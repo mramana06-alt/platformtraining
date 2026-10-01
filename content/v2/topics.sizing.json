@@ -1,0 +1,180 @@
+[
+  {
+    "id": "simple-effort",
+    "track": "sizing",
+    "level": 2,
+    "title": "A simple application: under an hour, about eight approvals",
+    "prompt": "If I ask the platform to build a very simple application, approximately how much effort and time should I expect?",
+    "summary": "Measured on real deliveries: 20 to 45 minutes from the first prompt to a release you can open, of which your attention is a few minutes of reading and about eight clicks; the build itself takes under a minute.",
+    "blocks": [
+      { "type": "diagram", "kind": "timeline", "items": [
+        { "label": "Discovery", "detail": "1 to 3 turns when the prompt is well formed; 2 to 5 default cards to accept" },
+        { "label": "Blueprint + landscape", "detail": "2 clicks" },
+        { "label": "Four work products", "detail": "4 next-step commands, 4 approvals; a few minutes of PL time each" },
+        { "label": "Build", "detail": "37 to 40 seconds measured; verification adds a browser run" },
+        { "label": "Business Review + EAL", "detail": "1 acceptance, 1 launch, first record in ten seconds" }
+      ], "caption": "Measured: 24 minutes from prompt to release for a mileage log once discovery converged." },
+      { "type": "key_value", "rows": [
+        { "label": "What counts as simple", "value": "One entity, one or two roles, a worklist and a form, no integration: mileage log, contact directory, room reservation, visitor log." },
+        { "label": "Your effort", "value": "Write 3 to 6 sentences; read 6 cards; click accept about eight times." },
+        { "label": "Model usage", "value": "Roughly 16k to 28k tokens per turn; a session ceiling of 750k tokens covers a simple app comfortably." },
+        { "label": "What slows it down", "value": "Vague first prompts (discovery loops), authority wording such as I confirm the topology, asking PL to apply all defaults at once, and requesting changes at Build Plan instead of Requirements." }
+      ] }
+    ],
+    "followUps": ["moderate-approach", "prompts-that-work", "examples-by-size", "complexity-factors"],
+    "plPrompts": [
+      { "label": "Ask PL to estimate a simple app", "prompt": "If I ask you to build a very simple single-entity application with two roles, what steps, approvals and time should I expect in this workspace? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["effort", "time", "simple"]
+  },
+  {
+    "id": "moderate-approach",
+    "track": "sizing",
+    "level": 2,
+    "title": "A moderately complex application: more discovery, more roles, a system of record",
+    "prompt": "How would the development approach change for a moderately complex enterprise application?",
+    "summary": "More discovery turns and a longer Blueprint; multi-role workflows with states and approvals; an integration-backed profile for a PostgreSQL system of record; architect review of the Solution Design; possibly several bounded applications instead of one.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Discovery", "note": "5 to 10 turns" },
+        { "label": "Blueprint", "note": "workflow states, roles" },
+        { "label": "Landscape", "note": "integration binding" },
+        { "label": "Design review", "note": "architect" },
+        { "label": "Build", "note": "integration-backed" },
+        { "label": "Qualification", "note": "role campaigns" }
+      ] },
+      { "type": "table", "columns": ["Aspect", "Simple", "Moderate"], "rows": [
+        ["Entities and states", "One entity, few states", "One core entity with a multi-step workflow; related records"],
+        ["Roles", "Requester and manager", "Three to five roles with distinct visibility and approvals"],
+        ["Data", "Own schema", "Own schema plus a registered PostgreSQL system of record through the Integration plane"],
+        ["Review", "Business user", "Architect reviews Solution Design; tester reviews qualification"],
+        ["Time", "Under an hour", "Hours to a day, mostly discovery and review"],
+        ["Delivery shape", "One application", "One application, or two bounded ones sharing identity"]
+      ] },
+      { "type": "callout", "tone": "tip", "text": "Split by ownership, not by screen. Work Request and Work Order were delivered as one multi-role app; a procurement flow with a separate supplier audience is better as two applications with shared roles in UME." }
+    ],
+    "followUps": ["complex-approach", "complexity-factors", "examples-by-size", "simple-effort"],
+    "plPrompts": [
+      { "label": "Ask PL how it would approach a moderate app", "prompt": "How would the development approach change for a moderately complex enterprise application with several roles, a workflow and a PostgreSQL system of record? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["moderate", "enterprise", "workflow", "integration"]
+  },
+  {
+    "id": "complex-approach",
+    "track": "sizing",
+    "level": 2,
+    "title": "A highly complex application: decompose, integrate through governed connectors, phase the delivery",
+    "prompt": "How would the platform handle a highly complex application involving multiple systems, integrations, APIs, databases, security requirements, and business processes?",
+    "summary": "Decompose into bounded applications with shared identity; model the landscape in EKG; connect systems of record through the Integration plane (PostgreSQL and files today; enterprise connectors planned); phase delivery with an architect at each gate. Some of this is beyond today's connectors.",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Business processes", "items": ["Discovered per process, each with actors and states"] },
+        { "title": "Bounded applications", "items": ["App A: intake", "App B: approvals", "App C: fulfilment", "Shared roles in UME"] },
+        { "title": "Integration plane", "items": ["PostgreSQL systems of record (available)", "File shares (available, Windows)", "ServiceNow, SAP, M365, queues (planned)"] },
+        { "title": "Landscape and knowledge", "items": ["EKG: systems, interfaces, dependencies", "Brain: cross-application context"] },
+        { "title": "Security", "items": ["Per-app database login", "Role policy per action", "Signed authority from EAL", "Audit envelopes"] }
+      ] },
+      { "type": "steps", "items": [
+        { "title": "Map the landscape first", "detail": "Register the systems, interfaces and dependencies in EKG through Landscape Studio so placement and impact are grounded." },
+        { "title": "Decompose by ownership", "detail": "One application per bounded process with a clear data owner; shared roles published to UME; each app has its own schema and release lifecycle." },
+        { "title": "Connect systems of record through the Integration plane", "detail": "Register a binding, stage it, activate it; operations are pinned, policy-checked and receipted. Today only PostgreSQL and files; other connectors are on the roadmap." },
+        { "title": "Phase the delivery", "detail": "Deliver intake first, then approvals, then fulfilment; each phase has its own Business Review and can be rolled back." },
+        { "title": "Put an architect at every gate", "detail": "Solution Design review per application; landscape confirmation per phase; security requirements written into Requirements so they become tests." }
+      ] },
+      { "type": "callout", "tone": "warning", "title": "Honest limits today", "text": "Applications are single-entity per generation; multi-entity domains are delivered as several apps. Enterprise SaaS and ERP connectors, transformation mapping and production environments are planned work. A highly complex program today is a sequence of bounded PL deliveries plus integration through PostgreSQL." }
+    ],
+    "followUps": ["complexity-factors", "examples-by-size", "existing-app", "moderate-approach"],
+    "plPrompts": [
+      { "label": "Ask PL how it would handle a complex program", "prompt": "How would you handle a highly complex application involving multiple systems, integrations, APIs, databases, security requirements and business processes? Be explicit about what this workspace supports today. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["complex", "integrations", "multiple systems", "security"]
+  },
+  {
+    "id": "complexity-factors",
+    "track": "sizing",
+    "level": 3,
+    "title": "What makes an application simple, medium, complex or enterprise-scale",
+    "prompt": "What factors determine whether an application is considered simple, medium, complex, or enterprise-scale?",
+    "summary": "Number of entities and relationships, workflow states and roles, systems of record and integrations, data migration, security and compliance requirements, environments, and whether an existing application constrains the design.",
+    "blocks": [
+      { "type": "table", "columns": ["Factor", "Simple", "Medium", "Complex", "Enterprise-scale"], "rows": [
+        ["Entities", "1", "1 core + related", "Several bounded apps", "Many apps, shared domain model"],
+        ["Roles and workflow", "2 roles, few states", "3 to 5 roles, approvals", "Cross-team workflow", "Organisation-wide, delegated"],
+        ["Integrations", "None", "1 PostgreSQL system of record", "Several systems, APIs", "ERP, ITSM, identity federation"],
+        ["Data", "New data", "New + read from a source", "Migration of existing data", "Multi-system consistency"],
+        ["Security", "Roles", "Roles + record scope", "Compliance evidence", "Federated identity, audit, retention"],
+        ["Environments", "Local", "Local", "Central + QA (planned)", "Production profile (planned)"]
+      ] },
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Simple", "note": "hours" },
+        { "label": "Medium", "note": "days" },
+        { "label": "Complex", "note": "weeks, phased" },
+        { "label": "Enterprise", "note": "program, roadmap" }
+      ], "caption": "Effort grows with integrations and roles more than with screens." },
+      { "type": "callout", "tone": "tip", "text": "Ask PL for a discovery-only assessment first: it will name the actors, states and systems it sees and you can judge the size before committing." }
+    ],
+    "followUps": ["examples-by-size", "process-by-size", "simple-effort", "complex-approach"],
+    "plPrompts": [
+      { "label": "Ask PL to size an idea", "prompt": "Assess the complexity of this idea before building anything: name the entities, roles, workflow states, integrations and security needs you see, and say whether it is simple, medium or complex. Do not build anything.", "requires": ["outcome-discovery"], "stages": ["welcome", "outcome-discovery"] }
+    ],
+    "keywords": ["complexity", "sizing", "factors"]
+  },
+  {
+    "id": "examples-by-size",
+    "track": "sizing",
+    "level": 2,
+    "title": "Three examples: mileage log, work management, procurement across systems",
+    "prompt": "Can you give me an example of a simple application, a moderately complex application, and a highly complex application that could be built using this platform?",
+    "summary": "Simple: Mileage Reimbursement Log. Moderate: Work Management with work requests and work orders across roles. Complex: procurement across intake, approvals, supplier records and finance, delivered as several bounded applications with governed integrations.",
+    "blocks": [
+      { "type": "diagram", "kind": "map", "center": "Examples", "nodes": [
+        { "label": "Mileage Reimbursement Log", "note": "simple: 1 entity, 2 roles, derived amount" },
+        { "label": "Contact Directory", "note": "simple: object page + worklist" },
+        { "label": "Work Management", "note": "moderate: requests, orders, 4 roles, approvals" },
+        { "label": "Service Request Hub", "note": "moderate: queue, assignment, integration-backed records" },
+        { "label": "Procurement program", "note": "complex: intake, approvals, suppliers, finance" }
+      ] },
+      { "type": "table", "columns": ["Example", "Shape", "What PL delivers", "Status"], "rows": [
+        ["Mileage Reimbursement Log", "Form + worklist; submitter and manager; amount = miles x rate rounded half-up", "One app, own schema, roles in UME, 14 tests, browser evidence", "Delivered on this platform"],
+        ["Work Management", "Work request to work order; requester, dispatcher, technician, manager; states and approvals", "One multi-role app with record authorization and audit", "Delivered and qualified (M7)"],
+        ["Service Request Hub", "Intake queue with owners and statuses; records in a PostgreSQL system of record", "Integration-backed app through the Integration plane", "Delivered in Local Development"],
+        ["Procurement program", "Purchase requisition, approvals by threshold, supplier onboarding, finance posting", "Three or four bounded apps, shared roles, PostgreSQL connectors; ERP posting planned", "Partly possible today"]
+      ] }
+    ],
+    "followUps": ["process-by-size", "complexity-factors", "business-idea-journey", "moderate-approach"],
+    "plPrompts": [
+      { "label": "Ask PL for examples it can build", "prompt": "Give me an example of a simple, a moderately complex and a highly complex application that could be built with the capabilities installed in this workspace, and say what would be needed for each. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["examples", "simple", "moderate", "complex"]
+  },
+  {
+    "id": "process-by-size",
+    "track": "sizing",
+    "level": 3,
+    "title": "How the process differs for each example",
+    "prompt": "For each of those examples, explain how the development process would differ.",
+    "summary": "The lifecycle is the same; what changes is the number of discovery turns, the depth of design review, the landscape binding, the qualification campaigns and whether the delivery is one application or a phased set.",
+    "blocks": [
+      { "type": "diagram", "kind": "swimlane", "lanes": ["Mileage log", "Work management", "Procurement program"], "sequence": [
+        { "lane": 0, "label": "2 discovery turns" },
+        { "lane": 1, "label": "8 discovery turns, role matrix" },
+        { "lane": 2, "label": "Landscape in EKG, 3 apps scoped" },
+        { "lane": 0, "label": "Approve 4 cards, build, accept" },
+        { "lane": 1, "label": "Architect review, role campaigns" },
+        { "lane": 2, "label": "Per-app deliveries, connectors, phased reviews" }
+      ] },
+      { "type": "table", "columns": ["Stage", "Mileage log", "Work management", "Procurement program"], "rows": [
+        ["Discovery", "One well-formed prompt; 2 to 3 defaults", "Several turns: roles, states, who sees what, escalation", "Per process; systems and owners mapped first"],
+        ["Blueprint", "1 entity, 2 roles, 2 floorplans", "1 entity with workflow, 4 roles, 3 floorplans", "One Blueprint per bounded app"],
+        ["Landscape", "Local defaults", "Local defaults", "Integration bindings per system of record"],
+        ["Design review", "Business user", "Architect and tester", "Architect per app; security requirements as tests"],
+        ["Build", "40 seconds", "Under two minutes", "Per app, sequenced"],
+        ["Qualification", "Browser checks", "Role and workflow campaigns", "Cross-app scenarios; connector campaigns"],
+        ["Release", "1.0.0 in EAL", "1.0.0 with role publication", "Phased releases, rollback per app"]
+      ] }
+    ],
+    "followUps": ["examples-by-size", "complex-approach", "typical-process", "end-to-end"],
+    "plPrompts": [],
+    "keywords": ["process differences", "examples"]
+  }
+]

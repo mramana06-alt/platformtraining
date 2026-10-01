@@ -1,0 +1,326 @@
+[
+  {
+    "id": "build-an-app",
+    "track": "process",
+    "level": 1,
+    "title": "Describe, approve, build, accept: four things you do; PL does the rest",
+    "prompt": "How can I use this platform to build a software application?",
+    "summary": "You describe the problem and answer a few questions, approve the Blueprint and the work products, send Start build, and accept the release. PL discovers, designs, generates, verifies and releases.",
+    "takeaways": [
+      "Four things you do: describe, approve, start the build, accept the release.",
+      "About 30 to 45 minutes of your attention for a simple application.",
+      "You never write code, design tables or configure servers."
+    ],
+    "status": "available",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Describe", "note": "problem in plain words" },
+        { "label": "Discover", "note": "PL asks, you accept defaults" },
+        { "label": "Approve Blueprint" },
+        { "label": "Approve work products", "note": "4 cards" },
+        { "label": "Start build.", "note": "PL builds and verifies" },
+        { "label": "Accept release", "note": "open in EAL" }
+      ], "caption": "Your part is the bold verbs. PL never moves past an approval on its own." },
+      { "type": "key_value", "rows": [
+        { "label": "Input", "value": "A few sentences: who struggles, how work happens now, what should improve, the fields and rules that matter." },
+        { "label": "Output", "value": "A running application with UI, API, PostgreSQL schema, roles, tests, evidence and a release you can open in EAL." },
+        { "label": "Your time", "value": "Typically 30 to 45 minutes of attention for a simple application; PL works in the background between your approvals." },
+        { "label": "What you never do", "value": "Write code, design tables, configure servers, or copy files. Those are generated, verified and recorded." }
+      ] },
+      { "type": "example", "title": "Mileage Reimbursement Log", "before": "Employees email trip details; finance recalculates amounts by hand; nobody knows which claims are approved.", "after": "Employees log trips with miles and rate; the app computes the reimbursement with the agreed rounding rule; managers approve from a worklist; finance sees only approved claims.", "features": ["Trip form", "My claims", "Manager approval", "Derived amount"] }
+    ],
+    "followUps": ["dev-process-diagram", "typical-process", "getting-started", "simple-effort"],
+    "plPrompts": [
+      { "label": "Start discovery for your application", "prompt": "I want to build an application. Ask me one question at a time to understand the problem, the people involved and the main process before proposing anything. Do not build anything.", "requires": ["outcome-discovery"], "stages": ["welcome", "outcome-discovery"] }
+    ],
+    "keywords": ["build", "how to", "application"]
+  },
+  {
+    "id": "typical-process",
+    "track": "process",
+    "level": 2,
+    "title": "The typical process: discovery, four work products, build, review, release",
+    "prompt": "Walk me through the typical application development process using this platform.",
+    "summary": "Discovery produces a Blueprint; landscape confirmation places it; Requirements, Delivery Plan, Solution Design and Build Plan are approved in order; Start build generates and verifies; Business Review accepts; EAL runs it.",
+    "blocks": [
+      { "type": "diagram", "kind": "swimlane", "lanes": ["You", "PL"], "sequence": [
+        { "lane": 0, "label": "Describe" },
+        { "lane": 1, "label": "Discover + Blueprint" },
+        { "lane": 0, "label": "Approve + confirm landscape" },
+        { "lane": 1, "label": "Requirements" },
+        { "lane": 0, "label": "Approve" },
+        { "lane": 1, "label": "Delivery Plan, Solution Design, Build Plan" },
+        { "lane": 0, "label": "Approve, Start build." },
+        { "lane": 1, "label": "Generate, verify, release" },
+        { "lane": 0, "label": "Accept in Business Review" }
+      ], "caption": "Approvals alternate with PL work. Each approval is a typed gate, not a chat reply." },
+      { "type": "table", "columns": ["Step", "What happens", "What you see"], "rows": [
+        ["1 Discovery", "PL extracts outcome, actors, journeys, data, rules; asks one question per turn with measurable defaults", "Option cards; Insufficient dimensions until enough is known"],
+        ["2 Blueprint", "The whole understanding in one card: entity, fields, states, roles, floorplans, topology recommendation", "Approve or request a change"],
+        ["3 Landscape", "Where the app runs; Local defaults place UI, API and schema on this workstation", "Nudge: Use Local defaults and confirm"],
+        ["4 Requirements", "Testable statements with validation rules and acceptance signals traced to the Blueprint", "Approve; changes here regenerate the rest"],
+        ["5 Delivery Plan", "Which stages apply (required, optional, skipped) and the verification each needs", "Approve"],
+        ["6 Solution Design", "Components, contracts, data ownership", "Approve"],
+        ["7 Build Plan", "Exact files, migrations and tests; read-only until Start build", "Approve"],
+        ["8 Build", "Scaffold, generate, migrate, build, start, verify, review", "Live progress; only interrupted if PL needs you"],
+        ["9 Business Review", "Browser evidence against requirements; accept or reject", "Accept release; Open in EAL"]
+      ] }
+    ],
+    "followUps": ["delivery-swimlane", "major-stages", "artifacts-per-stage", "lifecycle-commands"],
+    "plPrompts": [
+      { "label": "Ask PL to walk you through the process", "prompt": "Walk me through the typical application development process using this platform. Explain each stage briefly, what I would do, and what evidence is produced. Do not start execution.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["process", "steps", "lifecycle"]
+  },
+  {
+    "id": "idea-to-app",
+    "track": "process",
+    "level": 2,
+    "title": "From words to a working app: understanding, blueprint, generation",
+    "prompt": "How does the platform take an idea or business requirement and turn it into a working application?",
+    "summary": "A model-driven understanding turns your words into typed discovery items; the Blueprint fixes entity, fields, states, roles and screens; deterministic generators compile it into code; delivery provisions, builds, verifies and registers it.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Your words" },
+        { "label": "Outcome understanding", "note": "model call" },
+        { "label": "Discovery items", "note": "actors, journeys, data, rules, risks" },
+        { "label": "Discovery Blueprint", "note": "typed, approved" },
+        { "label": "Application blueprint", "note": "one structured model call" },
+        { "label": "Generated files", "note": "deterministic compilers" },
+        { "label": "Running app", "note": "provisioned, verified, registered" }
+      ], "caption": "Intelligence is used to understand and shape; generation is deterministic so it can be verified." },
+      { "type": "heading", "text": "What happens at each transformation" },
+      { "type": "key_value", "rows": [
+        { "label": "Understanding", "value": "The understanding engine extracts a domain-neutral outcome from the conversation: goal, users, current state, desired change." },
+        { "label": "Discovery", "value": "Outcome discovery produces items with lifecycle and authority: proposed, tentatively accepted, accepted, disputed. Semantic defects (for example an unsupported confirmation) block readiness until resolved." },
+        { "label": "Blueprint", "value": "When enough dimensions are covered, the Discovery Blueprint is generated for your approval. It is the canonical input for everything downstream." },
+        { "label": "Application blueprint", "value": "From approved requirements, one structured call derives the entity, fields, states, roles and floorplan bindings as typed data." },
+        { "label": "Generation", "value": "Schema-driven generators and the floorplan compiler emit domain types, migration, API routes with role policy and idempotency, and the React UI. No model writes code." },
+        { "label": "Delivery", "value": "Provision schema and login, migrate, build, start on reserved ports, verify with tests and a browser, register with EAL, publish roles to UME." }
+      ] },
+      { "type": "callout", "tone": "tip", "text": "Because generation is deterministic, the same Blueprint always produces the same files, and every file carries a SHA-256 in the artifact manifest. That is what makes the result reviewable." }
+    ],
+    "followUps": ["major-stages", "correctness", "artifacts-per-stage", "typical-process"],
+    "plPrompts": [
+      { "label": "Ask PL how it turns ideas into apps", "prompt": "How does the platform take an idea or business requirement and turn it into a working application? Explain the stages and what is generated at each. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["idea", "requirement", "generation", "blueprint"]
+  },
+  {
+    "id": "major-stages",
+    "track": "process",
+    "level": 2,
+    "title": "Six stages from discovery to production, with the gate at each",
+    "prompt": "What are the major stages involved in developing an application from discovery through production?",
+    "summary": "Discovery, shaping, design and planning, build and verification, release and run, operate and improve. Each stage ends in a typed gate you control. Production promotion beyond Local Development is planned, not yet available.",
+    "blocks": [
+      { "type": "diagram", "kind": "timeline", "items": [
+        { "label": "1 Discovery", "detail": "Gate: Discovery Blueprint approved", "state": "done" },
+        { "label": "2 Shaping", "detail": "Gate: landscape confirmed; Requirements approved", "state": "done" },
+        { "label": "3 Design and planning", "detail": "Gate: Delivery Plan, Solution Design, Build Plan approved", "state": "done" },
+        { "label": "4 Build and verification", "detail": "Gate: tests and browser qualification pass; Start build authorized by you", "state": "active" },
+        { "label": "5 Release and run", "detail": "Gate: Business Review accepted; release activated in EAL", "state": "todo" },
+        { "label": "6 Operate and improve", "detail": "Gate per change: impact approved; new version verified", "state": "todo" }
+      ], "caption": "Gates are typed events in the delivery case, never inferred from chat." },
+      { "type": "table", "columns": ["Stage", "Owner of the decision", "Environment today"], "rows": [
+        ["Discovery and shaping", "Business user", "Chat only"],
+        ["Design and planning", "Developer or architect", "Chat only"],
+        ["Build and verification", "PL, authorized by you", "Local Development on this workstation"],
+        ["Release and run", "Business user accepts", "EAL on this workstation"],
+        ["QA, UAT, Production", "Planned: release manifests promoted through environment gates", "Not yet available"]
+      ] }
+    ],
+    "followUps": ["end-to-end", "decisions-approvals", "environments", "readiness"],
+    "plPrompts": [
+      { "label": "Ask PL about the stages", "prompt": "What are the major stages involved in developing an application from discovery through production on this platform, and which gate ends each stage? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["stages", "gates", "discovery to production"]
+  },
+  {
+    "id": "end-to-end",
+    "track": "process",
+    "level": 2,
+    "title": "The complete delivery process, end to end",
+    "prompt": "Walk me through the complete end-to-end application delivery process using this platform.",
+    "summary": "Twelve concrete steps from project creation to a user signing in, with the command or click at each step and the evidence produced.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Project" },
+        { "label": "Discovery" },
+        { "label": "Blueprint" },
+        { "label": "Landscape" },
+        { "label": "Requirements" },
+        { "label": "Plan + Design" },
+        { "label": "Build Plan" },
+        { "label": "Build" }
+      ], "caption": "Then: Business Review, release activation, open in EAL, first record." },
+      { "type": "steps", "items": [
+        { "title": "1 Create a project", "detail": "Projects panel: Create. One application per project; the project holds the primary chat and its successors." },
+        { "title": "2 Describe and discover", "detail": "Send the problem description ending with Finalize discovery from this description and generate the Discovery Blueprint for review. Do not design or build yet. Accept the 2 to 5 measurable defaults PL proposes." },
+        { "title": "3 Approve the Discovery Blueprint", "detail": "Read entity, fields, states, roles, floorplans and the topology recommendation. Approve, or request a change and approve the next version." },
+        { "title": "4 Confirm the landscape", "detail": "Click Use Local defaults and confirm. PL composes, resolves and confirms UI port, API port and PostgreSQL schema." },
+        { "title": "5 Requirements", "detail": "Send the next-step command: Create the Requirements for the current app from the approved Discovery Blueprint. Show it for review. Do not build or create files yet. Approve." },
+        { "title": "6 Delivery Plan and Solution Design", "detail": "Same pattern, in order. The Solution Design shows components and data ownership; approve." },
+        { "title": "7 Build Plan", "detail": "Exact files, migrations and tests. Approve. Now all four heads are on the active revision." },
+        { "title": "8 Start build.", "detail": "PL scaffolds, generates, provisions the schema and login, migrates, builds, starts on reserved ports, runs typecheck, tests and browser qualification, and records the release identity." },
+        { "title": "9 Business Review", "detail": "A table of checks with browser evidence. Accept the release, or reject with a reason." },
+        { "title": "10 Activation", "detail": "The signed release set is staged and activated in the EAL registry; roles are published to UME; a test identity pl.app-name.user is created." },
+        { "title": "11 Open in EAL", "detail": "Click Open in EAL, sign in with the test identity, create the first record through the registered form." },
+        { "title": "12 Evolve", "detail": "Describe a change in the same project; PL shows the impact, regenerates in order, verifies and releases version 1.0.1." }
+      ] }
+    ],
+    "followUps": ["artifacts-per-stage", "decisions-approvals", "lifecycle-flow", "business-idea-journey"],
+    "plPrompts": [
+      { "label": "Ask PL for the end-to-end walk-through", "prompt": "Walk me through the complete end-to-end application delivery process using this platform, naming the command or approval at each step. Do not start execution.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["end to end", "delivery", "walk-through"]
+  },
+  {
+    "id": "business-idea-journey",
+    "track": "process",
+    "level": 2,
+    "title": "One business idea, all the way through and around again",
+    "prompt": "Start with a business idea and explain how it moves through discovery, requirements, solution design, planning, development, testing, release, deployment, operations, and continuous improvement.",
+    "summary": "Following Lost email requests to a Service Request Hub through every stage, naming what PL produces and what you decide, including the parts that are planned rather than available today.",
+    "blocks": [
+      { "type": "example", "title": "Service Request Hub", "before": "Employees email requests; managers search replies to find the owner, the latest status and what still needs attention.", "after": "Employees submit a request and see its progress; managers work from one queue, assign an owner and resolve with a visible history.", "features": ["Submit a request", "My requests", "Manager queue", "Assignment and status"] },
+      { "type": "diagram", "kind": "swimlane", "lanes": ["Business", "PL", "Runtime"], "sequence": [
+        { "lane": 0, "label": "Idea: requests get lost" },
+        { "lane": 1, "label": "Discovery: actors, states, rules" },
+        { "lane": 0, "label": "Approve Blueprint" },
+        { "lane": 1, "label": "Requirements, Design, Plans" },
+        { "lane": 1, "label": "Generate + verify" },
+        { "lane": 0, "label": "Accept release" },
+        { "lane": 2, "label": "Users work in EAL" },
+        { "lane": 2, "label": "Observations" },
+        { "lane": 1, "label": "Next version" }
+      ], "caption": "The loop closes: what users do in EAL informs the next revision." },
+      { "type": "table", "columns": ["Stage", "For this idea", "Status today"], "rows": [
+        ["Discovery", "Actors requester, agent, manager; states open, assigned, in progress, resolved; rule: one owner per request", "Available"],
+        ["Requirements", "12 to 15 testable statements, validation rules, acceptance signals", "Available"],
+        ["Solution design", "Worklist + form floorplans, API with role policy, schema app_service_request_hub", "Available"],
+        ["Planning", "Delivery Plan stages; Build Plan with files, migration, tests", "Available"],
+        ["Development", "Generated in about 40 seconds; deterministic", "Available"],
+        ["Testing", "Typecheck, contract tests, browser qualification with business oracle", "Available"],
+        ["Release and deployment", "Release identity, signed release set, activation in EAL, roles in UME", "Available, Local Development"],
+        ["Operations", "Control Center monitors services; EAL audit and activity", "Workstation scope"],
+        ["Continuous improvement", "Change requests with impact analysis; Eval Studio quality loop; Brain-assisted evolution", "Change requests available; the rest partially"]
+      ] }
+    ],
+    "followUps": ["artifacts-per-stage", "production-improvement", "examples-by-size", "end-to-end"],
+    "plPrompts": [
+      { "label": "Run this exact discovery in PL", "prompt": "Employees submit service requests through email and things get lost. Help me explore a simple application: employees submit requests and track status; managers work a queue, assign an owner and resolve. Fields: title, description, category, requester, owner, status. Rule: one owner per request. Scope: Local Development only. Ask one question at a time. Do not build anything.", "requires": ["outcome-discovery"], "stages": ["welcome", "outcome-discovery"] }
+    ],
+    "keywords": ["example", "journey", "service request"]
+  },
+  {
+    "id": "artifacts-per-stage",
+    "track": "process",
+    "level": 3,
+    "title": "What PL creates at each stage",
+    "prompt": "During the end-to-end process, what artifacts does the platform create at each stage?",
+    "summary": "Discovery items and Blueprint; landscape binding; four versioned work products; generated source with an artifact manifest; release identity and manifest; provider release and role publication; qualification evidence; Business Review record; delivery journal and knowledge ledger.",
+    "blocks": [
+      { "type": "diagram", "kind": "timeline", "items": [
+        { "label": "Discovery", "detail": "Discovery items (typed, with authority) and the Discovery Blueprint v1" },
+        { "label": "Landscape", "detail": "Project landscape binding: placement, ports, schema, profile" },
+        { "label": "Work products", "detail": "Requirements, Delivery Plan, Solution Design, Build Plan, each versioned and approved" },
+        { "label": "Generation", "detail": "app/shared/domain.ts, migrations, API, UI, tests, floorplan bindings, artifact manifest with SHA-256 per file" },
+        { "label": "Release", "detail": "Release identity, release manifest, provider-release.json, application-manifest.json, ume-role-publication.json" },
+        { "label": "Verification", "detail": "Test results, browser qualification receipts, business-oracle results" },
+        { "label": "Review and run", "detail": "Business Review record, activation receipt, delivery journal, knowledge ledger items" }
+      ] },
+      { "type": "table", "columns": ["Artifact", "Where it lives", "Why it matters"], "rows": [
+        ["Discovery Blueprint", "Project work products", "Canonical input for everything downstream"],
+        ["Requirements", "Project work products, versioned", "Every test and screen traces to a requirement"],
+        ["Solution Design", "Project work products", "Components, contracts, data ownership"],
+        ["Build Plan", "Project work products", "Exact files and tests; authorizes nothing until Start build"],
+        ["Generated source", "Application repository (platformapps) and the release directory", "The application itself, hash-manifested"],
+        ["Release manifest", "Release directory", "Immutable identity of what was built"],
+        ["Provider release", "EAL registry", "What EAL activates: roles, operations, floorplans"],
+        ["Qualification evidence", "Delivery journal", "Proof, not assertion, that the app behaves"],
+        ["Knowledge ledger", "Project knowledge", "Decisions, assumptions, coverage, source trace"]
+      ] }
+    ],
+    "followUps": ["decisions-approvals", "context-knowledge", "correctness", "end-to-end"],
+    "plPrompts": [
+      { "label": "Ask PL to list the artifacts", "prompt": "During the end-to-end process, what artifacts does the platform create at each stage, and where can I see each one in this project? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome", "requirements-formalization", "build-plan"] }
+    ],
+    "keywords": ["artifacts", "work products", "evidence"]
+  },
+  {
+    "id": "decisions-approvals",
+    "track": "process",
+    "level": 3,
+    "title": "Decisions and approvals across the lifecycle",
+    "prompt": "What decisions and approvals would typically occur throughout the delivery lifecycle?",
+    "summary": "Clarification answers and default acceptances during discovery; Blueprint approval; landscape confirmation; four work-product approvals with a cascade; Start build authorization; Business Review acceptance; per-change impact approval; effect grants for anything external.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Defaults", "note": "accept or correct" },
+        { "label": "Blueprint", "note": "approve" },
+        { "label": "Landscape", "note": "confirm" },
+        { "label": "4 work products", "note": "approve in order" },
+        { "label": "Start build.", "note": "authorize" },
+        { "label": "Business Review", "note": "accept or reject" },
+        { "label": "Changes", "note": "approve impact" }
+      ] },
+      { "type": "table", "columns": ["Decision", "Who", "What it changes"], "rows": [
+        ["Answer a clarification or accept a measurable default", "Requesting user", "A discovery item becomes accepted with your authority"],
+        ["Approve the Discovery Blueprint", "Business user", "Opens the requirements stage; the Blueprint becomes canonical"],
+        ["Confirm the landscape", "Business user or architect", "Fixes where the app will run"],
+        ["Approve Requirements", "Business user", "Starts the chain; a later change supersedes the three downstream products"],
+        ["Approve Delivery Plan, Solution Design, Build Plan", "Developer or architect", "Locks stages, components and files"],
+        ["Start build.", "Any project member with authority", "Authorizes generation and local execution"],
+        ["Accept the release", "Business user", "Activates the release in EAL"],
+        ["Approve a change impact", "Business user", "Starts a bounded evolution and a new version"],
+        ["Grant an external effect", "Explicit fresh authorization", "Required for anything outside the workspace; none in Local Development apps"]
+      ] },
+      { "type": "callout", "tone": "warning", "title": "The cascade", "text": "Approving a new Requirements or Delivery Plan version supersedes its dependents. Regenerate in order: Requirements, Delivery Plan, Solution Design, Build Plan. Request change text is stored as a rejection; fix content in Requirements rather than at Build Plan review." }
+    ],
+    "followUps": ["approvals-and-changes", "automation-vs-approval", "start-build-rules", "end-to-end"],
+    "plPrompts": [
+      { "label": "Ask PL which approvals it needs", "prompt": "What decisions and approvals would typically occur throughout the delivery lifecycle on this platform, and which of them are required before Start build? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["approvals", "decisions", "gates", "cascade"]
+  },
+  {
+    "id": "lifecycle-flow",
+    "track": "process",
+    "level": 2,
+    "title": "The complete application lifecycle as a process flow",
+    "prompt": "Show me the complete lifecycle of an application built using this platform as a process flow.",
+    "summary": "A single flow from problem to version n, with the loop back from operations to the next revision.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Problem" },
+        { "label": "Discovery" },
+        { "label": "Blueprint" },
+        { "label": "Requirements" },
+        { "label": "Design + Plans" },
+        { "label": "Build + Verify" },
+        { "label": "Review + Release" },
+        { "label": "Run in EAL" }
+      ], "caption": "Version 1.0.0" },
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Observe use" },
+        { "label": "Change request" },
+        { "label": "Impact analysis" },
+        { "label": "Regenerate in order" },
+        { "label": "Verify" },
+        { "label": "Release 1.0.1" },
+        { "label": "Run in EAL" }
+      ], "caption": "Every later version. Unrelated behaviour is preserved and proven by the existing tests." },
+      { "type": "key_value", "rows": [
+        { "label": "Loop owner", "value": "PL owns the development thread; EAL owns runtime task cases; UME owns identity; the application owns its data." },
+        { "label": "Version identity", "value": "Each release has an identity and a manifest; superseded releases stay immutable on disk and can be rolled back." },
+        { "label": "Retire", "value": "Revoke the release in EAL; the schema and evidence remain until an explicit retention decision." }
+      ] }
+    ],
+    "followUps": ["application-lifecycle", "end-to-end", "enhance-deployed", "production-improvement"],
+    "plPrompts": [
+      { "label": "Ask PL for the lifecycle flow", "prompt": "Show me the complete lifecycle of an application built using this platform as a process flow, including how a later change becomes a new version. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["lifecycle", "process flow", "versions"]
+  }
+]

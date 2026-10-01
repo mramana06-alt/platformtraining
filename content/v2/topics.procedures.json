@@ -1,0 +1,409 @@
+[
+  {
+    "id": "how-start",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: your first project, click by click",
+    "prompt": "How do I start my first project, step by step?",
+    "summary": "Create the project, send a well-formed description ending with the Blueprint request, accept defaults one at a time, approve the Blueprint, confirm Local defaults, then follow the next-step chip through the four work products to Start build.",
+    "blocks": [
+      { "type": "diagram", "kind": "wireframe", "view": "overview", "title": "PL chat, first project", "columns": ["Projects", "Conversation", "Knowledge Inspector"], "primary": "Create project" },
+      { "type": "steps", "items": [
+        { "title": "1 Projects panel: Create", "detail": "Name the project after the application. A bounded session (chat) opens for it." },
+        { "title": "2 Send the description", "detail": "Include people, current situation, desired improvement, fields, rules, examples, then Scope: Local Development only. Finalize discovery from this description and generate the Discovery Blueprint for review. Do not design or build yet." },
+        { "title": "3 Accept measurable defaults", "detail": "Option cards disable the composer until you answer. Click the recommended option, or the card's Answer button to write your own words." },
+        { "title": "4 Approve the Discovery Blueprint", "detail": "Review entity, fields, states, roles, floorplans and topology recommendation; approve." },
+        { "title": "5 Confirm the landscape", "detail": "Click Use Local defaults and confirm in the nudge above the conversation." },
+        { "title": "6 Work products", "detail": "Click the next-step chip in the composer four times, approving each card: Requirements, Delivery Plan, Solution Design, Build Plan." },
+        { "title": "7 Start build.", "detail": "Send exactly Start build. and watch the progress. Then accept the Business Review and click Open in EAL." }
+      ] },
+      { "type": "callout", "tone": "tip", "text": "Keep the composer for corrections and commands; use the cards for answers. If the composer says Respond to the interaction above, a card is waiting." }
+    ],
+    "followUps": ["prompts-that-work", "answer-questions", "lifecycle-commands", "getting-started"],
+    "plPrompts": [],
+    "keywords": ["first project", "procedure", "steps"]
+  },
+  {
+    "id": "prompts-that-work",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: writing a first prompt that converges in one turn",
+    "prompt": "How should I phrase my first prompt so discovery converges quickly?",
+    "summary": "Describe the app the way a colleague would: who, current state, desired change, fields, rules with examples, who sees which records, scope, and the closing instruction to generate the Blueprint. Pre-answer the usual questions.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Who and why" },
+        { "label": "Today vs desired" },
+        { "label": "Fields" },
+        { "label": "Rules + examples" },
+        { "label": "Visibility" },
+        { "label": "Scope" },
+        { "label": "Closing instruction" }
+      ], "caption": "Seven parts, three to eight sentences in total." },
+      { "type": "example", "title": "A prompt that converged in one turn", "before": "We track mileage claims in a spreadsheet. Employees email trips; managers cannot see what is approved.", "after": "Build a Mileage Reimbursement Log. Employees log trips (date, from, to, miles, rate per mile); the app computes amount = miles x rate rounded half-up to 2 decimals. Managers approve or reject; employees see only their own claims, managers see their team. The name field is not tied to identity. Scope: Local Development only. Finalize discovery from this description and generate the Discovery Blueprint for review. Do not design or build yet.", "features": ["Fields listed", "Rule with rounding", "Visibility stated", "Scope and closing instruction"] },
+      { "type": "table", "columns": ["Do", "Avoid"], "rows": [
+        ["State business facts as the requesting user", "I confirm the topology / architecture (authority conflict; discovery oscillates)"],
+        ["Accept 2 to 5 default cards one at a time", "Apply all defaults without asking (per-turn model-call cap)"],
+        ["Pre-answer rounding, visibility, identity questions", "Leaving the rule for later and correcting at Build Plan"],
+        ["Say the UI, API, DB split is a recommendation", "Confirming technical topology as a fact"],
+        ["Ask for discovery only first", "Asking to build in the first message"]
+      ] }
+    ],
+    "followUps": ["answer-questions", "how-start", "troubleshooting", "simple-effort"],
+    "plPrompts": [
+      { "label": "Use the mileage prompt as a template", "prompt": "Build a Mileage Reimbursement Log. Employees log trips (date, from, to, miles, rate per mile); the app computes amount = miles x rate rounded half-up to 2 decimals. Managers approve or reject; employees see only their own claims, managers see their team. The name field is not tied to identity. Scope: Local Development only. Finalize discovery from this description and generate the Discovery Blueprint for review. Do not design or build yet.", "requires": ["outcome-discovery"], "stages": ["welcome", "outcome-discovery"] }
+    ],
+    "keywords": ["prompt", "discovery", "template"]
+  },
+  {
+    "id": "answer-questions",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: answering PL's questions and option cards",
+    "prompt": "How do I answer PL's questions and options?",
+    "summary": "Click the recommended option to accept a measurable default; use the card's Answer button to write your own words; the composer is disabled while a card waits; defects such as Insufficient dimensions mean more discovery is needed.",
+    "blocks": [
+      { "type": "diagram", "kind": "wireframe", "view": "form", "title": "Interaction card", "fields": ["Apply the 14-day default (recommended)", "Use 7 days", "No due dates", "Or answer in your own words"], "primary": "Answer" },
+      { "type": "steps", "items": [
+        { "title": "Read the question and its options", "detail": "The recommended option is a measurable default: a number, a rule or a visibility choice you can verify later." },
+        { "title": "Click an option", "detail": "The answer is recorded as your decision with your authority; the composer re-enables." },
+        { "title": "Or answer in your own words", "detail": "Click Answer on the card, type in Or answer in your own words, click Answer. Free text in the main composer is not accepted while a card waits." },
+        { "title": "If PL says Insufficient dimensions", "detail": "Discovery has not covered enough: add the missing facts (actors, process, data, rules) in your next message." },
+        { "title": "If an UNSUPPORTED_CONFIRMED defect appears", "detail": "Restate the fact plainly as the requesting user (We round to two decimals) instead of confirming a technical assumption." }
+      ] }
+    ],
+    "followUps": ["prompts-that-work", "troubleshooting", "knowledge-inspector", "how-start"],
+    "plPrompts": [],
+    "keywords": ["questions", "options", "answer", "cards"]
+  },
+  {
+    "id": "lifecycle-commands",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: the exact commands that move a project forward",
+    "prompt": "Which exact commands move the project forward?",
+    "summary": "Lifecycle commands continue the active revision. The next-step chip in the composer always carries the right one; typing a capability-style request instead opens a new business revision.",
+    "blocks": [
+      { "type": "table", "columns": ["Stage", "Command"], "rows": [
+        ["Discovery", "... Finalize discovery from this description and generate the Discovery Blueprint for review. Do not design or build yet."],
+        ["Requirements", "Create the Requirements for the current app from the approved Discovery Blueprint. Show it for review. Do not build or create files yet."],
+        ["Delivery Plan", "Create the Delivery Plan for the current app from the approved Requirements. Show it for review. Do not build or create files yet."],
+        ["Solution Design", "Create the Solution Design for the current app from the approved Delivery Plan. Show it for review. Do not build or create files yet."],
+        ["Build Plan", "Create the Build Plan for the current app from the approved Solution Design. Show it for review. Do not build or create files yet."],
+        ["Build", "Start build."],
+        ["Review", "Show the Business Review for the current release."],
+        ["Evolution", "Add ... to the current application and show the impact of the change for review. Do not build or create files yet."]
+      ] },
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Blueprint" },
+        { "label": "Requirements" },
+        { "label": "Delivery Plan" },
+        { "label": "Solution Design" },
+        { "label": "Build Plan" },
+        { "label": "Start build." }
+      ], "caption": "Order matters: each command consumes the approved head before it." },
+      { "type": "callout", "tone": "warning", "text": "Approving a new version of Requirements or the Delivery Plan supersedes everything after it. Regenerate in this order; do not jump ahead." }
+    ],
+    "followUps": ["start-build-rules", "revisions", "approvals-and-changes", "how-start"],
+    "plPrompts": [],
+    "keywords": ["commands", "lifecycle", "next step"]
+  },
+  {
+    "id": "approvals-and-changes",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: approving, requesting changes and the cascade",
+    "prompt": "How do approvals and Request change work?",
+    "summary": "Each work product card has Approve and Request change. Approving records a typed decision; Request change stores a rejection and asks for the correction; content is fixed by regenerating the earliest affected work product, usually Requirements.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Card shown" },
+        { "label": "Approve", "note": "or" },
+        { "label": "Request change", "note": "rejection stored" },
+        { "label": "Fix in Requirements" },
+        { "label": "Regenerate in order" },
+        { "label": "Approve again" }
+      ] },
+      { "type": "key_value", "rows": [
+        { "label": "Approve", "value": "Records your decision on this version; the next-step chip advances." },
+        { "label": "Request change", "value": "Your text is stored as a rejection effect on that version. It does not edit the content. Send the correction as a Requirements change so the cascade carries it downstream." },
+        { "label": "Cascade", "value": "New Requirements or Delivery Plan versions supersede their dependents. Delivery Plan, Solution Design and Build Plan regenerate in order from canonical inputs." },
+        { "label": "Iteration budget", "value": "Each regeneration spends several workflow iterations; at most one review round per work product fits comfortably, so put the whole correction in one message." }
+      ] }
+    ],
+    "followUps": ["lifecycle-commands", "revisions", "decisions-approvals", "change-handling"],
+    "plPrompts": [],
+    "keywords": ["approve", "request change", "cascade"]
+  },
+  {
+    "id": "start-build-rules",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: when Start build is eligible and what to do when it is refused",
+    "prompt": "When is Start build eligible and what if it is refused?",
+    "summary": "Eligible when Requirements, Delivery Plan, Solution Design and Build Plan heads all belong to the active revision and the session has enough budget. Refusals name the missing item; a failed session accepts Start build again.",
+    "blocks": [
+      { "type": "table", "columns": ["Check", "Rule", "If it fails"], "rows": [
+        ["Heads on active revision", "All four work products approved on the current revision", "Regenerate the missing one with its lifecycle command"],
+        ["Blueprint accepted", "First build needs an approved Discovery Blueprint", "Approve it"],
+        ["Landscape confirmed", "Placement exists", "Use Local defaults and confirm"],
+        ["Session budget", "At least 181k tokens remaining of the 750k ceiling", "Roll over to the successor chat"],
+        ["Clarification at Start build", "PL may ask clarify:intent once", "Answer with an explicit full-stack sentence; do not restate requirements"]
+      ] },
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Start build." },
+        { "label": "Eligibility check" },
+        { "label": "Reserve budget" },
+        { "label": "Build steps" },
+        { "label": "Release identity" }
+      ] },
+      { "type": "callout", "tone": "tip", "text": "A session in failed state still accepts a new Start build. after the cause is fixed; its status returns to understanding and the build resumes with the same approvals." }
+    ],
+    "followUps": ["budgets-rollover", "errors", "business-review-procedure", "lifecycle-commands"],
+    "plPrompts": [],
+    "keywords": ["start build", "eligibility", "refused"]
+  },
+  {
+    "id": "budgets-rollover",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: session budgets and rolling over to a successor chat",
+    "prompt": "What are session budgets and rollover?",
+    "summary": "Each chat has a 750k-token ceiling; a full-stack build needs at least 181k remaining. When PL reports WORKFLOW_STEP_TOKEN_RESERVATION_UNAVAILABLE, roll over: a successor chat in the same project carries approvals, landscape and knowledge forward.",
+    "blocks": [
+      { "type": "diagram", "kind": "timeline", "items": [
+        { "label": "Chat 1", "detail": "Discovery, Blueprint, work products: budget spent on understanding and drafting", "state": "done" },
+        { "label": "Budget check", "detail": "Start build needs 181k; 138k left", "state": "active" },
+        { "label": "Successor chat", "detail": "Same project; approvals and knowledge carried forward; fresh 750k", "state": "todo" },
+        { "label": "Start build.", "detail": "Runs in the successor", "state": "todo" }
+      ] },
+      { "type": "key_value", "rows": [
+        { "label": "Why budgets exist", "value": "Model calls are metered per turn and per session so a runaway conversation cannot spend without limit." },
+        { "label": "Per-turn cap", "value": "A small number of model calls per turn; asking for many things at once hits MODEL_CALL_LIMIT_EXCEEDED." },
+        { "label": "Rollover", "value": "The project offers a successor primary chat; nothing is lost. The composer shows the rollover command when the budget is low." }
+      ] }
+    ],
+    "followUps": ["start-build-rules", "troubleshooting", "context-knowledge", "errors"],
+    "plPrompts": [],
+    "keywords": ["budget", "tokens", "rollover", "successor"]
+  },
+  {
+    "id": "revisions",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: revisions, and why a new one sometimes opens",
+    "prompt": "What is a revision and why did a new one open?",
+    "summary": "A business revision is one coherent version of the application's intent. Lifecycle commands stay on the active revision; capability-style requests (Build me ..., Create an app that ...) open a new one, which resets first-build eligibility.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Revision 1", "note": "Blueprint, 4 heads" },
+        { "label": "Lifecycle command", "note": "stays on revision 1" },
+        { "label": "Capability-style prompt", "note": "opens revision 2" },
+        { "label": "Heads must be regenerated" }
+      ] },
+      { "type": "table", "columns": ["Wording", "Effect"], "rows": [
+        ["Create the Requirements for the current app from the approved Blueprint ...", "Continues the active revision"],
+        ["Start build.", "Continues the active revision"],
+        ["Build me a ... / Create an app that ...", "Opens a new business revision"],
+        ["Add a field to the current application and show the impact", "Evolution on the active application, after release"]
+      ] },
+      { "type": "callout", "tone": "tip", "text": "Use the next-step chip. It always carries the lifecycle wording for the active revision." }
+    ],
+    "followUps": ["lifecycle-commands", "approvals-and-changes", "change-handling", "start-build-rules"],
+    "plPrompts": [],
+    "keywords": ["revision", "new revision", "wording"]
+  },
+  {
+    "id": "business-review-procedure",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: reading and accepting the Business Review",
+    "prompt": "How do I review and accept a release?",
+    "summary": "The Business Review lists checks with results and evidence observed in a real browser against the running application. Accept to activate the release in EAL; reject with a reason to record a rejection and return to Requirements.",
+    "blocks": [
+      { "type": "diagram", "kind": "wireframe", "view": "worklist", "title": "Business Review", "columns": ["Check", "Result", "Evidence"], "primary": "Accept release" },
+      { "type": "steps", "items": [
+        { "title": "Read the check table", "detail": "Each row is a requirement-derived check: pass, blocked (a rule correctly refused something) or fail, with the observed evidence." },
+        { "title": "Compare with your Requirements", "detail": "If a rule you care about is missing, reject and add it to Requirements; do not accept and hope." },
+        { "title": "Accept", "detail": "Records your acceptance as a typed event; the release is activated in EAL and roles are published to UME." },
+        { "title": "Open in EAL", "detail": "Sign in with the test identity PL created and create the first record." }
+      ] }
+    ],
+    "followUps": ["open-in-eal", "correctness", "start-build-rules", "quality-checks"],
+    "plPrompts": [
+      { "label": "Ask for the Business Review", "prompt": "Show the Business Review for the current release.", "requires": ["general-answer"], "stages": ["full-stack-builder", "build-plan"] }
+    ],
+    "keywords": ["business review", "accept", "release"]
+  },
+  {
+    "id": "open-in-eal",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: opening your application in EAL",
+    "prompt": "How do I open my app in EAL and sign in?",
+    "summary": "After acceptance, click Open in EAL. Sign in as the test identity pl.app-name.user (or a UME user with the app's role), pick the application, and use the chat or the full view. Forms are registered tasks; confirm writes explicitly.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Open in EAL" },
+        { "label": "Sign in", "note": "test identity or UME user" },
+        { "label": "Pick the app" },
+        { "label": "Chat or full view" },
+        { "label": "Create record", "note": "confirm" }
+      ] },
+      { "type": "key_value", "rows": [
+        { "label": "Chat", "value": "Type the registered task phrase (for example Create a mileage log record.), fill the form, then click Send and confirm. Enter alone is unreliable." },
+        { "label": "Full view", "value": "The generated UI (worklist, form) opened by EAL with a signed authority; the API resolves your roles live." },
+        { "label": "Roles", "value": "Published to UME at release; managers and submitters see different records exactly as the Blueprint's role matrix said." },
+        { "label": "Forms", "value": "Registered forms are controlled: set each field, confirm; the API rejects invalid values with VALIDATION_FAILED and writes nothing." }
+      ] }
+    ],
+    "followUps": ["where-run", "business-review-procedure", "enhance-deployed", "what-is-eal-note"],
+    "plPrompts": [],
+    "keywords": ["EAL", "open app", "sign in", "runtime"]
+  },
+  {
+    "id": "what-is-eal-note",
+    "track": "about",
+    "level": 1,
+    "title": "EAL: the runtime where AI-native applications are used",
+    "prompt": "What is EAL and what is it used for?",
+    "summary": "EAL, the Enterprise AI Launchpad, is the runtime loop of the platform. Users sign in, find their applications, chat with registered tasks, fill confirmed forms, approve human tasks and open the full UI. PL builds and releases; EAL runs. Roles come from UME; every write is confirmed and receipted.",
+    "takeaways": [
+      "EAL is where business users live; PL is where applications are made.",
+      "Everything a user can do in EAL is a registered task or form published by the application's release.",
+      "Writes are confirmed by the user and receipted by the application; nothing happens silently."
+    ],
+    "status": "available",
+    "blocks": [
+      { "type": "heading", "text": "What EAL is used for" },
+      { "type": "table", "columns": ["Use", "What the user does", "What happens underneath"], "rows": [
+        ["Sign in and find apps", "Signs in once; sees the applications assigned to their roles", "UME resolves principals, roles and effective access"],
+        ["Chat with an application", "Types a registered task phrase, for example Create a mileage log record.", "Deterministic routing to the registered task; the app API is called with signed authority"],
+        ["Fill a form", "Completes the registered form, reviews, confirms", "Field values are synchronised; the API validates and writes with an idempotency receipt"],
+        ["Approve or act", "Claims, approves, rejects, delegates human tasks", "Human-workflow state machine with role checks; password step-up for sensitive actions"],
+        ["Open the full view", "Launches the generated UI (worklist, form, timeline)", "EAL passes a signed authority reference; the API resolves it live"],
+        ["Documents and notifications", "Uploads, reads, gets notified", "Stored and audited per application"],
+        ["Administer", "Previews assignments, sets retention and legal holds, exports privacy data", "Administrative writes with audit"]
+      ] },
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "PL (development loop)", "items": ["Discover, design, generate, verify, release"] },
+        { "title": "Release hand-off", "items": ["Signed release set to the EAL registry", "Roles to UME"] },
+        { "title": "EAL (runtime loop)", "items": ["Chat with registered tasks", "Full view of the generated UI", "Human tasks and approvals", "Documents, notifications, audit"] }
+      ] },
+      { "type": "table", "columns": ["Aspect", "PL", "EAL"], "rows": [
+        ["Who uses it", "People building and evolving applications", "People using applications"],
+        ["Intelligence", "Model-driven understanding and drafting", "Deterministic task routing over registered tasks"],
+        ["Authority", "Approvals on work products and builds", "Signed application authority per request; confirmed writes"],
+        ["State", "Sessions and delivery cases", "Runtime task cases and receipts"]
+      ] }
+    ],
+    "followUps": ["runtime-architecture", "open-in-eal", "where-run", "roles"],
+    "plPrompts": [
+      { "label": "Ask PL about EAL", "prompt": "What is EAL and what is it used for? Explain how it differs from this chat and what a business user does there. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["EAL", "runtime", "Enterprise AI Launchpad", "used for"]
+  },
+  {
+    "id": "knowledge-inspector",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: seeing what PL understood, decided and still needs",
+    "prompt": "Where do I see what PL understood and decided?",
+    "summary": "The Knowledge Inspector above the conversation shows five views for the project: current state, decision register, assumptions and risks, coverage gaps and source trace. It is the same ledger the model reads.",
+    "blocks": [
+      { "type": "diagram", "kind": "wireframe", "view": "overview", "title": "Knowledge Inspector", "columns": ["Current state", "Decisions", "Assumptions", "Coverage gaps", "Source trace"] },
+      { "type": "key_value", "rows": [
+        { "label": "Current state", "value": "What PL believes about the application now: goal, actors, entity, process, topology." },
+        { "label": "Decision register", "value": "Every accepted default and approval, with who decided and when." },
+        { "label": "Assumptions and risks", "value": "What PL assumed to move fast, marked assumed, confirmed or corrected." },
+        { "label": "Coverage gaps", "value": "Discovery dimensions still open or deferred; Insufficient dimensions points here." },
+        { "label": "Source trace", "value": "Which message or artifact each item came from." }
+      ] },
+      { "type": "callout", "tone": "tip", "text": "If PL seems to have forgotten something, check the source trace first; the message may have been a correction that was stored as a rejection rather than as content." }
+    ],
+    "followUps": ["context-knowledge", "answer-questions", "troubleshooting", "six-months-later"],
+    "plPrompts": [],
+    "keywords": ["knowledge inspector", "understood", "decided"]
+  },
+  {
+    "id": "troubleshooting",
+    "track": "procedures",
+    "level": 3,
+    "title": "Procedure: messages you may see and what to do",
+    "prompt": "Something went wrong. What do the common messages mean and what should I do?",
+    "summary": "A short table of the messages new users meet most, what each means, and the exact next action.",
+    "blocks": [
+      { "type": "table", "columns": ["Message", "Meaning", "Do this"], "rows": [
+        ["Insufficient dimensions", "Discovery has not covered enough of actors, process, data or rules", "Add the missing facts in one message; accept the default cards"],
+        ["UNSUPPORTED_CONFIRMED_* / AUTHORITY_MISMATCH_TOPOLOGY", "You confirmed something as an authority you do not hold (topology, architecture)", "Restate business facts as the requesting user; call the UI/API/DB split a recommendation"],
+        ["MODEL_CALL_LIMIT_EXCEEDED", "Too many model calls in one turn", "Ask for one thing per turn; accept defaults one card at a time"],
+        ["WORKFLOW_STEP_TOKEN_RESERVATION_UNAVAILABLE", "Session budget too low for the build", "Roll over to the successor chat, then Start build."],
+        ["BUDGET_EXCEEDED: iterations limit", "A work product was regenerated too many times", "Put the whole correction in one Requirements change; approve once"],
+        ["Respond to the interaction above", "A card is waiting for your answer", "Answer on the card"],
+        ["Not eligible for Start build", "A head is missing on the active revision", "Run the missing lifecycle command"],
+        ["PL_APPLICATION_MIGRATION_IMMUTABLE_CONFLICT", "A published migration would change", "Accept the recovery PL proposes; never edit files"],
+        ["PROVIDER_RATE_LIMITED", "The model provider refused or throttled", "Wait and retry; PL retries automatically for a few minutes"]
+      ] },
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Read the code" },
+        { "label": "Find it here" },
+        { "label": "Do the one action" },
+        { "label": "Continue" }
+      ] }
+    ],
+    "followUps": ["errors", "budgets-rollover", "answer-questions", "prompts-that-work"],
+    "plPrompts": [],
+    "keywords": ["troubleshooting", "errors", "messages"]
+  },
+  {
+    "id": "floorplans",
+    "track": "procedures",
+    "level": 2,
+    "title": "The nine screen shapes PL can generate",
+    "prompt": "What kinds of screens can PL generate?",
+    "summary": "Worklist, object page, business form, calendar workspace, overview, review and decision, guided task, analytical list and case timeline. The Blueprint binds one or two of them; the compiler generates the React UI.",
+    "blocks": [
+      { "type": "diagram", "kind": "wireframe", "view": "worklist", "title": "Worklist (list report)", "columns": ["Asset", "Item", "Requester", "Due", "Status"], "primary": "New checkout" },
+      { "type": "diagram", "kind": "wireframe", "view": "form", "title": "Business form", "fields": ["Asset tag", "Item", "Requester", "Depot", "Due date"], "primary": "Create" },
+      { "type": "table", "columns": ["Floorplan", "Use it for", "Example"], "rows": [
+        ["Worklist", "Lists people work from, with filters and status", "Manager queue"],
+        ["Object page", "One record with sections and related items", "Vendor contract"],
+        ["Business form", "Create or edit one record with validation", "New checkout"],
+        ["Calendar workspace", "Time-based booking with conflicts", "Room reservations"],
+        ["Overview", "KPI tiles and shortcuts", "Facility operations"],
+        ["Review and decision", "Approve or reject with evidence", "Expense claims"],
+        ["Guided task", "Step-by-step data capture", "Visitor check-in"],
+        ["Analytical list", "Grouped and aggregated lists", "Fuel log analysis"],
+        ["Case timeline", "Chronology of a case with actions", "Service requests"]
+      ] }
+    ],
+    "followUps": ["capabilities-installed", "build-an-app", "examples-by-size", "typical-process"],
+    "plPrompts": [
+      { "label": "Ask PL to propose screens", "prompt": "Based on the accepted users and workflow, propose the screens this application needs, name the floorplan for each, and mark open questions. Do not build files.", "requires": ["outcome-discovery"], "stages": ["outcome-discovery", "requirements-formalization", "architecture-design"] }
+    ],
+    "keywords": ["screens", "floorplans", "UI"]
+  },
+  {
+    "id": "capabilities-installed",
+    "track": "procedures",
+    "level": 2,
+    "title": "The capabilities installed in your workspace",
+    "prompt": "Which capabilities are installed in my workspace?",
+    "summary": "The list below comes from the running platform, not from this guide. Installed means PL can route to it; execution still depends on inputs, approvals and environment.",
+    "blocks": [
+      { "type": "installed_capabilities", "intro": "These are the capabilities registered in the PL instance you are signed in to. A capability that is not installed is described but cannot be used from this chat." },
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Understanding" },
+        { "label": "Routing", "note": "to a capability" },
+        { "label": "Workflow steps" },
+        { "label": "Result card" }
+      ], "caption": "Every message is understood, routed to one capability and executed as bounded workflow steps." },
+      { "type": "callout", "tone": "info", "text": "Installed capability names are not a promise of execution readiness. PL checks permissions, inputs and environments when work is requested." }
+    ],
+    "followUps": ["floorplans", "what-can-i-do", "primary-use", "build-an-app"],
+    "plPrompts": [
+      { "label": "Ask PL for its capabilities", "prompt": "Show the main capabilities available in this workspace. Distinguish what is installed, what needs configuration or approval, and what is unavailable. Do not perform any build or deployment.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["capabilities", "installed", "workspace"]
+  }
+]

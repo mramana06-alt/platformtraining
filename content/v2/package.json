@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 2,
+  "version": "2.1.0",
+  "playerVersion": 2,
+  "entry": {
+    "title": "Develop, deploy and validate AI-native applications.",
+    "body": "Platform Loops (PL) is for developers, architects, product managers, business analysts and business users. Describe what you want to improve; PL discovers and proposes the application, carries it through design, build and verification, and releases it into EAL where your users work. Ask the guide anything below. Every answer ends with the next questions worth asking, and every question can also be typed into your PL chat.",
+    "starters": ["platform-purpose", "getting-started", "build-an-app", "how-it-all-works"],
+    "composerHint": "Describe the problem in your own words, or pick a question."
+  },
+  "tracks": [
+    { "id": "about", "title": "About the platform", "summary": "What PL is, what it is for, and how its components fit together." },
+    { "id": "process", "title": "Building applications", "summary": "How an idea becomes a running application, stage by stage, with the artifacts and approvals on the way." },
+    { "id": "environments", "title": "Where things run", "summary": "Where development happens, where applications are deployed and run, and how environments are managed." },
+    { "id": "change", "title": "Changing and improving", "summary": "Enhancing deployed applications, handling change, keeping context, and continuous improvement." },
+    { "id": "governance", "title": "Roles, quality and control", "summary": "Who does what, what is automated, what needs approval, and how quality and errors are handled." },
+    { "id": "sizing", "title": "Effort and complexity", "summary": "What to expect for simple, moderate and complex applications, with examples." },
+    { "id": "procedures", "title": "Hands-on procedures", "summary": "Exact steps, commands, rules and messages you will meet while using PL." }
+  ],
+  "levels": [
+    { "id": 0, "title": "Overview" },
+    { "id": 1, "title": "Big picture" },
+    { "id": 2, "title": "How it works" },
+    { "id": 3, "title": "Details and procedures" }
+  ],
+  "capabilities": [
+    { "id": "outcome-discovery", "title": "Outcome discovery", "summary": "Turns your description into actors, journeys, data, rules and risks, and produces the Discovery Blueprint." },
+    { "id": "requirements-discovery", "title": "Requirements discovery", "summary": "Moves a vague idea into a confirmed requirements contract: goal, outcome, acceptance signals." },
+    { "id": "requirements-formalization", "title": "Requirements formalization", "summary": "Writes the Requirements work product from an approved Discovery Blueprint." },
+    { "id": "architecture-design", "title": "Architecture design", "summary": "Produces the Solution Design: components, contracts and data ownership, from approved requirements." },
+    { "id": "planning", "title": "Planning", "summary": "Bounded plans with tasks, risks and verification for a piece of work." },
+    { "id": "build-plan", "title": "Build plan", "summary": "The exact files, migrations and tests the builder will produce, read-only until you start the build." },
+    { "id": "full-stack-builder", "title": "Full-stack builder", "summary": "Executes an authorized Build Plan: scaffold, generate, migrate, build, start, verify and review a UI, API and database application." },
+    { "id": "simple-form-builder", "title": "Simple form builder", "summary": "Builds and verifies a small standalone form application." },
+    { "id": "general-answer", "title": "General answer", "summary": "Answers questions from platform knowledge and your project context without changing anything." },
+    { "id": "coding-assistance", "title": "Coding assistance", "summary": "Code examples, debugging help and reviews in chat, without building or executing anything." }
+  ],
+  "topics": []
+}

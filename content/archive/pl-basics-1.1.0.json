@@ -1,0 +1,750 @@
+{
+  "schemaVersion": 1,
+  "version": "1.1.0",
+  "playerVersion": 1,
+  "welcome": {
+    "title": "What would you like to make easier?",
+    "body": "PL helps you turn the way your business works into an application: the screens people use, the rules behind them, the information they store, and the steps needed to test and release it. You can begin with a problem in ordinary words. I can show you an example first."
+  },
+  "lessons": [
+    {
+      "id": "what-is-pl",
+      "title": "PL turns a business need into connected delivery work",
+      "body": [
+        "Think of PL as a workspace where business decisions and application delivery stay connected. You can start with “requests get lost in email”; you do not need to begin with a requirements document, API specification or technology stack.",
+        "PL helps identify users, map the process, propose a first release, design screens and data, prepare the build, and examine testing and deployment evidence. Your project retains the decisions and work products as the conversation develops."
+      ],
+      "prompt": "Explain what PL does in simple language. Give three practical examples based on installed capabilities and suggest one way to start. Do not build anything.",
+      "takeaway": "You describe the outcome. PL helps work out what to build, makes the design visible, and carries the agreed work through the applicable delivery steps.",
+      "example": {
+        "title": "From an email inbox to a Service Request Hub",
+        "before": "Employees email requests. Managers search through replies to find the owner, latest status and what still needs attention.",
+        "after": "Employees submit a request and see its progress. Managers work from one queue, assign an owner and resolve the request with a visible history.",
+        "features": [
+          "Submit a request",
+          "My requests",
+          "Manager queue",
+          "Assignment and status"
+        ],
+        "fields": [
+          "Request",
+          "Requester",
+          "Category",
+          "Owner",
+          "Status"
+        ]
+      },
+      "next": "capabilities",
+      "sections": [
+        {
+          "title": "What you actually receive",
+          "body": "The useful output grows with the stage of work.",
+          "items": [
+            {
+              "label": "During discovery",
+              "value": "A clear problem, users, process, first-release scope, decisions and open questions."
+            },
+            {
+              "label": "During design",
+              "value": "Screen flows, logical architecture, data ownership and required API/integration contracts."
+            },
+            {
+              "label": "During delivery",
+              "value": "The applicable build plan, generated artifacts, verification results and release evidence—not just advice in a chat."
+            }
+          ]
+        },
+        {
+          "title": "What makes it different from an ordinary answer",
+          "body": "A conversation can become a versioned project with work products, dependencies and execution controls. A change to the agreed scope can affect later design or build work.",
+          "items": [
+            {
+              "label": "Example correction",
+              "value": "“Only managers should see the team queue” affects the role matrix, screen behavior and relevant access tests."
+            },
+            {
+              "label": "Important distinction",
+              "value": "A draft diagram is a design proposal. A built artifact, passed test and running release each require their own evidence."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "capabilities",
+      "title": "Start with the work you want to improve",
+      "body": [
+        "These examples describe useful outcomes, not a list of internal module names. Choose a small first result, then expand it as the requirements and evidence become clear."
+      ],
+      "prompt": "Show the main capabilities available in this workspace. Distinguish what is installed, what needs configuration or approval, and what is unavailable. Do not perform any build or deployment.",
+      "takeaway": "You can explore a small business tool, design a full-stack application, or plan improvements to an existing application. The installed capabilities below determine which paths can be offered here.",
+      "cards": [
+        {
+          "title": "Replace spreadsheet-based work",
+          "description": "Capture structured information, show a useful list and track status.",
+          "example": "Equipment checkout, visitor sign-in, mileage logs or a service-request queue.",
+          "requires": [
+            "simple-form-builder"
+          ]
+        },
+        {
+          "title": "Build a full-stack business application",
+          "description": "Design the user experience together with backend operations, application data and role-based access.",
+          "example": "An employee request app with a manager queue and status history.",
+          "requires": [
+            "full-stack-builder"
+          ],
+          "condition": "The delivery profile, database, environment and approvals must be ready before execution."
+        },
+        {
+          "title": "Understand and improve an existing application",
+          "description": "Explain what is known, identify a requested change and examine its impact on users, data and tests.",
+          "example": "Add an approval step or review who can see an existing application’s records.",
+          "requires": [
+            "application-overview"
+          ]
+        },
+        {
+          "title": "Design connected workflows",
+          "description": "Work out which systems exchange information and which system owns each action or record.",
+          "example": "An app that needs customer data from a CRM and approval results from another service.",
+          "requires": [
+            "architecture-design"
+          ],
+          "condition": "Real integrations—including SAP or Microsoft—need supported, configured and verified connectors. A design proposal is not a working connection."
+        }
+      ],
+      "sections": [
+        {
+          "title": "Other useful starting points",
+          "body": "You do not always need to build something immediately.",
+          "items": [
+            {
+              "label": "Ask a question",
+              "value": "“Explain this application’s roles and process using the evidence we have.”"
+            },
+            {
+              "label": "Compare designs",
+              "value": "“Show the trade-off between a simple form and a full-stack app for this need.”"
+            },
+            {
+              "label": "Review a plan",
+              "value": "“What is still missing before we can build or release this version?”"
+            }
+          ]
+        },
+        {
+          "title": "Where PL needs more information",
+          "body": "PL should identify gaps rather than promise a capability it cannot verify.",
+          "items": [
+            {
+              "label": "Customer systems",
+              "value": "It cannot assume it has access to your SAP, CRM, identity service or database."
+            },
+            {
+              "label": "Existing implementation",
+              "value": "A user description or old document does not prove what is deployed today."
+            },
+            {
+              "label": "Business authority",
+              "value": "A request to explore an idea is not a request to change production."
+            }
+          ]
+        }
+      ],
+      "next": "journey"
+    },
+    {
+      "id": "journey",
+      "title": "Follow one idea from discovery to a usable application",
+      "body": [
+        "For our example, imagine replacing lost email requests with a shared Service Request Hub. Here is how the same idea develops."
+      ],
+      "flow": [
+        "Understand",
+        "Shape",
+        "Design",
+        "Build and test",
+        "Release and improve"
+      ],
+      "prompt": "Show how a business idea becomes an application in PL. Explain each stage briefly, what I would do and what evidence is needed. Do not start execution.",
+      "takeaway": "Each stage answers a different question and produces something you can inspect. You can revise the project without starting the whole conversation again.",
+      "sections": [
+        {
+          "title": "1 · Understand the problem",
+          "body": "PL asks what is difficult today and who is affected, then proposes a direction.",
+          "items": [
+            {
+              "label": "Your input",
+              "value": "“Requests get lost between Facilities and IT.”"
+            },
+            {
+              "label": "PL prepares",
+              "value": "A problem statement, proposed users and a simple process."
+            },
+            {
+              "label": "Your decision",
+              "value": "Confirm whether the two teams need separate queues."
+            }
+          ]
+        },
+        {
+          "title": "2 · Shape the first release",
+          "body": "Choose a useful scope instead of collecting every possible feature.",
+          "items": [
+            {
+              "label": "PL prepares",
+              "value": "Submission, own-request view, team queue and manual assignment."
+            },
+            {
+              "label": "Your decision",
+              "value": "Keep automated escalation for a later version."
+            },
+            {
+              "label": "Output",
+              "value": "Discovery blueprint and requirements with explicit assumptions."
+            }
+          ]
+        },
+        {
+          "title": "3 · Make the design visible",
+          "body": "Review the screens, data and component interactions together.",
+          "items": [
+            {
+              "label": "PL prepares",
+              "value": "An employee form, manager queue, permission matrix and application design."
+            },
+            {
+              "label": "Your decision",
+              "value": "Employees see only their own requests; managers manage their team queue."
+            },
+            {
+              "label": "Output",
+              "value": "Applicable solution design and build plan."
+            }
+          ]
+        },
+        {
+          "title": "4 · Build and verify",
+          "body": "When the project’s actual prerequisites and authority are satisfied, PL performs the supported build and checks.",
+          "items": [
+            {
+              "label": "PL produces",
+              "value": "Application artifacts and real verification results for the stated version and scope."
+            },
+            {
+              "label": "Your review",
+              "value": "Check that the app solves the intended problem and inspect failures or uncovered requirements."
+            },
+            {
+              "label": "Important",
+              "value": "A successful-looking preview is not proof that all tests or security checks passed."
+            }
+          ]
+        },
+        {
+          "title": "5 · Release, use and improve",
+          "body": "Deploy to the intended environment through the applicable release process, then learn from actual use.",
+          "items": [
+            {
+              "label": "PL records",
+              "value": "Release identity, environment and deployment/verification outcomes."
+            },
+            {
+              "label": "Operational use",
+              "value": "Users can work through the application or a qualified EAL integration when configured."
+            },
+            {
+              "label": "Next increment",
+              "value": "Use real feedback to decide whether automated escalation is worthwhile."
+            }
+          ]
+        }
+      ],
+      "next": "role"
+    },
+    {
+      "id": "guided-demo",
+      "title": "See the same example develop, one decision at a time",
+      "body": [
+        "The example begins with lost email requests and ends with a coherent app concept, screens, data and an explanation of delivery and operational use.",
+        "It is prepared learning content. It does not create an application or connect to a live EAL environment. Prompts can be previewed separately before you choose to use them in your own chat."
+      ],
+      "prompt": "Guide me through discovering a sample internal service-request application. Propose a first version and ask one question at a time. This is discovery only; do not build, deploy or change business records.",
+      "takeaway": "Follow the sample before starting your own project. Each step explains what changes, what you decide and what the next delivery artifact would contain.",
+      "example": {
+        "title": "From an email inbox to a Service Request Hub",
+        "before": "Employees email requests. Managers search through replies to find the owner, latest status and what still needs attention.",
+        "after": "Employees submit a request and see its progress. Managers work from one queue, assign an owner and resolve the request with a visible history.",
+        "features": [
+          "Submit a request",
+          "My requests",
+          "Manager queue",
+          "Assignment and status"
+        ],
+        "fields": [
+          "Request",
+          "Requester",
+          "Category",
+          "Owner",
+          "Status"
+        ]
+      },
+      "next": "idea"
+    },
+    {
+      "id": "idea",
+      "title": "A rough problem is enough to start",
+      "body": [
+        "Try the short structure below. You can leave unknown details open; PL should help you discover them progressively."
+      ],
+      "prompt": "Help me turn a business problem into an application idea. Start with three simple examples, propose a direction, and ask one question at a time. Do not build anything.",
+      "takeaway": "Tell PL who is struggling, how the work happens now and what you want to improve. PL should provide a useful first proposal before asking for more detail.",
+      "sections": [
+        {
+          "title": "Use this simple starting point",
+          "body": "“Today, [people] do [work] using [current method]. The difficulty is [problem]. I want [better outcome].”",
+          "items": [
+            {
+              "label": "Employee operations",
+              "value": "“Employees email facilities requests. We lose track of ownership. I want everyone to see progress.”"
+            },
+            {
+              "label": "Approval workflow",
+              "value": "“Managers approve purchases in email. I want a clear approval queue and an audit trail.”"
+            },
+            {
+              "label": "Existing application",
+              "value": "“We have a supplier portal. I want to add regional approval without losing the current process.”"
+            }
+          ]
+        },
+        {
+          "title": "What should happen after you send it",
+          "body": "PL should reflect the problem, propose a small first version and ask one consequential question.",
+          "items": [
+            {
+              "label": "First proposal",
+              "value": "A request form, a status list and a manager queue."
+            },
+            {
+              "label": "First visual",
+              "value": "Submit → Review → Assign → Resolve, labeled as a proposed process."
+            },
+            {
+              "label": "Next question",
+              "value": "Who handles incoming requests today: one team or several?"
+            }
+          ]
+        },
+        {
+          "title": "Keep control as the idea develops",
+          "body": "You can correct the understanding at any point.",
+          "items": [
+            {
+              "label": "Change scope",
+              "value": "“Leave billing out of this version.”"
+            },
+            {
+              "label": "Ask for clarity",
+              "value": "“Explain that in simple terms and show an example.”"
+            },
+            {
+              "label": "Check readiness",
+              "value": "“What have we decided, what are you assuming, and what is still missing?”"
+            }
+          ]
+        }
+      ],
+      "next": "guided-demo"
+    },
+    {
+      "id": "role",
+      "title": "You bring the business judgment. PL helps with the detailed work.",
+      "body": [
+        "For the Service Request Hub, your knowledge of how employees and managers work is more important than knowing database syntax. PL should translate that knowledge into a proposed design and make uncertainty visible."
+      ],
+      "prompt": "Explain what PL can help me do and which decisions or actions need my involvement. Use plain language and distinguish proposals from authorized execution.",
+      "takeaway": "You do not need to write a technical specification before starting. You explain what matters, choose between meaningful options and review the result.",
+      "sections": [
+        {
+          "title": "What you contribute",
+          "body": "Answer the questions that require your business knowledge.",
+          "items": [
+            {
+              "label": "Outcome",
+              "value": "“We need to stop requests from being forgotten.”"
+            },
+            {
+              "label": "People and rules",
+              "value": "“Facilities managers should only manage their own team’s queue.”"
+            },
+            {
+              "label": "Priorities",
+              "value": "“Manual assignment is enough for the first version.”"
+            },
+            {
+              "label": "Acceptance",
+              "value": "“An employee can submit and track a request; a manager can resolve it.”"
+            }
+          ]
+        },
+        {
+          "title": "What PL should prepare",
+          "body": "PL should reduce the work of turning those decisions into delivery detail.",
+          "items": [
+            {
+              "label": "Direction",
+              "value": "Relevant examples, a recommended first scope and focused questions."
+            },
+            {
+              "label": "Design",
+              "value": "Screens, workflows, data and architecture linked to the agreed requirements."
+            },
+            {
+              "label": "Execution detail",
+              "value": "The supported build steps, tests, dependencies and environment prerequisites."
+            },
+            {
+              "label": "Evidence",
+              "value": "What was actually built, tested or released, and what remains unknown."
+            }
+          ]
+        },
+        {
+          "title": "When PL should ask you",
+          "body": "A question should explain the consequence of the choice.",
+          "items": [
+            {
+              "label": "Useful question",
+              "value": "“Should employees see only their own requests? This determines which rows and screens they may access.”"
+            },
+            {
+              "label": "If you do not know",
+              "value": "Ask for a recommendation or a concrete example. A safe design choice can remain a labeled proposal."
+            },
+            {
+              "label": "Before a consequential action",
+              "value": "PL should show the specific work and applicable authorization boundary, rather than treat lesson clicks as permission."
+            }
+          ]
+        }
+      ],
+      "example": {
+        "title": "From an email inbox to a Service Request Hub",
+        "before": "Employees email requests. Managers search through replies to find the owner, latest status and what still needs attention.",
+        "after": "Employees submit a request and see its progress. Managers work from one queue, assign an owner and resolve the request with a visible history.",
+        "features": [
+          "Submit a request",
+          "My requests",
+          "Manager queue",
+          "Assignment and status"
+        ],
+        "fields": [
+          "Request",
+          "Requester",
+          "Category",
+          "Owner",
+          "Status"
+        ]
+      },
+      "next": "idea"
+    }
+  ],
+  "prompts": [
+    {
+      "id": "business-problem",
+      "label": "Help me describe my problem",
+      "prompt": "We manage work through email and spreadsheets. Help me identify the main problem and whether an application would help. Suggest a simple starting point and ask one question at a time. Do not build anything.",
+      "requires": [
+        "outcome-discovery"
+      ],
+      "stages": [
+        "welcome",
+        "outcome-discovery"
+      ]
+    },
+    {
+      "id": "first-version",
+      "label": "Suggest a useful first version",
+      "prompt": "Using our current discovery, recommend the smallest useful first version. Separate essential features, assumptions, decisions still needed and items to defer. Do not repeat questions we have already answered or start a build.",
+      "requires": [
+        "outcome-discovery"
+      ],
+      "stages": [
+        "outcome-discovery",
+        "requirements-discovery",
+        "requirements-formalization"
+      ]
+    },
+    {
+      "id": "show-process",
+      "label": "Show the process",
+      "prompt": "Show the application's proposed user process as a simple flow. Distinguish what we agreed from assumptions, include important exceptions and ask only the next necessary question. Do not execute the process.",
+      "requires": [
+        "outcome-discovery"
+      ],
+      "stages": [
+        "outcome-discovery"
+      ]
+    },
+    {
+      "id": "screens",
+      "label": "Explore the screens",
+      "prompt": "Based on the accepted users and workflow, propose the screens this application needs. Explain the purpose of each screen and mark drafts and open questions. Do not build files.",
+      "requires": [
+        "architecture-design"
+      ],
+      "stages": [
+        "architecture-design",
+        "requirements-formalization"
+      ]
+    },
+    {
+      "id": "review-design",
+      "label": "Explain the design",
+      "prompt": "Explain the current application design in plain language. Show the major components and connections, distinguish proposed design from verified implementation, and identify missing evidence. Do not build or deploy.",
+      "requires": [
+        "architecture-design"
+      ],
+      "stages": [
+        "architecture-design",
+        "build-plan"
+      ]
+    },
+    {
+      "id": "review-plan",
+      "label": "Review the next delivery step",
+      "prompt": "Review the current delivery plan and tell me the next supported step, remaining prerequisites and any required decisions. Do not treat this request as authorization to build or deploy.",
+      "requires": [
+        "build-plan"
+      ],
+      "stages": [
+        "build-plan",
+        "full-stack-builder"
+      ]
+    },
+    {
+      "id": "simple-help",
+      "label": "Explain PL more simply",
+      "prompt": "Explain how I can begin using PL in simple language, with one relatable example and one suggested next step. Do not execute any build or deployment.",
+      "requires": [],
+      "stages": [
+        "general-answer"
+      ]
+    }
+  ],
+  "example": {
+    "id": "service-request-hub",
+    "title": "From lost email requests to a Service Request Hub",
+    "description": "Prepared learning example with users, screens, process and delivery evidence. No real build or deployment.",
+    "steps": [
+      {
+        "id": "problem",
+        "title": "1. Begin with a business problem",
+        "body": "Sample situation: employees send requests by email and some get lost. A shared queue could make ownership and progress clearer. This is an illustrative starting point, not an observation about your company.",
+        "prompt": "Employees submit service requests through email and things get lost. Help me explore a simple application. Suggest a first version and ask one question at a time. Do not build anything.",
+        "flow": [
+          "Employee asks",
+          "Team reviews",
+          "Request resolved"
+        ],
+        "facts": [
+          {
+            "label": "Sample goal",
+            "value": "Make requests visible and actionable"
+          },
+          {
+            "label": "Assumption",
+            "value": "Internal employees only"
+          },
+          {
+            "label": "A clear outcome",
+            "value": "Success would mean fewer unassigned requests and a visible owner. A real project would still need a baseline; no improvement percentage is assumed."
+          }
+        ]
+      },
+      {
+        "id": "users",
+        "title": "2. Decide who needs access",
+        "body": "Proposed roles: employees submit and track their own requests; managers manage the team queue. Choose a sample visibility rule to see how a decision becomes explicit.",
+        "prompt": "Suggest the users and responsibilities for this service-request application. Ask about the visibility rule that matters most before proposing permissions.",
+        "choices": [
+          {
+            "id": "own",
+            "label": "Employees see their own requests"
+          },
+          {
+            "id": "team",
+            "label": "Employees see the team queue"
+          },
+          {
+            "id": "recommend",
+            "label": "Not sure—recommend an option"
+          }
+        ],
+        "facts": [
+          {
+            "label": "Proposed",
+            "value": "Employee and manager roles"
+          },
+          {
+            "label": "Open",
+            "value": "Which requests employees may see"
+          },
+          {
+            "label": "Why this choice matters",
+            "value": "Visibility affects what appears in My requests, which records the API returns and which access tests are needed."
+          }
+        ]
+      },
+      {
+        "id": "process",
+        "title": "3. Map the work",
+        "body": "A simple proposed flow helps you discuss responsibilities before collecting every field. Reassignment, rejection and cancellation can be explored after the main path is clear.",
+        "flow": [
+          "Submit",
+          "Review",
+          "Assign",
+          "Resolve"
+        ],
+        "prompt": "Show the proposed service-request process, including important exceptions. Distinguish confirmed rules from assumptions. Do not execute actions.",
+        "facts": [
+          {
+            "label": "A useful exception",
+            "value": "If a request goes to the wrong team, a manager needs a reassignment path. Record that as an open rule rather than silently inventing it."
+          }
+        ]
+      },
+      {
+        "id": "scope",
+        "title": "4. Choose a small first release",
+        "body": "Suggested first release: submit, view progress, team queue and manual assignment. Automated routing, external users and complex SLAs can be deferred. A recommendation is not an approved build plan.",
+        "facts": [
+          {
+            "label": "Included in sample",
+            "value": "Submission, own requests, team queue, status updates"
+          },
+          {
+            "label": "Deferred",
+            "value": "External integrations and automated escalation"
+          },
+          {
+            "label": "A testable first result",
+            "value": "An employee submits and tracks a request; the right manager assigns and resolves it. This is more useful than a long list of unrelated features."
+          }
+        ],
+        "prompt": "Recommend a useful first version of this application. Separate essential features, deferred items and unresolved decisions. Keep previously agreed scope."
+      },
+      {
+        "id": "screens",
+        "title": "5. Make the experience visible",
+        "body": "Each screen should support a user task. Start with Submit request, My requests, Team queue and Request details. A screen sketch is a design aid, not a working application.",
+        "flow": [
+          "Submit request",
+          "My requests",
+          "Request details"
+        ],
+        "prompt": "Show draft screens for employees and managers, tied to the agreed workflow. Explain each screen in plain language and identify open decisions.",
+        "facts": [
+          {
+            "label": "What the user sees",
+            "value": "Submit request collects the problem. My requests shows personal progress. The manager queue shows unassigned work. Request details holds the history and permitted actions."
+          }
+        ]
+      },
+      {
+        "id": "data",
+        "title": "6. Understand data and connections",
+        "body": "Request, requester and status history are logical business concepts. They do not establish SQL table names or API payloads. Look for an existing identity or request system before proposing new integration work.",
+        "flow": [
+          "Browser experience",
+          "Authorized app operations",
+          "Application-owned data"
+        ],
+        "facts": [
+          {
+            "label": "Logical data",
+            "value": "Request, owner and status history"
+          },
+          {
+            "label": "Unverified",
+            "value": "Identity integration and exact API/database contracts"
+          },
+          {
+            "label": "Keep concepts separate",
+            "value": "“Requester” is a business concept. The physical user identifier, SQL key and API field must be designed or verified separately."
+          }
+        ],
+        "prompt": "Explain the logical data and integration needs. Reuse authorized existing evidence where available and clearly mark missing API methods, payloads, tables or keys. Do not invent them."
+      },
+      {
+        "id": "security",
+        "title": "7. Make access and assumptions explicit",
+        "body": "Specify who can see and change records. Security should be discussed early when sensitive data or external users change the design. Training choices never grant real permissions.",
+        "prompt": "Review the proposed application permissions and data sensitivity. Separate user-confirmed decisions, recommendations and unresolved questions.",
+        "facts": [
+          {
+            "label": "Example acceptance check",
+            "value": "An employee must not retrieve another employee’s private request by changing the request identifier."
+          }
+        ]
+      },
+      {
+        "id": "blueprint",
+        "title": "8. Review a coherent discovery blueprint",
+        "body": "Summarize the outcome, users, process, scope, screens, data, integrations and risks. Ask only about blockers for the next stage. Deployment details may remain open while a design is being explored.",
+        "facts": [
+          {
+            "label": "Ready for discussion",
+            "value": "Sample goal, roles, process and first-release scope"
+          },
+          {
+            "label": "Still unverified",
+            "value": "Customer-specific integrations and environment bindings"
+          },
+          {
+            "label": "What a useful blueprint contains",
+            "value": "Goal, first-release scope, people, main process and exceptions, screen map, logical data, integration constraints, acceptance criteria and unresolved decisions."
+          }
+        ],
+        "prompt": "Summarize our discovery blueprint with confirmed facts, decisions, assumptions and open questions. Explain whether it is sufficient for design; do not claim readiness to build without the required inputs."
+      },
+      {
+        "id": "delivery",
+        "title": "9. Understand build, testing and release",
+        "body": "In a real project, PL follows the applicable design/build approvals, performs actual verification and records the deployment outcome. This lesson only illustrates those stages. Nothing has been built or deployed here.",
+        "flow": [
+          "Approved plan",
+          "Build",
+          "Test evidence",
+          "Authorized release"
+        ],
+        "prompt": "Explain the next delivery stages for this application, their prerequisites and the evidence needed. This is an explanation, not authorization to build or deploy.",
+        "facts": [
+          {
+            "label": "Different kinds of evidence",
+            "value": "Design explains intent. Build artifacts show implementation. Tests show checked behavior. A release record identifies the deployed version and environment."
+          }
+        ]
+      },
+      {
+        "id": "operate",
+        "title": "10. Learn what comes after delivery",
+        "body": "An operational experience such as EAL can guide a user through a qualified application. A predeployed practice app would need its own verified training binding and isolated sample data. No live practice app is connected to this lesson.",
+        "flow": [
+          "Open qualified practice app",
+          "Review sample form",
+          "Submit and verify outcome"
+        ],
+        "prompt": "Explain how users would operate the delivered application through EAL, including roles, sample data and verification. Distinguish the proposed experience from integrations that are actually available.",
+        "facts": [
+          {
+            "label": "Example operational task",
+            "value": "An employee submits a projector issue. A manager assigns it and later resolves it. A future practice app would use isolated sample records and verified role bindings."
+          }
+        ]
+      }
+    ]
+  }
+}

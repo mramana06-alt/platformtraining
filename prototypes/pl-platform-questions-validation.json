@@ -1,0 +1,18 @@
+{
+  "validatedAt": "2026-09-13T09:43:41.359Z",
+  "questions": 40,
+  "exactPromptMatches": 40,
+  "minimumAnswerWords": 180,
+  "allFollowupsResolve": true,
+  "syntax": "passed",
+  "externalAPICalls": false,
+  "browserChecks": [
+    "recommended prompt",
+    "follow-up prompt",
+    "direct typing",
+    "searchable question library",
+    "all 40 answers visible in reference mode",
+    "reload retains conversation",
+    "unrecognized prompt offers matching topics"
+  ]
+}

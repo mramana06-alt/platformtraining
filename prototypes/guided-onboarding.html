@@ -1,0 +1,863 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PL Guided Onboarding Prototype</title>
+<style>
+  :root {
+    --ink: #25292c; --muted: #52675a; --line: #e3e8e4; --card-line: #dfe5e1; --green: #244f3b; --green-soft: #edf3ef;
+    --eyebrow: #587463; --soft: #f6f7f7; --accent: #2e8b57; --warn-bg: #fff9e9; --warn-line: #e4c37e; --danger: #b42318;
+    --blue: #2a78d6; --blue-soft: #eaf2fc; --hl: #f2b64a;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #fff; color: var(--ink); font: 14px/1.5 Aptos, "Segoe UI Variable", "Segoe UI", -apple-system, sans-serif; }
+  button, textarea, input { font: inherit; }
+  button { cursor: pointer; }
+  button:disabled { cursor: not-allowed; opacity: .55; }
+  .app-shell { display: flex; flex-direction: column; height: 100vh; }
+  .topbar { display: flex; align-items: center; gap: 14px; padding: 10px 20px; border-bottom: 1px solid var(--line); background: #fff; flex: 0 0 auto; }
+  .brand-mark { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 12px; color: #fff; background: var(--green); font: 700 .74rem Georgia, serif; letter-spacing: .08em; }
+  .topbar h1 { margin: 0; font: 500 1.35rem/1 Georgia, "Times New Roman", serif; }
+  .topbar .proto { margin-left: 8px; padding: 4px 10px; border-radius: 999px; background: var(--blue-soft); color: #1c5cab; font-size: .74rem; font-weight: 700; }
+  .topbar .spacer { flex: 1; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+  .seg button { border: 0; background: #fff; padding: 6px 14px; font-size: .82rem; font-weight: 600; color: var(--muted); }
+  .seg button.on { background: var(--green); color: #fff; }
+  .btn { border: 1px solid var(--line); background: #fff; border-radius: 9px; padding: 7px 12px; font-size: .84rem; font-weight: 600; color: var(--ink); }
+  .btn:hover { background: var(--soft); }
+  .btn.primary { background: var(--green); border-color: var(--green); color: #fff; }
+  .btn.primary:hover { background: #1d3f30; }
+  .btn.ghost { border-color: transparent; }
+  .btn.small { padding: 4px 9px; font-size: .78rem; }
+  .btn.danger { color: var(--danger); }
+  .workspace { display: grid; grid-template-columns: 236px minmax(0, 1fr) 372px; flex: 1 1 auto; min-height: 0; }
+  /* sidebar */
+  .project-sidebar { border-right: 1px solid var(--line); padding: 14px 12px; overflow: auto; background: #fbfcfb; }
+  .eyebrow { margin: 0 0 6px; color: var(--eyebrow); font-size: .68rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .project { padding: 9px 10px; border-radius: 9px; margin-bottom: 4px; cursor: pointer; border: 1px solid transparent; }
+  .project:hover { background: #f1f4f2; }
+  .project.active { background: #fff; border-color: var(--card-line); box-shadow: 0 4px 14px rgba(37,54,46,.06); }
+  .project .name { font-weight: 700; font-size: .86rem; }
+  .project .sub { color: var(--muted); font-size: .74rem; }
+  .project-empty { color: var(--muted); font-size: .82rem; padding: 8px 10px; }
+  /* chat */
+  .chat-column { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+  .conversation { flex: 1 1 auto; overflow-y: auto; padding: 24px clamp(24px, 4vw, 60px) 150px; }
+  .message { position: relative; max-width: 100%; margin: 0 0 16px; padding: 14px 18px; border: 1px solid var(--card-line); border-radius: 13px; background: #fff; box-shadow: 0 8px 26px rgba(37,54,46,.05); font-size: .9rem; }
+  .message--user { width: fit-content; max-width: 82%; margin-left: auto; padding: 10px 16px; color: #fff; border: 0; background: var(--green); box-shadow: none; }
+  .message--system { background: #fbfcfb; }
+  .message-actor { margin: 0 0 7px; color: var(--eyebrow); font-size: .64rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+  .message p { margin: 0 0 8px; }
+  .message p:last-child { margin-bottom: 0; }
+  .message h3 { margin: 10px 0 6px; font-size: 1rem; }
+  .message ul, .message ol { margin: 4px 0 8px; padding-left: 20px; }
+  .kv { display: grid; grid-template-columns: max-content 1fr; gap: 4px 14px; margin: 6px 0 10px; font-size: .86rem; }
+  .kv dt { color: var(--muted); font-weight: 600; } .kv dd { margin: 0; }
+  table.tbl { border-collapse: collapse; width: 100%; font-size: .82rem; margin: 6px 0 10px; }
+  .tbl th, .tbl td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .tbl th { color: var(--muted); font-size: .72rem; text-transform: uppercase; letter-spacing: .05em; }
+  .tbl td.c { text-align: center; }
+  .callout { border: 1px solid var(--line); border-left: 4px solid var(--blue); background: var(--blue-soft); border-radius: 8px; padding: 9px 12px; margin: 8px 0 10px; font-size: .86rem; }
+  .callout.warning { border-left-color: var(--warn-line); background: var(--warn-bg); }
+  .callout.success { border-left-color: var(--accent); background: var(--green-soft); }
+  .callout.danger { border-left-color: var(--danger); background: #fff4f1; }
+  .callout strong { display: block; margin-bottom: 2px; }
+  pre.code { margin: 6px 0 10px; padding: 10px 12px; border-radius: 8px; background: #f4f6f5; border: 1px solid var(--line); font: 12px/1.45 ui-monospace, Consolas, monospace; overflow-x: auto; }
+  .diff { margin: 6px 0 10px; font: 12.5px/1.5 ui-monospace, Consolas, monospace; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .diff div { padding: 2px 10px; }
+  .diff .add { background: #e9f7ec; color: #14532d; } .diff .del { background: #fdecec; color: #7f1d1d; } .diff .ctx { color: var(--muted); }
+  figure.diagram { margin: 8px 0 12px; padding: 10px; border: 1px solid var(--line); border-radius: 10px; background: #fcfdfc; overflow-x: auto; }
+  figure.diagram figcaption { color: var(--muted); font-size: .76rem; margin-top: 4px; }
+  figure.diagram svg { display: block; max-width: 100%; height: auto; }
+  .understood { margin-top: 12px; padding-top: 8px; border-top: 1px dashed var(--line); color: var(--muted); font-size: .78rem; display: flex; gap: 14px; flex-wrap: wrap; }
+  .understood b { color: var(--ink); }
+  /* interaction cards */
+  .interaction-card { border: 1px solid #cfe0d5; background: #f7faf8; border-radius: 12px; padding: 12px 14px; margin: 10px 0 0; }
+  .interaction-card .q { font-weight: 700; margin-bottom: 8px; }
+  .option-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 8px; }
+  .option-card { text-align: left; border: 1px solid var(--card-line); background: #fff; border-radius: 10px; padding: 9px 11px; font-size: .84rem; }
+  .option-card:hover { border-color: var(--accent); background: var(--green-soft); }
+  .option-card .rec { display: inline-block; margin-left: 6px; padding: 0 6px; border-radius: 999px; background: var(--green); color: #fff; font-size: .64rem; font-weight: 700; vertical-align: 2px; }
+  .option-card small { display: block; color: var(--muted); }
+  .interaction-actions { margin-top: 8px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+  .own-answer { width: 100%; margin-top: 8px; }
+  .own-answer textarea { width: 100%; min-height: 56px; border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .done-tag { display: inline-block; margin-top: 8px; padding: 3px 9px; border-radius: 999px; background: var(--green-soft); color: var(--green); font-size: .74rem; font-weight: 700; }
+  /* welcome */
+  .paths { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
+  .path { text-align: left; border: 1px solid var(--card-line); border-radius: 12px; background: #fff; padding: 12px 14px; }
+  .path:hover { border-color: var(--accent); background: var(--green-soft); }
+  .path.default { border-color: var(--green); box-shadow: inset 0 0 0 1px var(--green); }
+  .path b { display: block; font-size: .92rem; }
+  .path span { color: var(--muted); font-size: .8rem; }
+  .starters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 8px; }
+  .starter { text-align: left; border: 1px solid var(--card-line); border-radius: 10px; background: #fff; padding: 9px 11px; font-size: .82rem; }
+  .starter:hover { border-color: var(--accent); background: var(--green-soft); }
+  .starter small { display: block; color: var(--muted); }
+  .mini-journey { display: flex; gap: 4px; align-items: center; margin: 10px 0 4px; flex-wrap: wrap; }
+  .mini-journey span { padding: 4px 9px; border-radius: 999px; background: var(--soft); font-size: .76rem; font-weight: 600; color: var(--muted); }
+  .mini-journey i { color: #b8c2bc; font-style: normal; }
+  /* composer */
+  .composer { position: absolute; right: 0; bottom: 0; left: 0; padding: 0 clamp(24px, 4vw, 60px) 12px; pointer-events: none; background: linear-gradient(to top, #fff 60%, rgba(255,255,255,0)); }
+  .composer-row { max-width: 900px; margin: 0 auto; padding: 10px 10px 8px; border: 1px solid #e6e9ee; border-radius: 22px; background: #fff; box-shadow: 0 8px 24px rgba(15,30,54,.06); pointer-events: auto; }
+  .composer-row textarea { display: block; width: 100%; min-height: 44px; max-height: 160px; padding: 6px 4px; border: 0; background: transparent; resize: none; outline: 0; }
+  .composer-footer { display: flex; align-items: center; gap: 8px; }
+  .next-step { flex: 1; display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .next-step button { border: 1px solid #cfe0d5; background: var(--green-soft); color: var(--green); border-radius: 999px; padding: 4px 10px; font-size: .76rem; font-weight: 700; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .next-step .hint { color: var(--muted); font-size: .74rem; white-space: nowrap; }
+  .send { width: 36px; height: 36px; border-radius: 50%; border: 0; background: var(--green); color: #fff; font-size: 1rem; }
+  .composer.disabled .composer-row { background: #f7f8f7; }
+  /* side panel */
+  .side-panel { border-left: 1px solid var(--line); overflow: auto; background: #fbfcfb; padding: 12px; display: flex; flex-direction: column; gap: 12px; }
+  .panel { border: 1px solid var(--card-line); border-radius: 10px; background: #fff; padding: 10px 12px; }
+  .panel h2 { margin: 0 0 8px; font-size: .84rem; display: flex; align-items: center; gap: 8px; }
+  .panel h2 .btn { margin-left: auto; }
+  .journey { display: flex; flex-direction: column; gap: 4px; }
+  .jstep { display: flex; align-items: center; gap: 8px; padding: 5px 6px; border-radius: 8px; font-size: .8rem; }
+  .jstep .dot { width: 10px; height: 10px; border-radius: 50%; border: 2px solid #b8c2bc; background: #fff; flex: 0 0 auto; }
+  .jstep.done .dot { background: var(--accent); border-color: var(--accent); }
+  .jstep.active { background: var(--green-soft); font-weight: 700; }
+  .jstep.active .dot { border-color: var(--green); background: var(--green); box-shadow: 0 0 0 3px #cfe0d5; }
+  .jstep small { color: var(--muted); font-weight: 400; margin-left: auto; }
+  .jstep .why { display: none; width: 100%; color: var(--muted); font-size: .74rem; font-weight: 400; padding-left: 18px; }
+  .jstep.open { flex-wrap: wrap; } .jstep.open .why { display: block; }
+  .breadcrumb { display: flex; gap: 4px; flex-wrap: wrap; font-size: .76rem; }
+  .breadcrumb span { padding: 2px 8px; border-radius: 999px; background: var(--soft); color: var(--muted); }
+  .breadcrumb span.done { background: var(--green-soft); color: var(--green); }
+  .breadcrumb span.active { background: var(--green); color: #fff; }
+  .tabs { display: flex; gap: 2px; flex-wrap: wrap; margin-bottom: 8px; }
+  .tabs button { border: 1px solid transparent; background: transparent; border-radius: 8px; padding: 4px 8px; font-size: .74rem; font-weight: 600; color: var(--muted); }
+  .tabs button.on { background: var(--soft); color: var(--ink); border-color: var(--line); }
+  .tabs button b { display: inline-block; min-width: 18px; padding: 0 5px; margin-left: 4px; border-radius: 999px; background: #e6ebe8; font-size: .68rem; text-align: center; }
+  .view { font-size: .8rem; }
+  .view .row { display: grid; grid-template-columns: max-content 1fr; gap: 2px 10px; padding: 4px 0; border-bottom: 1px dashed var(--line); }
+  .view .row:last-child { border-bottom: 0; }
+  .view .row .k { color: var(--muted); font-weight: 600; }
+  .view .item { padding: 5px 0; border-bottom: 1px dashed var(--line); }
+  .view .item:last-child { border-bottom: 0; }
+  .view .item small { color: var(--muted); display: block; }
+  .view .empty { color: var(--muted); font-style: italic; padding: 4px 0; }
+  .st { display: inline-block; padding: 0 7px; border-radius: 999px; font-size: .68rem; font-weight: 700; margin-right: 6px; }
+  .st.open { background: #fdecec; color: #7f1d1d; } .st.covered { background: #e9f7ec; color: #14532d; } .st.deferred { background: var(--soft); color: var(--muted); }
+  .st.assumed { background: var(--warn-bg); color: #7a5a10; } .st.confirmed { background: #e9f7ec; color: #14532d; } .st.corrected { background: var(--blue-soft); color: #1c5cab; }
+  .st.default { background: var(--soft); color: var(--muted); } .st.user { background: var(--green-soft); color: var(--green); }
+  /* highlight ring (replay) */
+  .hl { box-shadow: 0 0 0 3px var(--hl), 0 0 0 7px rgba(242,182,74,.35) !important; transition: box-shadow .2s; position: relative; z-index: 2; }
+  .replay-bar { position: fixed; left: 50%; bottom: 96px; transform: translateX(-50%); z-index: 40; display: none; gap: 8px; align-items: center; padding: 8px 12px; border-radius: 999px; background: #1f2a25; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,.25); font-size: .8rem; }
+  .replay-bar.on { display: flex; }
+  .replay-bar button { border: 1px solid rgba(255,255,255,.3); background: transparent; color: #fff; border-radius: 999px; padding: 3px 10px; font-size: .76rem; }
+  .replay-bar .caption { max-width: 420px; }
+  .typing { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #b8c2bc; margin-right: 4px; animation: blink 1s infinite; }
+  @keyframes blink { 0%,100% { opacity: .3 } 50% { opacity: 1 } }
+  /* progress */
+  .steps { list-style: none; padding: 0; margin: 6px 0 8px; }
+  .steps li { display: flex; align-items: center; gap: 8px; padding: 4px 0; font-size: .84rem; }
+  .steps li .dot { width: 9px; height: 9px; border-radius: 50%; background: #d3dad6; }
+  .steps li.run .dot { background: var(--hl); } .steps li.ok .dot { background: var(--accent); }
+  .steps li small { margin-left: auto; color: var(--muted); }
+  /* modal + palette */
+  .overlay { position: fixed; inset: 0; background: rgba(20,30,25,.45); display: none; z-index: 50; align-items: center; justify-content: center; }
+  .overlay.on { display: flex; }
+  .modal { width: min(880px, 94vw); max-height: 90vh; overflow: auto; background: #fff; border-radius: 14px; box-shadow: 0 20px 60px rgba(0,0,0,.3); }
+  .modal header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+  .modal header .brand-mark { background: #1c5cab; }
+  .modal header .who { margin-left: auto; color: var(--muted); font-size: .78rem; }
+  .eal-body { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .eal-chat { padding: 14px; border-right: 1px solid var(--line); min-height: 320px; display: flex; flex-direction: column; gap: 8px; }
+  .eal-msg { padding: 8px 12px; border-radius: 10px; background: var(--soft); font-size: .84rem; max-width: 92%; }
+  .eal-msg.user { background: #1c5cab; color: #fff; margin-left: auto; }
+  .eal-form { padding: 14px; }
+  .eal-form label { display: block; font-size: .76rem; color: var(--muted); font-weight: 600; margin-top: 8px; }
+  .eal-form input, .eal-form select { width: 100%; padding: 7px 9px; border: 1px solid var(--line); border-radius: 8px; }
+  .eal-form .sample { font-size: .72rem; color: #1c5cab; }
+  .palette { width: min(640px, 92vw); background: #fff; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.3); overflow: hidden; }
+  .palette input { width: 100%; border: 0; border-bottom: 1px solid var(--line); padding: 12px 14px; outline: 0; }
+  .palette ul { list-style: none; margin: 0; padding: 6px; max-height: 360px; overflow: auto; }
+  .palette li { padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: .84rem; }
+  .palette li:hover, .palette li.on { background: var(--green-soft); }
+  .palette li small { display: block; color: var(--muted); }
+  .kbd { display: inline-block; border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px; padding: 0 5px; font-size: .7rem; color: var(--muted); }
+  @media (max-width: 1100px) { .workspace { grid-template-columns: 200px minmax(0,1fr) 320px; } .paths, .starters { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 860px) { .workspace { grid-template-columns: minmax(0,1fr); } .project-sidebar, .side-panel { display: none; } }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand-mark">PL</div>
+    <h1>Platform Loops</h1>
+    <span class="proto">Prototype · guided onboarding v1</span>
+    <div class="spacer"></div>
+    <div class="seg" role="group" aria-label="User journey">
+      <button id="modeNew" class="on" data-mode="new">New user</button>
+      <button id="modeExisting" data-mode="existing">Existing user</button>
+    </div>
+    <button class="btn" id="paletteBtn" title="Ctrl+K">Commands <span class="kbd">Ctrl K</span></button>
+    <button class="btn" id="resetBtn">Reset</button>
+  </header>
+  <div class="workspace">
+    <aside class="project-sidebar" id="sidebar"></aside>
+    <section class="chat-column">
+      <div class="conversation" id="conversation" aria-live="polite"></div>
+      <form class="composer" id="composer">
+        <div class="composer-row">
+          <label for="message">Message</label>
+          <textarea id="message" rows="1" placeholder="Describe a problem or pick an example"></textarea>
+          <div class="composer-footer">
+            <div class="next-step" id="nextStep"></div>
+            <button class="send" type="submit" id="sendBtn" aria-label="Send">➤</button>
+          </div>
+        </div>
+      </form>
+    </section>
+    <aside class="side-panel">
+      <section class="panel" id="journeyPanel"></section>
+      <section class="panel" id="understandingPanel"></section>
+    </aside>
+  </div>
+</div>
+<div class="replay-bar" id="replayBar">
+  <span class="caption" id="replayCaption">Replaying delivery journal · no model calls</span>
+  <button id="replayPause">Pause</button>
+  <button id="replaySpeed">1×</button>
+  <button id="replaySkip">Skip to end</button>
+  <button id="replayExit">Exit</button>
+</div>
+<div class="overlay" id="ealOverlay"><div class="modal" id="ealModal"></div></div>
+<div class="overlay" id="paletteOverlay"><div class="palette" id="palette"><input id="paletteInput" placeholder="Type a command…"><ul id="paletteList"></ul></div></div>
+
+<script>
+/* =========================================================================
+   PL guided onboarding prototype — vanilla JS, no dependencies.
+   Two journeys: new user (assisted / replay) and existing user (expert).
+   Everything rendered from state; typed blocks mirror ResponsePresentation.
+   ========================================================================= */
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/* ---------- state ---------- */
+const JOURNEY = [
+  { id: "idea", label: "Idea", why: "Say the problem in your own words. The platform proposes shape, actors and a first process flow." },
+  { id: "discovery", label: "Discovery", why: "One dimension per turn, led by measurable defaults you accept or correct. Ends in a Discovery Blueprint." },
+  { id: "requirements", label: "Requirements", why: "Testable statements every later artifact traces to. Approving starts the plan → design → build-plan chain." },
+  { id: "design", label: "Design & Plan", why: "Delivery Plan, Solution Design and Build Plan, each shown as consequence and diff, not as a document." },
+  { id: "build", label: "Build", why: "Scaffold, generate, migrate, build, start, verify, review. You only hear from it when it needs you." },
+  { id: "run", label: "Run in EAL", why: "Business Review, release identity, then open the app in the runtime with a test identity and sample data." },
+];
+const S = {
+  mode: "new",
+  app: "Equipment Checkout",
+  goal: "",
+  journey: Object.fromEntries(JOURNEY.map((j) => [j.id, "todo"])),
+  current: [], decisions: [], assumptions: [], gaps: [], trace: [],
+  view: "current", replay: null, palette: [], projects: [], activeProject: null,
+};
+const DIMS = ["Goal", "Actors and roles", "Current state", "Process", "Data and rules", "Who sees what", "UI shape", "Integrations", "Deployment target"];
+
+function resetPanelState() {
+  S.journey = Object.fromEntries(JOURNEY.map((j) => [j.id, "todo"]));
+  S.current = []; S.decisions = []; S.assumptions = []; S.trace = [];
+  S.gaps = DIMS.map((d) => ({ dim: d, state: "open", note: "" }));
+}
+function setJourney(id, state) { S.journey[id] = state; JOURNEY.forEach((j) => { if (state === "active" && j.id !== id && S.journey[j.id] === "active") S.journey[j.id] = "done"; }); renderJourney(); }
+function cover(dim, note = "") { const g = S.gaps.find((x) => x.dim === dim); if (g) { g.state = "covered"; g.note = note; } renderUnderstanding(); }
+function defer(dim, note = "") { const g = S.gaps.find((x) => x.dim === dim); if (g) { g.state = "deferred"; g.note = note; } renderUnderstanding(); }
+function decide(what, source, detail = "") { S.decisions.unshift({ what, source, detail, when: stamp() }); renderUnderstanding(); }
+function assume(text, status = "assumed") { S.assumptions.push({ text, status }); renderUnderstanding(); }
+function setAssumption(idx, status, text) { if (S.assumptions[idx]) { S.assumptions[idx].status = status; if (text) S.assumptions[idx].text = text; } renderUnderstanding(); }
+function setCurrent(rows) { S.current = rows; renderUnderstanding(); }
+function traceItem(item, from) { S.trace.unshift({ item, from, when: stamp() }); renderUnderstanding(); }
+function stamp() { return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
+
+/* ---------- diagrams (inline SVG) ---------- */
+const SVG = {
+  flow(steps, opts = {}) {
+    const w = 132, h = 44, gap = 34, W = steps.length * w + (steps.length - 1) * gap + 8, H = 60;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(opts.label || "Process flow")}"><defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#8a9a90"/></marker></defs>`;
+    steps.forEach((st, i) => {
+      const x = 4 + i * (w + gap), y = 8; const active = opts.active === i;
+      s += `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${active ? "#244f3b" : "#fff"}" stroke="${active ? "#244f3b" : "#9fb3a7"}" stroke-width="1.5"/>`;
+      s += `<text x="${x + w / 2}" y="${y + h / 2 + 4}" text-anchor="middle" font-size="12" font-weight="600" fill="${active ? "#fff" : "#25292c"}">${esc(st)}</text>`;
+      if (i < steps.length - 1) s += `<line x1="${x + w + 2}" y1="${y + h / 2}" x2="${x + w + gap - 3}" y2="${y + h / 2}" stroke="#8a9a90" stroke-width="1.5" marker-end="url(#ar)"/>`;
+    });
+    return s + `</svg>`;
+  },
+  swimlane(lanes, seq) {
+    const laneH = 58, colW = 150, left = 118, cols = seq.length, W = left + cols * colW + 10, H = lanes.length * laneH + 8;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Swimlane"><defs><marker id="ar2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#8a9a90"/></marker></defs>`;
+    lanes.forEach((l, i) => { const y = 4 + i * laneH; s += `<rect x="2" y="${y}" width="${W - 4}" height="${laneH - 4}" rx="8" fill="${i % 2 ? "#fbfcfb" : "#f3f6f4"}" stroke="#e3e8e4"/><text x="12" y="${y + laneH / 2 + 4}" font-size="12" font-weight="700" fill="#52675a">${esc(l)}</text>`; });
+    const pos = seq.map((st, i) => ({ x: left + i * colW + 12, y: 4 + st.lane * laneH + 9, w: colW - 24, h: laneH - 22 }));
+    seq.forEach((st, i) => { const p = pos[i]; s += `<rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="8" fill="#fff" stroke="#9fb3a7" stroke-width="1.4"/><text x="${p.x + p.w / 2}" y="${p.y + p.h / 2 + 4}" text-anchor="middle" font-size="11.5" font-weight="600" fill="#25292c">${esc(st.label)}</text>`;
+      if (i < seq.length - 1) { const q = pos[i + 1]; s += `<path d="M${p.x + p.w},${p.y + p.h / 2} C${p.x + p.w + 14},${p.y + p.h / 2} ${q.x - 14},${q.y + q.h / 2} ${q.x - 2},${q.y + q.h / 2}" fill="none" stroke="#8a9a90" stroke-width="1.4" marker-end="url(#ar2)"/>`; } });
+    return s + `</svg>`;
+  },
+  components(app, api, schema, port) {
+    const W = 640, H = 210;
+    const box = (x, y, w, h, t, sub, fill = "#fff", stroke = "#9fb3a7") => `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="10" fill="${fill}" stroke="${stroke}" stroke-width="1.5"/><text x="${x + w / 2}" y="${y + 24}" text-anchor="middle" font-size="12.5" font-weight="700" fill="#25292c">${esc(t)}</text><text x="${x + w / 2}" y="${y + 42}" text-anchor="middle" font-size="11" fill="#52675a">${esc(sub)}</text>`;
+    const ar = (x1, y1, x2, y2, label) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#8a9a90" stroke-width="1.5" marker-end="url(#ar3)"/>` + (label ? `<text x="${(x1 + x2) / 2}" y="${(y1 + y2) / 2 - 6}" text-anchor="middle" font-size="10.5" fill="#52675a">${esc(label)}</text>` : "");
+    return `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Solution components"><defs><marker id="ar3" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#8a9a90"/></marker></defs>
+      ${box(20, 20, 150, 56, "EAL runtime", "chat + full view", "#eaf2fc", "#7fa6d9")}
+      ${box(245, 20, 150, 56, app + " UI", "React · worklist + form")}
+      ${box(245, 120, 150, 56, app + " API", "Fastify · :" + port)}
+      ${box(470, 120, 150, 56, "PostgreSQL", "schema " + schema)}
+      ${box(470, 20, 150, 56, "UME", "roles · sessions", "#eaf2fc", "#7fa6d9")}
+      ${ar(170, 48, 243, 48, "launch")}${ar(320, 78, 320, 118, "JSON/HTTPS")}${ar(397, 148, 468, 148, "app login, RLS")}${ar(468, 48, 397, 48, "effective access")}${ar(170, 60, 245, 120, "signed authority")}
+    </svg>`;
+  },
+  wireframe(kind, title) {
+    if (kind === "form") {
+      const fields = ["Asset tag", "Item", "Requester", "Depot", "Due date"];
+      let s = `<svg viewBox="0 0 300 210" width="300" height="210" role="img" aria-label="Form wireframe"><rect x="1" y="1" width="298" height="208" rx="10" fill="#fff" stroke="#9fb3a7"/><text x="14" y="24" font-size="12" font-weight="700" fill="#25292c">${esc(title)}</text>`;
+      fields.forEach((f, i) => { const y = 40 + i * 28; s += `<text x="14" y="${y + 8}" font-size="10" fill="#52675a">${f}</text><rect x="100" y="${y - 4}" width="180" height="18" rx="5" fill="#f6f7f7" stroke="#e3e8e4"/>`; });
+      return s + `<rect x="200" y="182" width="80" height="20" rx="6" fill="#244f3b"/><text x="240" y="196" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">Create</text></svg>`;
+    }
+    let s = `<svg viewBox="0 0 320 210" width="320" height="210" role="img" aria-label="Worklist wireframe"><rect x="1" y="1" width="318" height="208" rx="10" fill="#fff" stroke="#9fb3a7"/><text x="14" y="24" font-size="12" font-weight="700" fill="#25292c">${esc(title)}</text><rect x="228" y="10" width="80" height="20" rx="6" fill="#244f3b"/><text x="268" y="24" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">New checkout</text><rect x="14" y="40" width="200" height="16" rx="5" fill="#f6f7f7" stroke="#e3e8e4"/><text x="20" y="52" font-size="9" fill="#8a9a90">Search · filter: status, depot</text>`;
+    ["Asset", "Item", "Requester", "Due", "Status"].forEach((h, i) => { s += `<text x="${14 + i * 60}" y="76" font-size="9.5" font-weight="700" fill="#52675a">${h}</text>`; });
+    for (let r = 0; r < 5; r++) { const y = 88 + r * 22; s += `<line x1="14" y1="${y + 12}" x2="306" y2="${y + 12}" stroke="#e3e8e4"/>`; [52, 44, 48, 34, 40].forEach((w, i) => { s += `<rect x="${14 + i * 60}" y="${y}" width="${w}" height="8" rx="3" fill="${i === 4 ? (r % 3 === 0 ? "#e4c37e" : "#cfe0d5") : "#e6ebe8"}"/>`; }); }
+    return s + `</svg>`;
+  },
+  topology(schema, uiPort, apiPort) {
+    return SVG.flow([`UI :${uiPort}`, `API :${apiPort}`, `PostgreSQL · ${schema}`], { label: "Local topology" });
+  },
+};
+
+/* ---------- typed blocks ---------- */
+function renderBlocks(blocks) {
+  const frag = document.createDocumentFragment();
+  for (const b of blocks) {
+    let n;
+    switch (b.type) {
+      case "paragraph": n = el("p", "", b.html || esc(b.text)); break;
+      case "heading": n = el("h3", "", esc(b.text)); break;
+      case "bullet_list": n = el("ul"); b.items.forEach((i) => n.appendChild(el("li", "", i.html || esc(i)))); break;
+      case "numbered_list": n = el("ol"); b.items.forEach((i) => n.appendChild(el("li", "", i.html || esc(i)))); break;
+      case "key_value": n = el("dl", "kv"); b.rows.forEach(([k, v]) => { n.appendChild(el("dt", "", esc(k))); n.appendChild(el("dd", "", v.html || esc(v))); }); break;
+      case "table": n = el("table", "tbl"); n.innerHTML = `<thead><tr>${b.columns.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${b.rows.map((r) => `<tr>${r.map((c) => `<td class="${c === "✓" || c === "—" ? "c" : ""}">${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody>`; break;
+      case "callout": n = el("div", "callout " + (b.tone || ""), (b.title ? `<strong>${esc(b.title)}</strong>` : "") + (b.html || esc(b.text))); break;
+      case "code": n = el("pre", "code", esc(b.text)); break;
+      case "diagram": n = el("figure", "diagram", b.svg + (b.caption ? `<figcaption>${esc(b.caption)}</figcaption>` : "")); break;
+      case "diff": n = el("div", "diff", (b.context ? `<div class="ctx">${esc(b.context)}</div>` : "") + (b.removed || []).map((l) => `<div class="del">− ${esc(l)}</div>`).join("") + (b.added || []).map((l) => `<div class="add">+ ${esc(l)}</div>`).join("")); break;
+      default: n = el("p", "", esc(JSON.stringify(b)));
+    }
+    frag.appendChild(n);
+  }
+  return frag;
+}
+
+/* ---------- conversation primitives ---------- */
+const conv = $("#conversation");
+function scrollDown() { conv.scrollTop = conv.scrollHeight; }
+function addUser(text) { const m = el("div", "message message--user", esc(text)); conv.appendChild(m); scrollDown(); return m; }
+async function thinking(ms = 700) { const m = el("div", "message message--system", `<p class="message-actor">Platform</p><p><span class="typing"></span><span class="typing"></span><span class="typing"></span></p>`); conv.appendChild(m); scrollDown(); await wait(S.replay ? ms / S.replay.speed : ms); m.remove(); }
+function addPlatform(blocks, opts = {}) {
+  const m = el("div", "message " + (opts.cls || "message--assistant"));
+  m.appendChild(el("p", "message-actor", opts.actor || "Platform"));
+  m.appendChild(renderBlocks(blocks));
+  if (opts.understood) { const u = el("div", "understood"); u.innerHTML = `<span><b>Understood:</b> ${esc(opts.understood[0])}</span><span><b>Assumed:</b> ${esc(opts.understood[1])}</span><span><b>Still open:</b> ${esc(opts.understood[2])}</span>`; m.appendChild(u); }
+  conv.appendChild(m); scrollDown(); return m;
+}
+function addUserSystem(text) { const m = el("div", "message message--system", `<p class="message-actor">System</p><p>${text}</p>`); conv.appendChild(m); scrollDown(); return m; }
+
+const composer = $("#composer"), ta = $("#message"), nextStepBox = $("#nextStep");
+let pending = null; // pending interaction
+function setPlaceholder(t) { ta.placeholder = t; }
+function setNextStep(cmd, hint) {
+  nextStepBox.innerHTML = "";
+  if (!cmd) return;
+  const b = el("button", "", esc(cmd)); b.type = "button"; b.dataset.next = "1"; b.title = cmd;
+  b.onclick = () => { ta.value = cmd; composer.requestSubmit(); };
+  nextStepBox.appendChild(b); if (hint) nextStepBox.appendChild(el("span", "hint", esc(hint)));
+}
+function lockComposer(lock) { composer.classList.toggle("disabled", lock); ta.disabled = lock; $("#sendBtn").disabled = lock; if (lock) setPlaceholder("Respond to the interaction above"); }
+
+/* Ask one question with option cards + free-text answer. Resolves with {label, own} */
+function ask(host, q) {
+  return new Promise((resolve) => {
+    const card = el("div", "interaction-card");
+    card.innerHTML = `<div class="q">${esc(q.prompt)}</div>`;
+    const grid = el("div", "option-grid");
+    q.options.forEach((o, i) => {
+      const b = el("button", "option-card", `${esc(o.label)}${o.recommended ? '<span class="rec">Recommended</span>' : ""}${o.detail ? `<small>${esc(o.detail)}</small>` : ""}`);
+      b.type = "button"; b.dataset.opt = String(i); if (o.recommended) b.dataset.rec = "1";
+      b.onclick = () => finish({ label: o.label, index: i });
+      grid.appendChild(b);
+    });
+    card.appendChild(grid);
+    const acts = el("div", "interaction-actions");
+    const own = el("button", "btn small", "Answer in your own words"); own.type = "button";
+    acts.appendChild(own); card.appendChild(acts);
+    const ownBox = el("div", "own-answer"); ownBox.style.display = "none";
+    ownBox.innerHTML = `<textarea placeholder="Or answer in your own words"></textarea><div class="interaction-actions"><button type="button" class="btn primary small" data-own-send>Answer</button></div>`;
+    card.appendChild(ownBox);
+    own.onclick = () => { ownBox.style.display = ownBox.style.display === "none" ? "block" : "none"; ownBox.querySelector("textarea").focus(); };
+    ownBox.querySelector("[data-own-send]").onclick = () => { const t = ownBox.querySelector("textarea").value.trim(); if (t) finish({ label: t, own: true }); };
+    host.appendChild(card); lockComposer(true); pending = card; scrollDown();
+    function finish(a) { card.querySelectorAll("button, textarea").forEach((x) => (x.disabled = true)); card.appendChild(el("div", "done-tag", "Answered")); lockComposer(false); pending = null; addUser(a.label); resolve(a); }
+  });
+}
+/* Buttons in a card: resolves with the clicked key */
+function choose(host, buttons) {
+  return new Promise((resolve) => {
+    const acts = el("div", "actions");
+    buttons.forEach((b) => { const x = el("button", "btn " + (b.primary ? "primary" : "") + (b.danger ? " danger" : ""), esc(b.label)); x.type = "button"; x.dataset.act = b.key; x.onclick = () => { acts.querySelectorAll("button").forEach((y) => (y.disabled = true)); x.classList.add("primary"); resolve(b.key); }; acts.appendChild(x); });
+    host.appendChild(acts); scrollDown();
+  });
+}
+
+/* ---------- side panel ---------- */
+function renderJourney() {
+  const p = $("#journeyPanel");
+  const collapsed = S.mode === "existing" && !S.journeyOpen;
+  p.innerHTML = `<h2>Journey <button class="btn small ghost" id="journeyToggle">${collapsed ? "Expand" : "Collapse"}</button></h2>`;
+  if (collapsed) {
+    const bc = el("div", "breadcrumb"); JOURNEY.forEach((j) => bc.appendChild(el("span", S.journey[j.id], esc(j.label)))); p.appendChild(bc);
+  } else {
+    const list = el("div", "journey");
+    JOURNEY.forEach((j, i) => { const st = S.journey[j.id]; const d = el("div", "jstep " + st, `<span class="dot"></span><span>${i + 1}. ${esc(j.label)}</span><small>${st === "done" ? "done" : st === "active" ? "now" : ""}</small><span class="why">${esc(j.why)}</span>`); d.onclick = () => d.classList.toggle("open"); list.appendChild(d); });
+    p.appendChild(list);
+  }
+  $("#journeyToggle").onclick = () => { S.journeyOpen = collapsed; renderJourney(); };
+}
+function renderUnderstanding() {
+  const p = $("#understandingPanel");
+  const counts = { current: S.current.length, decisions: S.decisions.length, assumptions: S.assumptions.length, gaps: S.gaps.filter((g) => g.state === "open").length, trace: S.trace.length };
+  const tabs = [["current", "Current state"], ["decisions", "Decisions"], ["assumptions", "Assumptions"], ["gaps", "Still to discover"], ["trace", "Source trace"]];
+  p.innerHTML = `<h2>Understanding</h2><div class="tabs">${tabs.map(([k, l]) => `<button data-view="${k}" class="${S.view === k ? "on" : ""}">${l}<b>${counts[k]}</b></button>`).join("")}</div><div class="view" id="viewBody"></div>`;
+  p.querySelectorAll("[data-view]").forEach((b) => (b.onclick = () => { S.view = b.dataset.view; renderUnderstanding(); }));
+  const v = $("#viewBody");
+  if (S.view === "current") v.innerHTML = S.current.length ? S.current.map(([k, val]) => `<div class="row"><span class="k">${esc(k)}</span><span>${esc(val)}</span></div>`).join("") : `<div class="empty">Nothing understood yet. Describe a problem and this fills in.</div>`;
+  if (S.view === "decisions") v.innerHTML = S.decisions.length ? S.decisions.map((d) => `<div class="item"><span class="st ${d.source === "you" ? "user" : "default"}">${d.source === "you" ? "you" : "platform default"}</span>${esc(d.what)}<small>${esc(d.detail)} · ${d.when}</small></div>`).join("") : `<div class="empty">No decisions yet. Accepted defaults and approvals land here.</div>`;
+  if (S.view === "assumptions") v.innerHTML = S.assumptions.length ? S.assumptions.map((a) => `<div class="item"><span class="st ${a.status}">${a.status}</span>${esc(a.text)}</div>`).join("") : `<div class="empty">The platform states what it assumes. You can correct any of it.</div>`;
+  if (S.view === "gaps") v.innerHTML = S.gaps.map((g) => `<div class="item"><span class="st ${g.state}">${g.state === "covered" ? "covered" : g.state === "deferred" ? "deferred" : "open"}</span>${esc(g.dim)}${g.note ? `<small>${esc(g.note)}</small>` : ""}</div>`).join("");
+  if (S.view === "trace") v.innerHTML = S.trace.length ? S.trace.map((t) => `<div class="item">${esc(t.item)}<small>from ${esc(t.from)} · ${t.when}</small></div>`).join("") : `<div class="empty">Every requirement, decision and file will point back to the message or artifact it came from.</div>`;
+}
+function renderSidebar() {
+  const sb = $("#sidebar");
+  sb.innerHTML = `<p class="eyebrow">Projects</p>`;
+  if (!S.projects.length) { sb.appendChild(el("div", "project-empty", "Your first project is created when you send your first idea.")); return; }
+  S.projects.forEach((pr) => { const d = el("div", "project" + (pr.id === S.activeProject ? " active" : ""), `<div class="name">${esc(pr.name)}</div><div class="sub">${esc(pr.sub)}</div>`); sb.appendChild(d); });
+}
+
+/* =========================================================================
+   NEW USER — blank canvas
+   ========================================================================= */
+const STARTERS = [
+  ["Track equipment checkouts across three depots", "worklist + form · roles: requester, depot staff, manager"],
+  ["Approve travel expense claims with two-level sign-off", "business form + review/decision · workflow states"],
+  ["Replace our shared spreadsheet for vendor contracts", "object page + worklist · renewal dates"],
+  ["Log mileage reimbursements with a rounding rule", "form + worklist · derived amounts"],
+  ["Book meeting rooms and avoid double bookings", "calendar workspace · conflict rule"],
+  ["Case timeline for customer service requests", "case timeline · assignment and escalation"],
+];
+function renderBlank() {
+  conv.innerHTML = "";
+  const m = addPlatform([
+    { type: "paragraph", html: `<strong>Platform Loops turns a business need into a working, governed application you can run.</strong> You describe the problem; the platform proposes the shape, asks only what it cannot infer, builds the app with a full audit trail, and opens it in the runtime for your users.` },
+    { type: "paragraph", text: "The journey is always the same six steps. You will see where you are at every turn in the panel on the right, together with what has been understood, decided, assumed, and what is still to discover." },
+  ], { actor: "Platform" });
+  const mj = el("div", "mini-journey"); JOURNEY.forEach((j, i) => { mj.appendChild(el("span", "", esc(j.label))); if (i < JOURNEY.length - 1) mj.appendChild(el("i", "", "→")); }); m.appendChild(mj);
+  const paths = el("div", "paths");
+  paths.innerHTML = `
+    <button class="path" data-path="watch"><b>Watch a 3-minute build</b><span>A replay of a real delivery, from idea to running app. No typing needed.</span></button>
+    <button class="path default" data-path="idea"><b>Start with my idea</b><span>Describe a problem. The platform leads with proposals and asks one question at a time.</span></button>
+    <button class="path" data-path="know"><b>I know the platform</b><span>Skip orientation. Commands, gates and your projects, nothing else.</span></button>`;
+  m.appendChild(paths);
+  m.appendChild(el("p", "eyebrow", "Examples you can start from"));
+  const st = el("div", "starters");
+  STARTERS.forEach(([t, s]) => { const b = el("button", "starter", `${esc(t)}<small>${esc(s)}</small>`); b.dataset.starter = t; b.onclick = () => startIdea(t); st.appendChild(b); });
+  m.appendChild(st);
+  paths.querySelector('[data-path="watch"]').onclick = () => runReplay();
+  paths.querySelector('[data-path="idea"]').onclick = () => { ta.focus(); setPlaceholder("Describe the problem in a sentence or two"); };
+  paths.querySelector('[data-path="know"]').onclick = () => setMode("existing");
+  setPlaceholder("Describe a problem or pick an example");
+  setNextStep(null);
+}
+
+/* ---------- Stage 1: idea → outcome ---------- */
+async function startIdea(text) {
+  if (!S.projects.length) { S.projects = [{ id: "p1", name: S.app, sub: "created just now · Local Development" }]; S.activeProject = "p1"; renderSidebar(); }
+  S.goal = text; addUser(text);
+  document.querySelector(".message--system .paths")?.closest(".message")?.querySelectorAll("button").forEach((b) => (b.disabled = true));
+  setJourney("idea", "active");
+  await thinking(900);
+  const m = addPlatform([
+    { type: "paragraph", html: `You want to <strong>${esc(text.replace(/\.$/, ""))}</strong> so people always know what is out, who has it and when it is due back. Here is how I would shape it before we go any deeper.` },
+    { type: "key_value", rows: [["Likely shape", "Worklist + business form (two of the nine floorplans)"], ["Actors", "Requester · Depot staff · Depot manager"], ["Core object", "Equipment checkout (one record per loan)"], ["Main journey", "Request → Approve → Check out → Return → Close"]] },
+    { type: "diagram", svg: SVG.flow(["Request", "Approve", "Check out", "Return", "Close"]), caption: "Proposed process. Every box becomes a status your users can see." },
+    { type: "heading", text: "What I am assuming so we can move fast" },
+    { type: "numbered_list", items: ["Each depot keeps its own equipment list, and one asset can be out on only one checkout at a time.", "Loans have a due date and can go overdue.", "Depot managers approve; requesters see only their own checkouts."] },
+    { type: "callout", tone: "", title: "You do not need to answer everything now.", text: "I will ask one question per turn, always with a recommended default. Correct anything in the panel on the right at any time." },
+  ], { understood: ["goal, actors, shape, main journey", "3 (see panel)", "6 dimensions"] });
+  setCurrent([["Goal", text], ["Shape", "Worklist + business form"], ["Actors", "Requester, Depot staff, Depot manager"], ["Core object", "Equipment checkout"], ["Process", "Request → Approve → Check out → Return → Close"]]);
+  assume("One asset can be out on only one checkout at a time."); assume("Loans have a due date and can go overdue."); assume("Depot managers approve; requesters see only their own.");
+  cover("Goal"); cover("Process", "proposed, not yet confirmed"); traceItem("Goal, actors, process proposal", "your first message");
+  setJourney("discovery", "active");
+  const a = await ask(m, { prompt: "Who approves a checkout?", options: [{ label: "Depot manager approves each request", recommended: true, detail: "Keeps assets accountable per depot" }, { label: "No approval; depot staff check out directly", detail: "Faster, less control" }, { label: "Approval only above a value threshold", detail: "Needs an asset value field" }] });
+  if (a.index === 0 || a.own) { decide("Depot manager approves each checkout", a.own ? "you" : "you", a.own ? a.label : "accepted recommendation"); setAssumption(2, "confirmed"); }
+  else if (a.index === 1) { decide("No approval step; depot staff check out directly", "you"); setAssumption(2, "corrected", "No approval; depot staff check out directly"); setCurrent(S.current.map(([k, v]) => k === "Process" ? [k, "Request → Check out → Return → Close"] : [k, v])); }
+  else { decide("Approval only above a value threshold", "you", "adds an asset value field"); setAssumption(2, "corrected", "Approval only above a value threshold"); }
+  cover("Actors and roles"); traceItem("Approval rule", "your answer to question 1");
+  await stage2A();
+}
+
+/* ---------- Stage 2: discovery, one dimension per turn ---------- */
+async function stage2A() {
+  await thinking(800);
+  const m = addPlatform([
+    { type: "heading", text: "Current state and the loan rule" },
+    { type: "paragraph", text: "Most teams doing this today use a shared spreadsheet per depot with no due-date tracking. I will take that as your starting point unless you say otherwise." },
+    { type: "diagram", svg: SVG.swimlane(["Requester", "Depot staff", "Depot manager"], [{ lane: 0, label: "Request item" }, { lane: 2, label: "Approve" }, { lane: 1, label: "Check out" }, { lane: 0, label: "Return" }, { lane: 1, label: "Close + condition" }]), caption: "Who does what. Overdue reminders go to depot staff." },
+    { type: "key_value", rows: [["Measurable default", "Loan period 14 days · overdue the day after due · reminder to depot staff at 3 days overdue"]] },
+  ], { understood: ["current state (spreadsheet), process by actor", "1 new: spreadsheet baseline", "4 dimensions"] });
+  assume("Today: one shared spreadsheet per depot, no due-date tracking.");
+  const a = await ask(m, { prompt: "Apply the loan-period default?", options: [{ label: "Apply the 14-day default", recommended: true }, { label: "Use 7 days" }, { label: "No due dates at all", detail: "Removes overdue tracking" }] });
+  if (a.index === 0) decide("Loan period 14 days, overdue next day, reminder at +3 days", "you", "platform default accepted");
+  else if (a.index === 1) decide("Loan period 7 days", "you", "changed from 14-day default");
+  else if (a.index === 2) { decide("No due dates", "you"); setAssumption(1, "corrected", "No due dates; overdue tracking removed"); }
+  else decide(a.label, "you", "your own words");
+  cover("Current state", "assumed spreadsheet baseline"); traceItem("Loan rule", "your answer to question 2");
+  await stage2B();
+}
+async function stage2B() {
+  await thinking(800);
+  const m = addPlatform([
+    { type: "heading", text: "Data and rules" },
+    { type: "paragraph", text: "One record per checkout. These fields cover the journey we agreed; nothing here is exotic." },
+    { type: "table", columns: ["Field", "Type", "Rule"], rows: [["Asset tag", "text", "required · unique per depot"], ["Item", "text", "required"], ["Requester", "person", "defaults to signed-in user"], ["Depot", "choice", "North · Central · South"], ["Checkout date", "date", "defaults to today"], ["Due date", "date", "≥ checkout date"], ["Returned date", "date", "set on return"], ["Condition on return", "choice", "good · damaged · missing"], ["Status", "state", "requested → approved → checked_out → returned · overdue"]] },
+    { type: "callout", tone: "", title: "Two rules I will enforce in the API, not just the form", text: "Asset tag is required, and an asset can have only one open checkout at a time." },
+  ], { understood: ["entity, fields, states, 2 rules", "none new", "3 dimensions"] });
+  const a = await ask(m, { prompt: "Apply these fields and rules?", options: [{ label: "Apply as proposed", recommended: true }, { label: "Add a field", detail: "Tell me which" }, { label: "Change a rule" }] });
+  if (a.index === 0) decide("Entity Equipment checkout with 9 fields, 5 states, 2 API rules", "you", "platform default accepted");
+  else decide("Data model change: " + a.label, "you", "will be reflected in the Blueprint");
+  cover("Data and rules"); traceItem("Fields, states, rules", "your answer to question 3");
+  await stage2C();
+}
+async function stage2C() {
+  await thinking(800);
+  const m = addPlatform([
+    { type: "heading", text: "Who sees what" },
+    { type: "table", columns: ["Role", "Create", "View own", "View depot", "Approve", "Close"], rows: [["Requester", "✓", "✓", "—", "—", "—"], ["Depot staff", "✓", "✓", "✓", "—", "✓"], ["Depot manager", "✓", "✓", "✓", "✓", "✓"]] },
+    { type: "paragraph", text: "Managers see their own depot only. That is the safer default; widening it later is a one-line change." },
+  ], { understood: ["role matrix", "none new", "2 dimensions"] });
+  const a = await ask(m, { prompt: "Apply this access model?", options: [{ label: "Apply as proposed", recommended: true }, { label: "Managers see all depots" }, { label: "Everyone sees everything", detail: "Not recommended for three depots" }] });
+  decide(a.index === 0 ? "Role matrix as proposed; managers scoped to own depot" : "Access model: " + a.label, "you", a.index === 0 ? "platform default accepted" : "changed from default");
+  cover("Who sees what"); cover("UI shape", "worklist + form, from the Blueprint"); defer("Integrations", "none for v1; add a data source later"); traceItem("Access model", "your answer to question 4");
+  await stage3();
+}
+
+/* ---------- Stage 3: Blueprint + landscape ---------- */
+async function stage3() {
+  await thinking(1000);
+  const m = addPlatform([
+    { type: "heading", text: `Discovery Blueprint · ${S.app} · v1` },
+    { type: "callout", tone: "warning", title: "This is a recommendation. Nothing is built yet.", text: "Read it as the whole understanding in one place. Anything wrong here is cheap to fix now and expensive later." },
+    { type: "key_value", rows: [["Goal", S.goal], ["Actors", "Requester · Depot staff · Depot manager"], ["Floorplans", "Worklist (list) · Business form (form)"], ["Data owner", "the app's own PostgreSQL schema, one login per app"], ["Integrations", "none in v1"]] },
+    { type: "diagram", svg: SVG.flow(["Request", "Approve", "Check out", "Return", "Close"]), caption: "Process and statuses" },
+    { type: "diagram", svg: `<div style="display:flex;gap:12px;flex-wrap:wrap">${SVG.wireframe("worklist", "Equipment checkouts")}${SVG.wireframe("form", "New checkout")}</div>`, caption: "UI shape: worklist for depot staff and managers, form for requesters" },
+    { type: "table", columns: ["Role", "Create", "View own", "View depot", "Approve", "Close"], rows: [["Requester", "✓", "✓", "—", "—", "—"], ["Depot staff", "✓", "✓", "✓", "—", "✓"], ["Depot manager", "✓", "✓", "✓", "✓", "✓"]] },
+    { type: "diagram", svg: SVG.topology("app_equipment_checkout", "58130", "58131"), caption: "Recommended local topology (UI, API, database). A recommendation, not a confirmation." },
+  ], { understood: ["everything above", "2 still marked assumed", "deployment target"] });
+  const k = await choose(m, [{ key: "approve", label: "Looks right, approve the Blueprint", primary: true }, { key: "change", label: "Request a change" }]);
+  if (k === "change") { const a = await ask(m, { prompt: "What should change?", options: [{ label: "Add a field" }, { label: "Change a role" }, { label: "Change the process" }] }); decide("Blueprint change requested: " + a.label, "you"); addPlatform([{ type: "paragraph", text: "Applied. Blueprint v2 carries your change; everything downstream will trace to it." }]); }
+  decide("Discovery Blueprint v1 approved", "you", "starts the delivery chain"); traceItem("Discovery Blueprint v1", "questions 1–4 and your approval");
+  await thinking(500);
+  const n = addPlatform([
+    { type: "heading", text: "Where should this run?" },
+    { type: "paragraph", text: "For a first version, local defaults are enough: the UI and API on free ports, a PostgreSQL schema with its own login. You can move it later without rebuilding." },
+    { type: "callout", tone: "", text: "Use Local defaults and confirm compose → resolve → confirm in one click." },
+  ], { cls: "message--assistant" });
+  const l = await choose(n, [{ key: "local", label: "Use Local defaults and confirm", primary: true }, { key: "other", label: "Choose differently" }]);
+  decide(l === "local" ? "Landscape: Local defaults confirmed" : "Landscape: custom placement", "you"); cover("Deployment target", l === "local" ? "Local defaults" : "custom");
+  setJourney("requirements", "active");
+  setNextStep("Create the Requirements for the current app from the approved Blueprint. Show it for review. Do not build or create files yet.", "or describe a change");
+  setPlaceholder("Next: Create the Requirements… Or describe a change in your own words.");
+  S.stage = "requirements";
+}
+
+/* ---------- Stage 4: work products ---------- */
+const WP = {
+  requirements: { title: "Requirements v1", decides: "The testable statements every later artifact must trace to.", journey: "requirements", diff: { context: "vs Discovery Blueprint v1", added: ["12 requirements (R-01 … R-12)", "3 validation rules: asset tag required · one open checkout per asset · due date ≥ checkout date", "5 acceptance signals, incl. overdue list visible to depot staff"] }, next: ["delivery-plan", "Create the Delivery Plan for the current app from the approved Requirements. Show it for review. Do not build or create files yet."] },
+  "delivery-plan": { title: "Delivery Plan v1", decides: "Which stages apply to this app and the verification each one needs.", journey: "design", diff: { context: "stage applicability for a single-entity worklist + form app", added: ["required: scaffold, generate, migrate, build, start, verify, review", "optional: browser qualification (enabled: yes)", "skipped: integration binding (no integrations in v1)"] }, next: ["solution-design", "Create the Solution Design for the current app from the approved Delivery Plan. Show it for review. Do not build or create files yet."] },
+  "solution-design": { title: "Solution Design v1", decides: "Components, contracts and who owns which data.", journey: "design", extra: () => [{ type: "diagram", svg: SVG.components(S.app, "api", "app_" + S.app.toLowerCase().replace(/ /g, "_"), "58131"), caption: "EAL launches the UI with a signed authority; the API resolves it live, then reads and writes its own schema under RLS." }], diff: { context: "vs Requirements v1", added: ["UI: React worklist + form, floorplan bindings enterprise-list-report 1.1.0 / enterprise-business-form 1.0.0", "API: Fastify, 5 operations, idempotency receipts, role policy", "DB: schema app_equipment_checkout, tables checkout, application_audit, application_outbox"] }, next: ["build-plan", "Create the Build Plan for the current app from the approved Solution Design. Show it for review. Do not build or create files yet."] },
+  "build-plan": { title: "Build Plan v1", decides: "The exact files, migrations and tests the builder will produce. Read-only until you start the build.", journey: "design", extra: [{ type: "code", text: "app/shared/domain.ts            entity + zod schema\napp/api/src/app.ts              5 routes, role policy, receipts\napp/api/migrations/0001_baseline.sql\napp/ui/src/main.tsx             worklist + form (floorplan compiled)\napp/ui/src/floorplan-binding.json\ntests/contract.test.ts          14 checks incl. the core business rule\nprovider-release.json           roles, operations, floorplans" }], diff: { context: "vs Solution Design v1", added: ["14 files · 1 migration · 14 tests", "verification: typecheck, tests, build, start, browser qualification"] }, next: [null, "Start build."] },
+};
+async function workProduct(key) {
+  const base = WP[key]; setJourney(base.journey, "active");
+  const v = (s) => (S.mode === "existing" && typeof s === "string" ? s.replace(/v1/g, "v2") : s);
+  const w = { ...base, title: v(base.title), diff: { ...base.diff, context: v(base.diff.context) }, next: base.next };
+  await thinking(900);
+  const extra = typeof w.extra === "function" ? w.extra() : (w.extra || []);
+  const blocks = [{ type: "heading", text: w.title }, { type: "paragraph", html: `<strong>What this decides:</strong> ${esc(w.decides)}` }, ...extra, { type: "diff", ...w.diff }];
+  const m = addPlatform(blocks, { understood: [w.title + " drafted", "none new", key === "build-plan" ? "nothing; ready to build" : "later work products"] });
+  if (key === "requirements") m.appendChild(renderBlocks([{ type: "callout", tone: "", title: "How approvals chain", text: "Approving Requirements starts Delivery Plan → Solution Design → Build Plan. If you change Requirements later, those three regenerate in that order. Fix content in Requirements, not at Build Plan review." }]));
+  const k = await choose(m, [{ key: "approve", label: "Approve " + w.title, primary: true }, { key: "change", label: "Request change" }]);
+  if (k === "change") { const a = await ask(m, { prompt: "What should change?", options: [{ label: "Wording of a requirement" }, { label: "Add a validation rule" }, { label: "Remove something" }] }); decide(w.title + " change requested: " + a.label, "you", "stored as a rejection effect; content fixed in the next version"); addPlatform([{ type: "paragraph", text: `${w.title.replace("v1", "v2")} regenerated with your change.` }]); }
+  decide(w.title + " approved", "you"); traceItem(w.title, "approved Blueprint and your review");
+  if (w.next[0]) { setNextStep(w.next[1], "or describe a change"); setPlaceholder(`Next: ${w.next[1].slice(0, 40)}… Or describe a change.`); S.stage = w.next[0]; }
+  else { setNextStep("Start build.", "everything is approved"); setPlaceholder("Next: Start build."); S.stage = "build"; }
+}
+
+/* ---------- Stage 5: build ---------- */
+async function build() {
+  setJourney("build", "active"); setNextStep(null); setPlaceholder("Building… you can add a follow-up instruction to steer the loop.");
+  const m = addPlatform([{ type: "heading", text: "Build started · " + S.app + " 1.0.0" }, { type: "paragraph", text: "I will only stop if I need you. Progress below is live." }]);
+  const steps = ["Scaffold from Build Plan", "Generate UI, API, migration, tests", "Provision schema + app login", "Build API and UI", "Start on reserved ports", "Verify: typecheck, tests, browser", "Review and release identity"];
+  const ul = el("ul", "steps"); steps.forEach((s) => ul.appendChild(el("li", "", `<span class="dot"></span>${esc(s)}<small></small>`))); m.appendChild(ul);
+  const speed = S.replay ? S.replay.speed : 1;
+  for (let i = 0; i < steps.length; i++) {
+    const li = ul.children[i]; li.classList.add("run"); scrollDown(); await wait((i === 3 ? 1600 : 700) / speed);
+    if (i === 4) { m.appendChild(renderBlocks([{ type: "callout", tone: "warning", title: "Port 58130 was already in use.", text: "Reserved 58132 for the UI instead and updated the release. No action needed." }])); }
+    if (i === 5) li.querySelector("small").textContent = "14/14 tests · 6/6 browser checks";
+    li.classList.remove("run"); li.classList.add("ok");
+  }
+  const slug = S.app.toLowerCase().replace(/ /g, "-");
+  m.appendChild(renderBlocks([{ type: "key_value", rows: [["Release", slug + " 1.0.0"], ["Files", "14 · sha256 manifest recorded"], ["Runtime", "UI :58132 · API :58131 · schema app_" + slug.replace(/-/g, "_")], ["Identity", "roles published to UME · test user pl." + slug + ".user"]] }]));
+  decide(S.app + " 1.0.0 built and verified", "platform", "14 tests, 6 browser checks"); setCurrent([...S.current.filter(([k]) => k !== "Release"), ["Release", S.app + " 1.0.0 · verified"]]); traceItem("Release 1.0.0", "Build Plan v1 + verification receipts");
+  await review();
+}
+
+/* ---------- Stage 6: business review + EAL ---------- */
+const CHECKS = {
+  "Equipment Checkout": [["Requester creates a checkout", "pass", "record CHK-0001 visible in worklist"], ["Manager approves", "pass", "status approved, audit row written"], ["Second checkout on same asset", "blocked", "API 409, rule enforced"], ["Due date before checkout date", "blocked", "validation error shown in form"], ["Requester cannot see other depots", "pass", "empty list, RLS"], ["Overdue appears after due date", "pass", "clock advanced in test"]],
+  "Mileage Reimbursement Log": [["Submitter creates a mileage log", "pass", "record MIL-0001 visible in worklist"], ["Amount rounds half-up to 2 decimals", "pass", "46.8 × 0.67 → 31.36"], ["Negative rate", "blocked", "API 422 VALIDATION_FAILED, no write"], ["Miles below 0.1", "blocked", "validation error shown in form"], ["Manager sees own team only", "pass", "other team's logs absent, RLS"], ["Approve the same log twice", "blocked", "idempotent receipt, one state change"]],
+};
+async function review() {
+  setJourney("run", "active"); await thinking(600);
+  const m = addPlatform([
+    { type: "heading", text: "Business Review" },
+    { type: "paragraph", text: "Evidence first, then your decision. Everything below was observed in a real browser against the running app, not inferred." },
+    { type: "table", columns: ["Check", "Result", "Evidence"], rows: (CHECKS[S.app] || CHECKS["Equipment Checkout"]) },
+  ], { understood: ["release verified against requirements", "none", "your acceptance"] });
+  const k = await choose(m, [{ key: "accept", label: "Accept release", primary: true }, { key: "reject", label: "Reject", danger: true }]);
+  if (k === "reject") { const a = await ask(m, { prompt: "What is wrong?", options: [{ label: "A check is missing" }, { label: "Behaviour differs from Requirements" }, { label: "Something else" }] }); decide("Release rejected: " + a.label, "you"); addPlatform([{ type: "paragraph", text: "Recorded. I will fix it in Requirements and regenerate the chain; you will review again." }]); return; }
+  decide(S.app + " 1.0.0 accepted for use", "you"); setJourney("run", "done");
+  const n = addPlatform([
+    { type: "heading", text: "Your app is live in the runtime" },
+    { type: "paragraph", text: "Open it in EAL as the test user. The form is pre-filled with sample data so the first record takes ten seconds." },
+    { type: "callout", tone: "success", title: "Next you can", text: "evolve this app (add a field, change a rule), build the second one, or connect a real data source." },
+  ]);
+  const acts = el("div", "actions"); const open = el("button", "btn primary", "Open in EAL"); open.dataset.act = "open-eal"; open.onclick = () => openEal(); acts.appendChild(open); n.appendChild(acts);
+  setNextStep("Add a field to " + S.app + " and show the change for review.", "evolve"); setPlaceholder("Describe a change, or start a new app.");
+  S.stage = "done";
+}
+const SAMPLES = {
+  "Equipment Checkout": { role: "Requester", greet: "Hi. You can create a checkout, list your checkouts, or ask what is overdue.", ask: "Create a checkout record.", title: "Create a checkout record",
+    fields: [["Asset tag", "DEP1-0417"], ["Item", "Cordless drill 18V"], ["Requester", "A. Rao (you)", "disabled"], ["Depot", "North|Central|South"], ["Due date", "2026-09-26"]],
+    done: "Checkout CHK-0001 created for DEP1-0417, due 2026-09-26. Status: requested. Your depot manager has been notified.", decision: "First record created in EAL (CHK-0001)" },
+  "Mileage Reimbursement Log": { role: "Submitter", greet: "Hi. You can log a trip, list your mileage logs, or ask what is awaiting approval.", ask: "Create a mileage log record.", title: "Create a mileage log record",
+    fields: [["Trip date", "2026-09-10"], ["From", "Head office"], ["To", "Client site, Sunnyvale"], ["Miles", "46.8"], ["Rate per mile", "0.67"], ["Submitter", "A. Rao (you)", "disabled"]],
+    done: "Mileage log MIL-0001 created: 46.8 miles × 0.67 = 31.36, rounded half-up. Status: submitted. Your manager has been notified.", decision: "First record created in EAL (MIL-0001)" },
+};
+function openEal() {
+  const sm = SAMPLES[S.app] || SAMPLES["Equipment Checkout"];
+  const modal = $("#ealModal");
+  const fields = sm.fields.map(([l, v, d]) => `<label>${esc(l)}</label>` + (v.includes("|") ? `<select>${v.split("|").map((o) => `<option>${esc(o)}</option>`).join("")}</select>` : `<input value="${esc(v)}"${d ? " disabled" : ""}>`)).join("");
+  modal.innerHTML = `<header><div class="brand-mark">EAL</div><strong>${esc(S.app)}</strong><span class="who">signed in as pl.${S.app.toLowerCase().replace(/ /g, "-")}.user · ${esc(sm.role)}</span><button class="btn small" id="ealClose">Close</button></header>
+    <div class="eal-body"><div class="eal-chat" id="ealChat"><div class="eal-msg">${esc(sm.greet)}</div></div>
+    <div class="eal-form" id="ealForm"><p class="eyebrow">${esc(sm.title)} <span class="sample">· sample data pre-filled</span></p>${fields}
+      <div class="actions"><button class="btn primary" id="ealSubmit">Confirm</button></div></div></div>`;
+  $("#ealOverlay").classList.add("on");
+  $("#ealClose").onclick = () => $("#ealOverlay").classList.remove("on");
+  const chat = $("#ealChat");
+  const say = (t, user) => { chat.appendChild(el("div", "eal-msg" + (user ? " user" : ""), esc(t))); chat.scrollTop = chat.scrollHeight; };
+  say(sm.ask, true); setTimeout(() => say("Fill in the form on the right and confirm. I will write it through the app API with your identity."), 300);
+  $("#ealSubmit").onclick = () => { say(sm.done); $("#ealSubmit").disabled = true; $("#ealSubmit").textContent = "Created ✓"; decide(sm.decision, "you", "as pl test user"); };
+}
+
+/* ---------- composer submit routing ---------- */
+composer.addEventListener("submit", async (e) => {
+  e.preventDefault(); const text = ta.value.trim(); if (!text || pending) return; ta.value = "";
+  if (S.mode === "existing") return existingCommand(text);
+  if (!S.goal) return startIdea(text);
+  if (/^start build/i.test(text)) { addUser(text); return S.stage === "build" ? build() : blocked("Start build is not eligible yet: " + WP[S.stage]?.title.replace(" v1", "") + " has not been approved on the active revision."); }
+  const m = text.match(/^create the (requirements|delivery plan|solution design|build plan)/i);
+  if (m) { addUser(text); const key = m[1].toLowerCase().replace(" ", "-"); if (key !== S.stage) return blocked(`That would open a new revision. The next step on the active revision is: ${WP[S.stage]?.title || "Start build."}`); return workProduct(key); }
+  if (S.stage === "done" || /add a field|change|evolve/i.test(text)) { addUser(text); await thinking(700); return addPlatform([{ type: "paragraph", text: "That is an evolution of the current app. I will show the impact before changing anything." }, { type: "diff", context: "impact of your change", added: ["1 field in domain, migration 0002 (additive)", "form + worklist column", "1 new test"] }, { type: "callout", tone: "", text: "Approve the Requirements change and the chain regenerates in order. Unrelated behaviour is preserved and proven by the existing 14 tests." }]); }
+  addUser(text); await thinking(600);
+  addPlatform([{ type: "paragraph", text: "Noted as a correction to the current work product. I have not changed anything downstream yet." }, { type: "callout", tone: "", text: `Next step on the active revision: ${WP[S.stage]?.title || "Start build."}` }]);
+});
+function blocked(text) { addPlatform([{ type: "callout", tone: "danger", title: "Not on this revision", text }], { cls: "message--assistant" }); }
+ta.addEventListener("keydown", (e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); composer.requestSubmit(); } });
+
+/* =========================================================================
+   REPLAY — "Watch a 3-minute build": scripted, no model calls, highlighted controls
+   ========================================================================= */
+const replayBar = $("#replayBar");
+function hl(node) { document.querySelectorAll(".hl").forEach((n) => n.classList.remove("hl")); if (node) { node.classList.add("hl"); node.scrollIntoView({ block: "center", behavior: "smooth" }); } }
+async function rwait(ms) { const r = S.replay; if (!r) throw new Error("replay-exit"); while (r.paused) { await wait(120); if (!S.replay) throw new Error("replay-exit"); } await wait(ms / r.speed); if (!S.replay) throw new Error("replay-exit"); }
+async function typeInto(text) { ta.value = ""; hl(ta.closest(".composer-row")); for (const ch of text) { ta.value += ch; await rwait(22); } await rwait(300); }
+async function clickWhen(sel, caption) { let n; for (let i = 0; i < 100; i++) { n = [...document.querySelectorAll(sel)].filter((x) => !x.disabled).pop(); if (n) break; await rwait(150); } if (!n) throw new Error("missing " + sel); if (caption) $("#replayCaption").textContent = caption; hl(n); await rwait(1100); n.click(); hl(null); }
+async function runReplay() {
+  if (S.replay) return;
+  S.replay = { paused: false, speed: 1 }; replayBar.classList.add("on"); $("#replayCaption").textContent = "Replaying delivery journal equipment-checkout-1.0.0 · no model calls";
+  try {
+    await rwait(600);
+    $("#replayCaption").textContent = "1 · Describe the problem. A starter card or your own words both work.";
+    await typeInto("Track equipment checkouts across three depots"); hl($("#sendBtn")); await rwait(700); composer.requestSubmit(); hl(null);
+    await clickWhen('.option-card[data-rec="1"]', "2 · The platform proposes; you accept the recommended default or correct it.");
+    await clickWhen('.option-card[data-rec="1"]', "3 · One dimension per turn. Watch the panel on the right fill in.");
+    await clickWhen('.option-card[data-rec="1"]', "4 · Data and rules, then who sees what.");
+    await clickWhen('.option-card[data-rec="1"]', "5 · The Blueprint is the whole understanding in one card.");
+    await clickWhen('[data-act="approve"]', "6 · Approve the Blueprint. Nothing is built yet.");
+    await clickWhen('[data-act="local"]', "7 · Confirm where it runs. Local defaults are one click.");
+    for (const key of ["requirements", "delivery-plan", "solution-design", "build-plan"]) {
+      await clickWhen('[data-next="1"]', `8 · Each work product is one prefilled next step: ${WP[key].title}.`);
+      await clickWhen('[data-act="approve"]', `9 · Approve ${WP[key].title}. Shown as consequence and diff, not a document.`);
+    }
+    await clickWhen('[data-next="1"]', "10 · Start build. The platform only interrupts if it needs you.");
+    await clickWhen('[data-act="accept"]', "11 · Business Review: evidence first, then your acceptance.");
+    await clickWhen('[data-act="open-eal"]', "12 · Open the app in EAL with a test identity and sample data.");
+    await rwait(1200); $("#replayCaption").textContent = "13 · The first record takes ten seconds."; hl($("#ealSubmit")); await rwait(1200); $("#ealSubmit").click(); hl(null); await rwait(1800);
+    $("#ealOverlay").classList.remove("on");
+    const m = addPlatform([{ type: "heading", text: "That was a real delivery, replayed" }, { type: "paragraph", text: "Every card you saw came from the recorded journal of a completed build: the same prompts, the same defaults, the same evidence. Nothing was staged." }, { type: "callout", tone: "success", title: "Now try yours", text: "Describe your own problem below, or pick a starter. The platform will lead the same way." }]);
+    $("#replayCaption").textContent = "Done. Now try yours.";
+  } catch (e) { if (String(e.message) !== "replay-exit") console.error(e); }
+  endReplay(false);
+}
+function endReplay(reset) { hl(null); S.replay = null; replayBar.classList.remove("on"); if (reset) { setMode("new", true); } }
+$("#replayPause").onclick = (e) => { if (!S.replay) return; S.replay.paused = !S.replay.paused; e.target.textContent = S.replay.paused ? "Resume" : "Pause"; };
+$("#replaySpeed").onclick = (e) => { if (!S.replay) return; S.replay.speed = S.replay.speed === 1 ? 2 : S.replay.speed === 2 ? 4 : 1; e.target.textContent = S.replay.speed + "×"; };
+$("#replaySkip").onclick = () => { if (S.replay) S.replay.speed = 40; };
+$("#replayExit").onclick = () => endReplay(true);
+
+/* =========================================================================
+   EXISTING USER — resume, commands, gates, templates, expert overrides
+   ========================================================================= */
+const EXISTING = {
+  project: "Mileage Reimbursement Log E2E v2",
+  commands: [
+    ["Review Requirements v2", "waiting for you · drafted 2026-09-11 from your rounding-rule correction", "review-req"],
+    ["Create the Requirements for the current app from the approved Blueprint. Show it for review. Do not build or create files yet.", "lifecycle command", "cmd"],
+    ["Create the Delivery Plan for the current app from the approved Requirements. Show it for review. Do not build or create files yet.", "lifecycle command", "cmd"],
+    ["Create the Solution Design for the current app from the approved Delivery Plan. Show it for review. Do not build or create files yet.", "lifecycle command", "cmd"],
+    ["Create the Build Plan for the current app from the approved Solution Design. Show it for review. Do not build or create files yet.", "lifecycle command", "cmd"],
+    ["Start build.", "checks first-build eligibility on the active revision", "start-build"],
+    ["Show the Business Review for the current release.", "evidence and acceptance", "cmd"],
+    ["Roll over to the successor chat and continue.", "when the session budget is nearly spent", "rollover"],
+    ["Start like Mileage Log", "template: clone this Blueprint shape for a new app", "template"],
+    ["Regenerate remaining work products and show one combined diff.", "expert override after a cascade", "batch"],
+  ],
+};
+function renderExisting() {
+  conv.innerHTML = ""; S.stage = "review-req"; S.app = "Mileage Reimbursement Log";
+  S.projects = [{ id: "m", name: EXISTING.project, sub: "Requirements v2 · waiting for you" }, { id: "c", name: "Contact Directory", sub: "released 1.0.0 · 2026-09-03" }, { id: "s", name: "Service Price Calculator", sub: "released 1.0.2 · 2026-09-02" }, { id: "e", name: "Equipment Checkout", sub: "discovery · 2 questions open" }];
+  S.activeProject = "m"; renderSidebar();
+  setCurrent([["App", EXISTING.project], ["Blueprint", "v1 approved 2026-09-11"], ["Landscape", "Local defaults confirmed"], ["Requirements", "v2 drafted, awaiting approval"], ["Delivery Plan · Design · Build Plan", "v1 approved (will be superseded)"], ["Session budget", "612k of 750k tokens used"]]);
+  S.decisions = [{ what: "Requirements v2 drafted with rounding rule", source: "platform", detail: "from your correction", when: "09-11 22:14" }, { what: "Landscape: Local defaults confirmed", source: "you", detail: "", when: "09-11 22:02" }, { what: "Discovery Blueprint v1 approved", source: "you", detail: "", when: "09-11 21:58" }];
+  S.assumptions = [{ text: "Reimbursement = miles × rate, rounded to 2 decimals half-up", status: "confirmed" }, { text: "Name field is not tied to identity", status: "confirmed" }, { text: "Managers see their own team's logs only", status: "assumed" }];
+  S.gaps = DIMS.map((d) => ({ dim: d, state: d === "Integrations" ? "deferred" : "covered", note: d === "Integrations" ? "none in v1" : "" }));
+  S.trace = [{ item: "Requirements v2", from: "your correction message 09-11 22:10", when: "09-11 22:14" }, { item: "Discovery Blueprint v1", from: "5 discovery answers", when: "09-11 21:58" }];
+  Object.assign(S.journey, { idea: "done", discovery: "done", requirements: "active", design: "todo", build: "todo", run: "todo" }); S.journeyOpen = false; renderJourney(); renderUnderstanding();
+  const m = addPlatform([
+    { type: "heading", text: "Welcome back" },
+    { type: "key_value", rows: [["Last session", "2026-09-11 22:14 · " + EXISTING.project], ["Waiting on you", "Approve Requirements v2"], ["Since then", "nothing ran; the loop is idle"]] },
+    { type: "heading", text: "What changed since your last session" },
+    { type: "bullet_list", items: ["Blueprint v1 approved (you, 21:58)", "Landscape confirmed: Local defaults (you, 22:02)", "Requirements v2 generated from your rounding-rule correction (22:14)"] },
+  ], { cls: "message--assistant" });
+  const acts = el("div", "actions");
+  const r = el("button", "btn primary", "Review Requirements v2"); r.dataset.act = "review-req"; r.onclick = () => reviewRequirementsV2(); acts.appendChild(r);
+  const c = el("button", "btn", "Commands  Ctrl K"); c.onclick = () => openPalette(); acts.appendChild(c);
+  const t = el("button", "btn", "Start like Mileage Log"); t.onclick = () => templateStart(); acts.appendChild(t);
+  m.appendChild(acts);
+  setNextStep("Review Requirements v2", "waiting on you"); setPlaceholder("Next: Review Requirements v2. Or type a command (Ctrl K).");
+}
+async function reviewRequirementsV2() {
+  addUser("Review Requirements v2"); await thinking(500);
+  const m = addPlatform([
+    { type: "heading", text: "Requirements v2 · " + EXISTING.project },
+    { type: "paragraph", html: "<strong>What this decides:</strong> the rounding rule becomes a testable requirement and a validation rule in the API." },
+    { type: "diff", context: "vs Requirements v1 (approved)", removed: ["R-07 Reimbursement amount is computed from miles and rate"], added: ["R-07 Reimbursement amount = miles × rate, rounded to 2 decimals half-up; displayed with 2 decimals", "V-04 Validation: rate must be positive; miles ≥ 0.1"] },
+  ]);
+  const k = await choose(m, [{ key: "approve", label: "Approve Requirements v2", primary: true }, { key: "change", label: "Request change" }]);
+  if (k !== "approve") { decide("Requirements v2 change requested", "you"); return addPlatform([{ type: "paragraph", text: "Recorded as a rejection effect. Tell me the wording and I will draft v3." }]); }
+  const n = addPlatform([{ type: "callout", tone: "warning", title: "Approval cascade", text: "Approving Requirements v2 supersedes Delivery Plan v1, Solution Design v1 and Build Plan v1. They must be regenerated in that order before Start build is eligible." }], { cls: "message--assistant" });
+  const c = await choose(n, [{ key: "go", label: "Approve and regenerate in order", primary: true }, { key: "cancel", label: "Cancel" }]);
+  if (c !== "go") return;
+  decide("Requirements v2 approved", "you", "supersedes DP/SD/BP v1"); setJourney("design", "active"); setCurrent(S.current.map(([k, v]) => k === "Requirements" ? [k, "v2 approved"] : k.startsWith("Delivery Plan") ? [k, "superseded; regenerating"] : [k, v]));
+  await thinking(500);
+  const o = addPlatform([{ type: "heading", text: "Expert override available" }, { type: "paragraph", text: "You reviewed v1 of all three downstream work products. I can regenerate them from Requirements v2 and show one combined diff instead of three reviews." }]);
+  const b = await choose(o, [{ key: "batch", label: "Regenerate all three, one combined diff", primary: true }, { key: "one", label: "One at a time" }]);
+  if (b === "one") { for (const key of ["delivery-plan", "solution-design", "build-plan"]) { await workProduct(key); await wait(200); } }
+  else {
+    await thinking(1200);
+    const d = addPlatform([{ type: "heading", text: "Delivery Plan v2 · Solution Design v2 · Build Plan v2" }, { type: "diff", context: "combined, vs the v1 you approved", added: ["Solution Design: rounding in domain layer (shared/domain.ts), not in UI", "Build Plan: +1 migration 0002 (additive: rate precision), +2 tests (rounding half-up, negative rate rejected)"], removed: ["Build Plan: test 'amount computed' replaced by two exact-value tests"] }, { type: "callout", tone: "", text: "Everything else is byte-identical to v1. Stage applicability unchanged." }]);
+    const k2 = await choose(d, [{ key: "approve", label: "Approve all three", primary: true }, { key: "one", label: "Review individually" }]);
+    if (k2 === "one") { for (const key of ["delivery-plan", "solution-design", "build-plan"]) { await workProduct(key); } }
+    else { ["Delivery Plan v2", "Solution Design v2", "Build Plan v2"].forEach((w) => decide(w + " approved", "you", "batch approval after review of v1")); }
+  }
+  setCurrent(S.current.map(([k, v]) => k.startsWith("Delivery Plan") ? [k, "v2 approved"] : [k, v]));
+  await eligibility();
+}
+async function eligibility() {
+  await thinking(400);
+  const m = addPlatform([
+    { type: "heading", text: "Start build eligibility" },
+    { type: "table", columns: ["Head", "Version", "On active revision"], rows: [["Requirements", "v2", "✓"], ["Delivery Plan", "v2", "✓"], ["Solution Design", "v2", "✓"], ["Build Plan", "v2", "✓"]] },
+    { type: "callout", tone: "warning", title: "Budget", text: "This session has used 612k of 750k tokens. A full-stack build needs at least 181k. Roll over to the successor chat first; the project and all approvals carry forward." },
+  ]);
+  const k = await choose(m, [{ key: "rollover", label: "Roll over and start build", primary: true }, { key: "force", label: "Start build here anyway" }]);
+  if (k === "force") { addUser("Start build."); return blocked("WORKFLOW_STEP_TOKEN_RESERVATION_UNAVAILABLE: 138k tokens remain, 181k required. Use the successor chat."); }
+  addUser("Roll over to the successor chat and continue."); await thinking(500);
+  addUserSystem("Successor chat created for " + esc(EXISTING.project) + ". Approvals, landscape and knowledge carried forward. Budget: 750k available.");
+  S.app = "Mileage Reimbursement Log"; setCurrent(S.current.map(([k, v]) => k === "Session budget" ? [k, "0 of 750k (successor chat)"] : [k, v]));
+  addUser("Start build."); await build();
+}
+async function templateStart() {
+  addUser("Start like Mileage Log"); await thinking(600);
+  S.projects.unshift({ id: "n", name: "New app (from Mileage Log)", sub: "discovery · template" }); S.activeProject = "n"; renderSidebar();
+  const m = addPlatform([{ type: "heading", text: "New app from the Mileage Log shape" }, { type: "paragraph", text: "I copied the Blueprint shape: one entity with a derived amount, a form and a worklist, a submitter and a manager role, local topology. Give me the new subject and I will rewrite fields and rules; everything you do not mention keeps the Mileage Log defaults." }, { type: "key_value", rows: [["Kept", "floorplans, roles, rounding rule pattern, validation style, local topology"], ["Needs you", "entity name, its fields, the derived rule"]] }]);
+  await ask(m, { prompt: "What is the new app about?", options: [{ label: "Per-diem allowances", detail: "days × rate" }, { label: "Fuel log", detail: "litres × price" }, { label: "Overtime claims", detail: "hours × multiplier" }] });
+  await thinking(500); addPlatform([{ type: "paragraph", text: "Blueprint v1 drafted from the template with your subject. Review it when ready; Requirements will trace to it." }]); setJourney("discovery", "active"); setNextStep("Review the Discovery Blueprint", "template applied");
+}
+async function existingCommand(text) {
+  const t = text.toLowerCase();
+  if (t.startsWith("review requirements")) return reviewRequirementsV2();
+  if (t.startsWith("start like")) return templateStart();
+  if (t.startsWith("start build")) { addUser(text); if (S.stage === "review-req") return blocked("Start build is not eligible: Requirements v2 is awaiting your approval, and Delivery Plan, Solution Design and Build Plan v1 would be superseded."); return build(); }
+  if (t.startsWith("roll over")) { addUser(text); return addUserSystem("Successor chat created. Approvals and knowledge carried forward."); }
+  if (t.startsWith("regenerate remaining")) { addUser(text); await thinking(600); return addPlatform([{ type: "paragraph", text: "No cascade is pending. This override applies right after a Requirements or Delivery Plan approval supersedes downstream work products." }]); }
+  if (t.startsWith("create the")) { addUser(text); return blocked("On the active revision the next step is: Review Requirements v2. A capability-style prompt would open a new business revision; use the lifecycle command from the palette instead."); }
+  if (t.startsWith("show the business review")) { addUser(text); await thinking(500); return addPlatform([{ type: "paragraph", text: "No release exists on this revision yet. The last released version is 1.0.0 (2026-09-03), accepted by you." }]); }
+  addUser(text); await thinking(500); addPlatform([{ type: "paragraph", text: "Noted. Nothing downstream changed. The next step on the active revision is still: Review Requirements v2." }]);
+}
+
+/* ---------- command palette ---------- */
+const palOverlay = $("#paletteOverlay"), palInput = $("#paletteInput"), palList = $("#paletteList");
+function openPalette() {
+  const items = S.mode === "existing" ? EXISTING.commands : [["Start with my idea", "describe a problem in the composer", "focus"], ["Watch a 3-minute build", "replay a real delivery, no model calls", "watch"], ["I know the platform", "switch to the expert experience", "know"], ...STARTERS.map(([t, s]) => [t, "starter · " + s, "starter"])];
+  palList.innerHTML = ""; items.forEach(([label, sub, kind], i) => { const li = el("li", i === 0 ? "on" : "", `${esc(label)}<small>${esc(sub)}</small>`); li.onclick = () => runPalette(label, kind); palList.appendChild(li); });
+  palOverlay.classList.add("on"); palInput.value = ""; palInput.focus();
+}
+function runPalette(label, kind) {
+  palOverlay.classList.remove("on");
+  if (kind === "focus") return ta.focus();
+  if (kind === "watch") return runReplay();
+  if (kind === "know") return setMode("existing");
+  if (kind === "starter") return startIdea(label);
+  ta.value = label; composer.requestSubmit();
+}
+palInput.addEventListener("input", () => { const q = palInput.value.toLowerCase(); [...palList.children].forEach((li) => (li.style.display = li.textContent.toLowerCase().includes(q) ? "" : "none")); });
+palInput.addEventListener("keydown", (e) => { const vis = [...palList.children].filter((li) => li.style.display !== "none"); let i = vis.findIndex((li) => li.classList.contains("on")); if (e.key === "ArrowDown") { i = Math.min(vis.length - 1, i + 1); } else if (e.key === "ArrowUp") { i = Math.max(0, i - 1); } else if (e.key === "Enter") { e.preventDefault(); return (vis[i] || vis[0])?.click(); } else if (e.key === "Escape") { return palOverlay.classList.remove("on"); } else return; vis.forEach((li) => li.classList.remove("on")); vis[i]?.classList.add("on"); });
+palOverlay.addEventListener("click", (e) => { if (e.target === palOverlay) palOverlay.classList.remove("on"); });
+$("#ealOverlay").addEventListener("click", (e) => { if (e.target === $("#ealOverlay")) $("#ealOverlay").classList.remove("on"); });
+document.addEventListener("keydown", (e) => { if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openPalette(); } });
+$("#paletteBtn").onclick = openPalette;
+
+/* ---------- mode + reset ---------- */
+function setMode(mode, force) {
+  if (S.replay) { S.replay = null; replayBar.classList.remove("on"); hl(null); }
+  S.mode = mode; $("#modeNew").classList.toggle("on", mode === "new"); $("#modeExisting").classList.toggle("on", mode === "existing");
+  S.goal = ""; S.app = "Equipment Checkout"; S.stage = null; pending = null; lockComposer(false); resetPanelState(); $("#ealOverlay").classList.remove("on");
+  if (mode === "new") { S.projects = []; S.activeProject = null; renderSidebar(); S.journeyOpen = true; renderJourney(); renderUnderstanding(); renderBlank(); }
+  else renderExisting();
+}
+$("#modeNew").onclick = () => setMode("new"); $("#modeExisting").onclick = () => setMode("existing"); $("#resetBtn").onclick = () => setMode(S.mode);
+setMode("new");
+</script>
+</body>
+</html>

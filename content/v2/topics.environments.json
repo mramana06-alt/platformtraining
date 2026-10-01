@@ -1,0 +1,148 @@
+[
+  {
+    "id": "where-development",
+    "track": "environments",
+    "level": 2,
+    "title": "Development happens in the PL chat and in a workspace PL owns",
+    "prompt": "Where does application development actually happen?",
+    "summary": "Thinking, discovery and design happen in your PL chat; generation and verification happen in a workspace directory PL owns on the platform host; committed sources land in the platformapps repository with a provenance gate.",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Your browser", "items": ["PL chat: conversation, cards, approvals", "Knowledge Inspector", "Landscape picker"] },
+        { "title": "PL API (platform host)", "items": ["Sessions and delivery cases (event log)", "Capabilities and model calls", "Workspace per delivery run"] },
+        { "title": "Workspace and repositories", "items": ["D:\\workspace\\...\\app-name\\run: generated sources, builds, logs", "platformapps repository: committed sources, releases, provenance"] },
+        { "title": "Databases", "items": ["platformloops: PL state", "platformapps: one schema per generated app"] }
+      ], "caption": "You never edit files; PL generates into its workspace and commits with a provenance manifest." },
+      { "type": "key_value", "rows": [
+        { "label": "Conversation and decisions", "value": "In your PL project. Every message and approval is an event in the delivery case." },
+        { "label": "Generated code", "value": "In a per-run workspace directory owned by PL, then committed to the platformapps repository as an immutable release snapshot." },
+        { "label": "Builds and tests", "value": "In that workspace, with an allow-listed child environment: no platform secrets reach the app processes." },
+        { "label": "Application data", "value": "A dedicated PostgreSQL schema per application in the platformapps database, with the app's own login." }
+      ] },
+      { "type": "callout", "tone": "info", "text": "Today the platform host is a single workstation. That is where the PL API, EAL, UME and the generated apps run. Multi-host deployment is part of the deployment foundation planned for the customer pilot." }
+    ],
+    "followUps": ["local-dev-architecture", "where-deployed", "where-run", "environments"],
+    "plPrompts": [
+      { "label": "Ask PL where development happens", "prompt": "Where does application development actually happen on this platform: which directories, repositories and databases are involved for a generated application? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["workspace", "where", "development"]
+  },
+  {
+    "id": "where-deployed",
+    "track": "environments",
+    "level": 2,
+    "title": "Deployed to a Local Development landscape and registered with EAL",
+    "prompt": "Where are applications built by this platform deployed?",
+    "summary": "Into the landscape you confirmed: today Local defaults, meaning the UI and API run as processes on the platform host with reserved ports and the app's schema in the platformapps database; the release is registered with the EAL registry and roles are published to UME.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Release identity", "note": "manifest + hashes" },
+        { "label": "Provision schema", "note": "own login, NOBYPASSRLS" },
+        { "label": "Start API + UI", "note": "reserved ports" },
+        { "label": "Register with EAL", "note": "signed release set" },
+        { "label": "Publish roles to UME" },
+        { "label": "Activate", "note": "after Business Review" }
+      ], "caption": "Deployment is part of the same delivery run, not a separate pipeline." },
+      { "type": "table", "columns": ["Target", "Today", "Planned"], "rows": [
+        ["Local Development", "UI and API processes on the platform host, ports reserved by the deployer, schema in platformapps", "Unchanged"],
+        ["Central Development", "Not available", "Independent deployables, release manifests, non-loopback origins"],
+        ["QA and UAT", "Not available", "Production-shaped environments promoted by release manifests"],
+        ["Production", "Not available", "Customer-controlled installation with identity, secrets, backup and recovery gates"]
+      ] },
+      { "type": "callout", "tone": "tip", "text": "Where the app is deployed is decided at the landscape step. The nudge Use Local defaults and confirm composes, resolves and confirms the placement in one click. EKG can provide placements when it is online; otherwise Local defaults apply." }
+    ],
+    "followUps": ["where-run", "environments", "config-infra-runtime", "where-development"],
+    "plPrompts": [
+      { "label": "Ask PL where apps are deployed", "prompt": "Where are applications built by this platform deployed in this workspace, and what is registered with EAL and UME during deployment? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome", "build-plan"] }
+    ],
+    "keywords": ["deploy", "landscape", "local defaults"]
+  },
+  {
+    "id": "where-run",
+    "track": "environments",
+    "level": 2,
+    "title": "Applications run as their own processes and are used through EAL",
+    "prompt": "Where do the deployed applications run?",
+    "summary": "Each application runs as its own API and UI processes on the platform host, reading and writing its own PostgreSQL schema. Users reach it through EAL, which launches the UI with a signed authority and enforces roles from UME.",
+    "blocks": [
+      { "type": "diagram", "kind": "swimlane", "lanes": ["User", "EAL", "Application", "Database"], "sequence": [
+        { "lane": 0, "label": "Sign in" },
+        { "lane": 1, "label": "Resolve roles (UME)" },
+        { "lane": 1, "label": "Launch app with authority" },
+        { "lane": 2, "label": "UI calls API" },
+        { "lane": 2, "label": "API checks authority live" },
+        { "lane": 3, "label": "Read/write own schema" },
+        { "lane": 2, "label": "Audit + outbox rows" }
+      ], "caption": "The application never sees the platform's credentials; it holds only its own database login." },
+      { "type": "key_value", "rows": [
+        { "label": "Processes", "value": "Two per application (API, UI), started by the PL deployer on reserved ports and adopted on restart through a managed runtime." },
+        { "label": "Data", "value": "One schema per application in the platformapps database with a dedicated login; row-level security policies in integration-backed apps." },
+        { "label": "Access", "value": "EAL chat and full view; EAL signs an application authority reference that the API resolves live before it answers." },
+        { "label": "Identity", "value": "Roles published to UME at release; a test identity pl.app-name.user is created for you to try the app." }
+      ] },
+      { "type": "callout", "tone": "warning", "text": "Deployed application processes are children of the PL API process today. Restarting the PL API stops them; the managed runtime re-adopts or restarts them. A supervisor for production is part of the planned runtime work." }
+    ],
+    "followUps": ["runtime-architecture", "open-in-eal", "config-infra-runtime", "environments"],
+    "plPrompts": [
+      { "label": "Ask PL where apps run", "prompt": "Where do the deployed applications run, how do users reach them, and how does an application check who is calling it? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["runtime", "EAL", "processes", "where run"]
+  },
+  {
+    "id": "environments",
+    "track": "environments",
+    "level": 2,
+    "title": "Local Development today; Central Development, QA, UAT and Production are on the roadmap",
+    "prompt": "What development, testing, staging, and production environments does the platform support?",
+    "summary": "Local Development is fully supported. The environment ladder to Production is designed (release manifests, environment promotion gates, customer deployment profiles) and sequenced in the roadmap, but not yet available.",
+    "blocks": [
+      { "type": "diagram", "kind": "timeline", "items": [
+        { "label": "Local Development", "detail": "One workstation; UI, API and schema per app; EAL, UME and services alongside. Available now.", "state": "done" },
+        { "label": "Central Development", "detail": "Independent deployables, published SDK, non-loopback origins, release manifests. Planned.", "state": "active" },
+        { "label": "QA / UAT", "detail": "Production-shaped environments promoted by manifest with evidence gates. Planned.", "state": "todo" },
+        { "label": "Production", "detail": "Customer-controlled install: identity federation, secret references, backup and restore drills, SLOs. Planned.", "state": "todo" }
+      ], "caption": "Promotion is by immutable release manifest and gate evidence, never by rebuilding." },
+      { "type": "table", "columns": ["Environment", "What it is for", "Status"], "rows": [
+        ["Local Development", "Build, verify and use applications on the platform host; every feature in this guide", "Available"],
+        ["Central Development", "Shared development landscape for a team", "Planned (M10 / R6)"],
+        ["QA", "Independent qualification of a release manifest", "Planned"],
+        ["UAT", "Customer acceptance on production-shaped infrastructure", "Planned"],
+        ["Production", "Customer operations with production controls", "Planned"]
+      ] },
+      { "type": "callout", "tone": "info", "text": "Testing exists at every stage already: typecheck, contract tests and browser qualification run inside Local Development for each build, and Eval Studio evaluates the platform and applications continuously. What is missing is separate infrastructure for later environments, not testing." }
+    ],
+    "followUps": ["readiness", "config-infra-runtime", "where-deployed", "production-improvement"],
+    "plPrompts": [
+      { "label": "Ask PL about environments", "prompt": "What development, testing, staging, and production environments does the platform support today, and which are planned? Be explicit about what is available in this workspace. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["environments", "staging", "production", "QA"]
+  },
+  {
+    "id": "config-infra-runtime",
+    "track": "environments",
+    "level": 3,
+    "title": "Configuration, infrastructure, deployment and runtime management",
+    "prompt": "How does the platform handle application configuration, infrastructure, deployment, and runtime management?",
+    "summary": "Configuration is derived from the confirmed landscape and injected through an allow-list; infrastructure is a schema, two processes and reserved ports; deployment is a recorded lifecycle with rollback; runtime management is a managed runtime inside PL plus the Control Center for the platform's own services.",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Configuration", "items": ["Landscape binding: ports, schema, profile", "Allow-listed child environment per app", "No inherited platform secrets"] },
+        { "title": "Infrastructure", "items": ["PostgreSQL schema + login per app", "API and UI processes", "Reserved ports with conflict resolution"] },
+        { "title": "Deployment lifecycle", "items": ["Immutable release directory", "Durable effect records", "Conditional activation and rollback"] },
+        { "title": "Runtime management", "items": ["Managed runtime (adopt, restart, health)", "EAL activation and revocation", "Control Center for platform services"] }
+      ] },
+      { "type": "key_value", "rows": [
+        { "label": "Configuration", "value": "The app receives only the keys its profile allows (its database URL, its ports, EAL origins). Keys outside the allow-list are refused, which is how platform credentials stay out of generated apps." },
+        { "label": "Infrastructure", "value": "Provisioned by the deployer: CREATE ROLE with NOBYPASSRLS and a random password, schema, migrations from the release, ports verified and reserved in-process." },
+        { "label": "Deployment", "value": "A lifecycle with durable records: staging directory, atomic rename, per-file hashes, activation only after Business Review, rollback to the previous release directory." },
+        { "label": "Runtime management", "value": "The managed runtime adopts running processes after a PL restart and restarts lost ones; the Control Center starts, stops and monitors PL, EAL, UME, EKG and the other services with an approval policy." }
+      ] },
+      { "type": "callout", "tone": "warning", "text": "Secrets are file-based on the workstation today. Secret references through a key vault, containers and a service manager are part of the deployment foundation for customer sites." }
+    ],
+    "followUps": ["where-run", "errors", "environments", "components"],
+    "plPrompts": [
+      { "label": "Ask PL how deployment is managed", "prompt": "How does the platform handle application configuration, infrastructure, deployment, and runtime management for a generated application? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome", "build-plan"] }
+    ],
+    "keywords": ["configuration", "infrastructure", "runtime", "deployment"]
+  }
+]

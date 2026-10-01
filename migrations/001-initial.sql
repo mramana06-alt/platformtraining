@@ -1,0 +1,15 @@
+CREATE SCHEMA IF NOT EXISTS training;
+CREATE TABLE training.packages(version text PRIMARY KEY, hash text NOT NULL, content jsonb NOT NULL, published_at timestamptz NOT NULL DEFAULT now());
+CREATE TABLE training.channels(name text PRIMARY KEY, version text NOT NULL REFERENCES training.packages(version));
+CREATE TABLE training.learners(tenant_id text NOT NULL,user_id uuid NOT NULL,version integer NOT NULL DEFAULT 0,payload jsonb NOT NULL DEFAULT '{"mode":"guided","attempt":null}',updated_at timestamptz NOT NULL DEFAULT now(),PRIMARY KEY(tenant_id,user_id));
+CREATE TABLE training.attempts(tenant_id text NOT NULL,user_id uuid NOT NULL,attempt_id uuid NOT NULL,payload jsonb NOT NULL,PRIMARY KEY(tenant_id,user_id,attempt_id));
+CREATE TABLE training.events(tenant_id text NOT NULL,user_id uuid NOT NULL,event_id uuid NOT NULL,request_hash text NOT NULL,result jsonb NOT NULL,created_at timestamptz NOT NULL DEFAULT now(),PRIMARY KEY(tenant_id,user_id,event_id));
+ALTER TABLE training.learners ENABLE ROW LEVEL SECURITY;
+ALTER TABLE training.learners FORCE ROW LEVEL SECURITY;
+ALTER TABLE training.attempts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE training.attempts FORCE ROW LEVEL SECURITY;
+ALTER TABLE training.events ENABLE ROW LEVEL SECURITY;
+ALTER TABLE training.events FORCE ROW LEVEL SECURITY;
+CREATE POLICY learner_scope ON training.learners USING (tenant_id=current_setting('training.tenant',true) AND user_id::text=current_setting('training.user',true)) WITH CHECK (tenant_id=current_setting('training.tenant',true) AND user_id::text=current_setting('training.user',true));
+CREATE POLICY attempt_scope ON training.attempts USING (tenant_id=current_setting('training.tenant',true) AND user_id::text=current_setting('training.user',true)) WITH CHECK (tenant_id=current_setting('training.tenant',true) AND user_id::text=current_setting('training.user',true));
+CREATE POLICY event_scope ON training.events USING (tenant_id=current_setting('training.tenant',true) AND user_id::text=current_setting('training.user',true)) WITH CHECK (tenant_id=current_setting('training.tenant',true) AND user_id::text=current_setting('training.user',true));

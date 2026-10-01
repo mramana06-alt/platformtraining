@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PL Guide · new user training v2</title>
+<style>
+  :root { --ink:#25292c; --muted:#52675a; --line:#e3e8e4; --card-line:#dfe5e1; --green:#244f3b; --green-soft:#edf3ef; --eyebrow:#587463; --soft:#f6f7f7; --accent:#2e8b57; --warn-bg:#fff9e9; --warn-line:#e4c37e; --blue:#2a78d6; --blue-soft:#eaf2fc; --danger:#b42318; color-scheme: light; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; background:#fff; color:var(--ink); font:14px/1.55 Aptos, "Segoe UI Variable", "Segoe UI", -apple-system, sans-serif; }
+  button, input { font: inherit; } button { cursor:pointer; } button:disabled { cursor:not-allowed; opacity:.55; }
+  .shell { display:flex; flex-direction:column; height:100vh; }
+  .topbar { display:flex; align-items:center; gap:12px; padding:10px 18px; border-bottom:1px solid var(--line); flex:0 0 auto; }
+  .mark { width:36px; height:36px; display:grid; place-items:center; border-radius:12px; color:#fff; background:var(--green); font:700 .74rem Georgia, serif; letter-spacing:.08em; }
+  .topbar h1 { margin:0; font:500 1.3rem/1 Georgia, "Times New Roman", serif; }
+  .pill { padding:4px 10px; border-radius:999px; background:var(--blue-soft); color:#1c5cab; font-size:.74rem; font-weight:700; }
+  .spacer { flex:1; }
+  .btn { border:1px solid var(--line); background:#fff; border-radius:9px; padding:6px 11px; font-size:.82rem; font-weight:600; color:var(--ink); }
+  .btn:hover { background:var(--soft); } .btn.primary { background:var(--green); border-color:var(--green); color:#fff; } .btn.small { padding:3px 8px; font-size:.76rem; }
+  .workspace { display:grid; grid-template-columns:270px minmax(0,1fr) 330px; flex:1 1 auto; min-height:0; }
+  aside { overflow:auto; background:#fbfcfb; padding:12px; }
+  .left { border-right:1px solid var(--line); } .right { border-left:1px solid var(--line); display:flex; flex-direction:column; gap:12px; }
+  .eyebrow { margin:0 0 6px; color:var(--eyebrow); font-size:.68rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+  .search { width:100%; padding:7px 10px; border:1px solid var(--line); border-radius:9px; margin-bottom:10px; }
+  .track { margin-bottom:6px; border:1px solid var(--card-line); border-radius:9px; background:#fff; }
+  .track > button { width:100%; text-align:left; border:0; background:transparent; padding:8px 10px; display:flex; align-items:center; gap:8px; font-weight:700; font-size:.84rem; }
+  .track > button small { margin-left:auto; color:var(--muted); font-weight:500; font-size:.72rem; }
+  .track ul { list-style:none; margin:0; padding:0 6px 6px; display:none; } .track.open ul { display:block; }
+  .track li button { width:100%; text-align:left; border:0; background:transparent; padding:5px 8px; border-radius:7px; font-size:.8rem; display:flex; gap:6px; align-items:flex-start; }
+  .track li button:hover { background:var(--green-soft); } .track li button.on { background:var(--green-soft); font-weight:700; }
+  .lvl { flex:0 0 auto; width:20px; height:20px; border-radius:50%; display:grid; place-items:center; font-size:.64rem; font-weight:700; color:var(--muted); border:1px solid var(--line); background:#fff; margin-top:1px; }
+  .lvl.l0 { color:#fff; background:var(--green); border-color:var(--green); }
+  .tick { color:var(--accent); font-weight:800; margin-left:auto; }
+  .chat { position:relative; display:flex; flex-direction:column; min-width:0; min-height:0; }
+  .conversation { flex:1 1 auto; overflow-y:auto; padding:22px clamp(20px,4vw,60px) 130px; }
+  .message { position:relative; margin:0 0 16px; padding:14px 18px; border:1px solid var(--card-line); border-radius:13px; background:#fff; box-shadow:0 8px 26px rgba(37,54,46,.05); font-size:.9rem; }
+  .message--user { width:fit-content; max-width:82%; margin-left:auto; padding:10px 16px; color:#fff; border:0; background:var(--green); box-shadow:none; }
+  .actor { margin:0 0 7px; color:var(--eyebrow); font-size:.64rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; display:flex; gap:8px; align-items:center; }
+  .actor .crumb { margin-left:auto; text-transform:none; letter-spacing:0; font-weight:600; color:var(--muted); font-size:.72rem; }
+  .message h2 { margin:0 0 6px; font-size:1.15rem; } .message h3 { margin:12px 0 6px; font-size:1rem; }
+  /* executive answer layout */
+  .message.answer { padding:0; overflow:hidden; }
+  .message.answer .band { padding:20px 24px 14px; border-top:3px solid var(--green); }
+  .message.answer .band h2 { margin:0 0 8px; font:500 1.45rem/1.25 Georgia, "Times New Roman", serif; color:var(--ink); letter-spacing:-.01em; }
+  .actor.light, .actor.light .crumb { color:var(--muted); }
+  .status { display:inline-block; padding:2px 10px; border-radius:999px; font-size:.72rem; font-weight:600; background:#fbfcfb; color:var(--muted); border:1px solid var(--line); }
+  .status-available { color:var(--green); border-color:var(--green); }
+  .message.answer .lede { margin:0; padding:14px 24px; background:#fbfcfb; border-top:1px solid var(--line); border-bottom:1px solid var(--line); font-size:1rem; line-height:1.6; }
+  .message.answer .lede span { display:block; color:var(--muted); font-size:.66rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; margin-bottom:4px; }
+  .takeaways { margin:0; padding:12px 24px 4px 44px; background:#fff; } .takeaways li { margin:4px 0; font-weight:600; } .takeaways li::marker { color:var(--green); }
+  .glance { margin:0; padding:6px 24px 10px; color:var(--muted); font-size:.78rem; border-bottom:1px solid var(--line); }
+  .message.answer .body { padding:16px 24px 8px; }
+  .message.answer .body h3 { margin:18px 0 8px; font:500 1.05rem/1.3 Georgia, serif; color:var(--ink); }
+  .message.answer .body .tbl th { color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; border-bottom:2px solid var(--line); }
+  .message.answer .body .kv { border-top:1px solid var(--line); gap:0; } .message.answer .body .kv dt, .message.answer .body .kv dd { padding:7px 0; border-bottom:1px solid var(--line); }
+  .fig-label { display:inline-block; margin-bottom:8px; color:var(--muted); font-size:.66rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+  .message.answer .followups { margin:4px 24px 12px; padding:12px 0 0; border-top:1px solid var(--line); } .followups h4 { margin:0 0 6px; font:700 .68rem/1.2 inherit; color:var(--muted); letter-spacing:.12em; text-transform:uppercase; }
+  .message.answer .try { margin:0 20px 8px; } .message.answer .understood { margin:0; padding:10px 20px 14px; border-top:1px solid var(--line); background:#fff; }
+  .message p { margin:0 0 8px; } .message ul, .message ol { margin:4px 0 8px; padding-left:20px; }
+  .kv { display:grid; grid-template-columns:max-content 1fr; gap:4px 14px; margin:6px 0 10px; font-size:.86rem; } .kv dt { color:var(--muted); font-weight:600; } .kv dd { margin:0; }
+  table.tbl { border-collapse:collapse; width:100%; font-size:.82rem; margin:6px 0 10px; } .tbl th, .tbl td { text-align:left; padding:5px 8px; border-bottom:1px solid var(--line); vertical-align:top; } .tbl th { color:var(--muted); font-size:.72rem; text-transform:uppercase; letter-spacing:.05em; }
+  .tablewrap { overflow-x:auto; }
+  .callout { border:1px solid var(--line); border-left:3px solid var(--green); background:#fbfcfb; border-radius:8px; padding:10px 14px; margin:10px 0 12px; font-size:.88rem; }
+  .callout.warning { border-left-color:var(--muted); } .callout strong { display:block; margin-bottom:2px; }
+  figure.diagram { margin:8px 0 12px; padding:10px; border:1px solid var(--line); border-radius:10px; background:#fcfdfc; overflow-x:auto; } figure.diagram figcaption { color:var(--muted); font-size:.76rem; margin-top:4px; } figure.diagram svg { display:block; max-width:100%; height:auto; }
+  .steps { list-style:none; padding:0; margin:6px 0 10px; counter-reset:s; } .steps li { display:grid; grid-template-columns:28px 1fr; gap:8px; padding:6px 0; border-bottom:1px dashed var(--line); } .steps li::before { counter-increment:s; content:counter(s); width:24px; height:24px; border-radius:50%; background:var(--green); color:#fff; display:grid; place-items:center; font-size:.72rem; font-weight:800; } .steps b { display:block; } .steps span { color:var(--muted); font-size:.84rem; }
+  .example { border:1px solid var(--card-line); border-radius:10px; padding:10px 12px; margin:8px 0 10px; background:#fbfcfb; } .example .ba { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:6px; } .example .ba > div { background:#fff; border:1px solid var(--line); border-radius:8px; padding:8px; font-size:.84rem; } .example .ba span { display:block; color:var(--eyebrow); font-size:.66rem; font-weight:800; text-transform:uppercase; letter-spacing:.08em; } .example .feat { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; } .example .feat i { font-style:normal; padding:2px 8px; border-radius:999px; background:var(--green-soft); color:var(--green); font-size:.74rem; font-weight:700; }
+  .caps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:8px; margin:8px 0 10px; } .caps div { border:1px solid var(--card-line); border-radius:9px; padding:8px 10px; background:#fff; font-size:.82rem; } .caps b { display:block; } .caps small { color:var(--muted); } .caps .miss { opacity:.7; border-style:dashed; }
+  .followups { margin-top:12px; padding-top:10px; border-top:1px dashed var(--line); } .followups .grp { display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:6px 0; } .followups .grp > span { color:var(--muted); font-size:.74rem; font-weight:700; text-transform:uppercase; letter-spacing:.06em; min-width:74px; }
+  .chip { border:1px solid var(--line); background:#fff; color:var(--ink); border-radius:999px; padding:5px 12px; font-size:.82rem; font-weight:500; text-align:left; } .chip:hover { border-color:var(--green); color:var(--green); } .chip.up { color:var(--muted); } .chip.done::after { content:" ✓"; color:var(--green); }
+  .try { margin-top:10px; border:1px solid var(--line); border-radius:10px; background:#fff; padding:12px 14px; } .try h4 { margin:0 0 6px; font-size:.68rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.12em; } .try .p { display:grid; grid-template-columns:1fr auto; gap:8px; align-items:start; padding:6px 0; border-top:1px dashed var(--line); font-size:.84rem; } .try .p:first-of-type { border-top:0; } .try .p b { display:block; } .try .p code { display:block; color:var(--muted); font:12px/1.45 ui-monospace, Consolas, monospace; white-space:pre-wrap; margin-top:2px; }
+  .understood { margin-top:10px; color:var(--muted); font-size:.76rem; display:flex; gap:14px; flex-wrap:wrap; } .understood b { color:var(--ink); }
+  .entry h2 { font:500 1.7rem/1.25 Georgia, "Times New Roman", serif; letter-spacing:-.01em; margin:6px 0 10px; } .entry > p { color:var(--muted); max-width:78ch; }
+  .entry .paths { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:10px; margin:14px 0; } .path { text-align:left; border:1px solid var(--card-line); border-radius:12px; background:#fff; padding:14px 16px; } .path:hover { border-color:var(--green); } .path b { display:block; font-size:.95rem; margin-bottom:4px; } .path span { color:var(--muted); font-size:.82rem; }
+  .tracks { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:0 24px; margin-top:4px; border-top:1px solid var(--line); } .trackcard { text-align:left; border:0; border-bottom:1px solid var(--line); border-radius:0; background:transparent; padding:12px 4px; } .trackcard:hover { background:var(--green-soft); } .trackcard b { display:block; font-size:.9rem; } .trackcard small { color:var(--muted); display:block; } .trackcard .bar { display:none; }
+  .composer { position:absolute; right:0; bottom:0; left:0; padding:0 clamp(20px,4vw,60px) 12px; pointer-events:none; background:linear-gradient(to top,#fff 60%,rgba(255,255,255,0)); }
+  .composer-row { max-width:900px; margin:0 auto; padding:10px; border:1px solid #e6e9ee; border-radius:22px; background:#fff; box-shadow:0 8px 24px rgba(15,30,54,.06); pointer-events:auto; display:flex; gap:8px; align-items:center; }
+  .composer-row input { flex:1; border:0; outline:0; padding:6px 4px; }
+  .send { width:36px; height:36px; border-radius:50%; border:0; background:var(--green); color:#fff; }
+  .panel { border:1px solid var(--card-line); border-radius:10px; background:#fff; padding:10px 12px; } .panel h2 { margin:0 0 8px; font-size:.84rem; }
+  .where .row { display:grid; grid-template-columns:max-content 1fr; gap:3px 10px; font-size:.8rem; } .where .k { color:var(--muted); font-weight:600; }
+  .levels { display:flex; flex-direction:column; gap:4px; font-size:.8rem; } .levels div { display:flex; align-items:center; gap:8px; }
+  .prog { height:8px; background:var(--soft); border-radius:4px; overflow:hidden; margin:6px 0; } .prog i { display:block; height:100%; background:var(--accent); }
+  .history { font-size:.78rem; } .history button { border:0; background:transparent; text-align:left; padding:3px 0; color:var(--blue); width:100%; } .history button:hover { text-decoration:underline; }
+  .toast { position:fixed; bottom:90px; left:50%; transform:translateX(-50%); background:#1f2a25; color:#fff; padding:8px 14px; border-radius:999px; font-size:.8rem; display:none; z-index:20; } .toast.on { display:block; }
+  .popup { position:fixed; inset:0; background:rgba(20,30,25,.35); display:none; align-items:center; justify-content:center; z-index:30; } .popup.on { display:flex; }
+  .popup-card { width:min(520px,92vw); background:#fff; border-radius:14px; box-shadow:0 20px 60px rgba(0,0,0,.3); padding:16px 18px; } .popup-head { display:flex; align-items:center; justify-content:space-between; gap:10px; } .popup-card h3 { margin:6px 0 8px; font-size:1.05rem; } .popup-card p { margin:0 0 10px; }
+  .popup-card { border-top:3px solid var(--green); } .popup-card h3 { font:500 1.15rem/1.3 Georgia, serif; }
+  .popup-artifact { border:1px solid var(--line); background:#fff; border-radius:8px; padding:8px 12px; font-size:.86rem; } .popup-artifact span { display:block; color:var(--muted); font-size:.66rem; font-weight:700; text-transform:uppercase; letter-spacing:.12em; }
+  .pill { background:#fbfcfb; color:var(--muted); border:1px solid var(--line); } .history button { color:var(--green); } .steps li::before { background:#fff; color:var(--green); border:1px solid var(--green); } .example .feat i { background:#fff; border:1px solid var(--line); color:var(--muted); font-weight:500; }
+  @media (max-width:1100px) { .workspace { grid-template-columns:230px minmax(0,1fr) 280px; } }
+  @media (max-width:860px) { .workspace { grid-template-columns:minmax(0,1fr); } aside { display:none; } }
+</style>
+</head>
+<body>
+<div class="shell">
+  <header class="topbar">
+    <div class="mark">PL</div>
+    <h1>Platform Loops</h1>
+    <span class="pill">Guide prototype v2 · content <span id="pkgVersion"></span></span>
+    <div class="spacer"></div>
+    <button class="btn" id="homeBtn">Start over</button>
+    <button class="btn" id="resetBtn" title="Forget which topics you have explored">Reset progress</button>
+  </header>
+  <div class="workspace">
+    <aside class="left">
+      <p class="eyebrow">Guide map</p>
+      <input class="search" id="search" placeholder="Search questions…" aria-label="Search questions">
+      <div id="map"></div>
+    </aside>
+    <section class="chat">
+      <div class="conversation" id="conversation" aria-live="polite"></div>
+      <form class="composer" id="composer">
+        <div class="composer-row">
+          <input id="ask" placeholder="Type a question about the platform, or pick one on the left" aria-label="Ask">
+          <button class="send" type="submit" aria-label="Ask">➤</button>
+        </div>
+      </form>
+    </section>
+    <aside class="right">
+      <section class="panel where" id="where"></section>
+      <section class="panel" id="progress"></section>
+      <section class="panel" id="history"></section>
+    </aside>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<div class="popup" id="popup"></div>
+<script>
+const PKG = /*__PACKAGE_JSON__*/null;
+const GENERATED_AT = "__GENERATED_AT__";
+const $ = (s, r = document) => r.querySelector(s);
+const el = (tag, cls, html) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const byId = new Map(PKG.topics.map((t) => [t.id, t]));
+const trackOf = (id) => PKG.tracks.find((t) => t.id === id);
+const levelOf = (n) => PKG.levels.find((l) => l.id === n);
+const state = { visited: {}, history: [], current: null };
+try { Object.assign(state, JSON.parse(localStorage.getItem("pl-guide-v2") || "{}"), { current: null }); } catch {}
+const save = () => { try { localStorage.setItem("pl-guide-v2", JSON.stringify({ visited: state.visited, history: state.history.slice(-30) })); } catch {} };
+
+/* ---------- diagrams (typed data → SVG) ---------- */
+const AR = (id) => `<defs><marker id="${id}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#8a9a90"/></marker></defs>`;
+const INFO = (x, y) => `<circle cx="${x}" cy="${y}" r="6" fill="#2e8b57"/><text x="${x}" y="${y + 3}" text-anchor="middle" font-size="8" font-weight="800" fill="#fff">i</text>`;
+const D = {
+  flow(d) {
+    const w = 128, h = 46, gap = 30, n = d.steps.length, W = n * w + (n - 1) * gap + 8, hasNotes = d.steps.some((s) => s.note), H = hasNotes ? 84 : 62;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(d.caption || "Process flow")}">${AR("f")}`;
+    d.steps.forEach((st, i) => { const x = 4 + i * (w + gap), y = 8, on = d.highlight === i, click = st.detail ? ` data-step="${i}" style="cursor:pointer"` : "";
+      s += `<g${click}><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="9" fill="${on ? "#244f3b" : "#fff"}" stroke="${on ? "#244f3b" : st.detail ? "#2e8b57" : "#9fb3a7"}" stroke-width="1.5"/><text x="${x + w / 2}" y="${y + h / 2 + 4}" text-anchor="middle" font-size="11.5" font-weight="600" fill="${on ? "#fff" : "#25292c"}">${esc(st.label)}</text>${st.detail ? INFO(x + w - 9, y + 9) : ""}</g>`;
+      if (st.note) s += `<text x="${x + w / 2}" y="${y + h + 16}" text-anchor="middle" font-size="10" fill="#52675a">${esc(st.note)}</text>`;
+      if (i < n - 1) s += `<line x1="${x + w + 2}" y1="${y + h / 2}" x2="${x + w + gap - 3}" y2="${y + h / 2}" stroke="#8a9a90" stroke-width="1.5" marker-end="url(#f)"/>`; });
+    return s + "</svg>";
+  },
+  swimlane(d) {
+    const laneH = 58, colW = d.sequence.length > 8 ? 122 : 142, left = 132, cols = d.sequence.length, W = left + cols * colW + 10, H = d.lanes.length * laneH + 8;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Swimlane">${AR("s")}`;
+    d.lanes.forEach((l, i) => { const y = 4 + i * laneH; s += `<rect x="2" y="${y}" width="${W - 4}" height="${laneH - 4}" rx="8" fill="${i % 2 ? "#fbfcfb" : "#f3f6f4"}" stroke="#e3e8e4"/><text x="12" y="${y + laneH / 2 + 4}" font-size="11" font-weight="700" fill="#52675a">${esc(l)}</text>`; });
+    const pos = d.sequence.map((st, i) => ({ x: left + i * colW + 8, y: 4 + st.lane * laneH + 9, w: colW - 16, h: laneH - 22 }));
+    d.sequence.forEach((st, i) => { const p = pos[i], click = st.detail ? ` data-step="${i}" style="cursor:pointer"` : "";
+      s += `<g${click}><rect x="${p.x}" y="${p.y}" width="${p.w}" height="${p.h}" rx="8" fill="#fff" stroke="${st.detail ? "#2e8b57" : "#9fb3a7"}" stroke-width="1.4"/><text x="${p.x + p.w / 2}" y="${p.y + p.h / 2 + 4}" text-anchor="middle" font-size="${colW < 130 ? 9.5 : 10.5}" font-weight="600" fill="#25292c">${esc(st.label)}</text>${st.detail ? INFO(p.x + p.w - 8, p.y + 8) : ""}</g>`;
+      if (i < d.sequence.length - 1) { const q = pos[i + 1]; s += `<path d="M${p.x + p.w},${p.y + p.h / 2} C${p.x + p.w + 12},${p.y + p.h / 2} ${q.x - 12},${q.y + q.h / 2} ${q.x - 2},${q.y + q.h / 2}" fill="none" stroke="#8a9a90" stroke-width="1.4" marker-end="url(#s)"/>`; } });
+    return s + "</svg>";
+  },
+  layers(d) {
+    const W = 660, rowH = 58, H = d.layers.length * rowH + 8;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Layers">`;
+    d.layers.forEach((l, i) => { const y = 4 + i * rowH; const fill = ["#edf3ef", "#eaf2fc", "#fbfcfb", "#f6f7f7", "#fff9e9", "#f3f6f4"][i % 6];
+      s += `<rect x="2" y="${y}" width="${W - 4}" height="${rowH - 6}" rx="9" fill="${fill}" stroke="#c9d5cd"/><text x="14" y="${y + 20}" font-size="11.5" font-weight="800" fill="#25292c">${esc(l.title)}</text>`;
+      let x = 14; l.items.forEach((it) => { const w = Math.min(300, it.length * 6.2 + 18); if (x + w > W - 8) return; s += `<rect x="${x}" y="${y + 27}" width="${w}" height="20" rx="6" fill="#fff" stroke="#9fb3a7"/><text x="${x + w / 2}" y="${y + 41}" text-anchor="middle" font-size="10" fill="#25292c">${esc(it)}</text>`; x += w + 8; }); });
+    return s + "</svg>";
+  },
+  map(d) {
+    const W = 680, H = 300, cx = W / 2, cy = H / 2, R = 118, n = d.nodes.length;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Map">`;
+    d.nodes.forEach((nd, i) => { const a = -Math.PI / 2 + (i * 2 * Math.PI) / n, x = cx + Math.cos(a) * (R + 90), y = cy + Math.sin(a) * R; s += `<line x1="${cx}" y1="${cy}" x2="${x}" y2="${y}" stroke="#c9d5cd" stroke-width="1.5"/>`; });
+    d.nodes.forEach((nd, i) => { const a = -Math.PI / 2 + (i * 2 * Math.PI) / n, x = cx + Math.cos(a) * (R + 90), y = cy + Math.sin(a) * R, w = 150, h = nd.note ? 40 : 28;
+      s += `<g class="mapnode" data-topic="${esc(nd.topic || "")}" style="cursor:${nd.topic ? "pointer" : "default"}"><rect x="${x - w / 2}" y="${y - h / 2}" width="${w}" height="${h}" rx="8" fill="#fff" stroke="${nd.topic ? "#2e8b57" : "#9fb3a7"}" stroke-width="1.4"/><text x="${x}" y="${y - (nd.note ? 4 : -4)}" text-anchor="middle" font-size="10.5" font-weight="700" fill="#25292c">${esc(nd.label)}</text>${nd.note ? `<text x="${x}" y="${y + 12}" text-anchor="middle" font-size="9" fill="#52675a">${esc(nd.note)}</text>` : ""}</g>`; });
+    s += `<circle cx="${cx}" cy="${cy}" r="44" fill="#244f3b"/><text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">${esc(d.center)}</text>`;
+    return s + "</svg>";
+  },
+  wireframe(d) {
+    if (d.view === "form") { const f = d.fields || []; const H = 60 + f.length * 28 + 30; let s = `<svg viewBox="0 0 320 ${H}" width="320" height="${H}" role="img" aria-label="Form"><rect x="1" y="1" width="318" height="${H - 2}" rx="10" fill="#fff" stroke="#9fb3a7"/><text x="14" y="24" font-size="12" font-weight="700" fill="#25292c">${esc(d.title)}</text>`;
+      f.forEach((l, i) => { const y = 44 + i * 28; s += `<text x="14" y="${y + 8}" font-size="10" fill="#52675a">${esc(l)}</text><rect x="150" y="${y - 4}" width="150" height="18" rx="5" fill="#f6f7f7" stroke="#e3e8e4"/>`; });
+      if (d.primary) s += `<rect x="210" y="${H - 30}" width="90" height="20" rx="6" fill="#244f3b"/><text x="255" y="${H - 16}" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">${esc(d.primary)}</text>`;
+      return s + "</svg>"; }
+    if (d.view === "overview") { const c = d.columns || []; const W = 640, colW = (W - 20 - (c.length - 1) * 8) / c.length; let s = `<svg viewBox="0 0 ${W} 200" width="${W}" height="200" role="img" aria-label="Overview"><rect x="1" y="1" width="${W - 2}" height="198" rx="10" fill="#fff" stroke="#9fb3a7"/><text x="14" y="24" font-size="12" font-weight="700" fill="#25292c">${esc(d.title)}</text>`;
+      c.forEach((t, i) => { const x = 10 + i * (colW + 8); s += `<rect x="${x}" y="40" width="${colW}" height="140" rx="8" fill="#f6f7f7" stroke="#e3e8e4"/><text x="${x + colW / 2}" y="60" text-anchor="middle" font-size="10.5" font-weight="700" fill="#25292c">${esc(t)}</text>`; for (let r = 0; r < 4; r++) s += `<rect x="${x + 10}" y="${74 + r * 22}" width="${colW - 20}" height="8" rx="3" fill="#e6ebe8"/>`; });
+      if (d.primary) s += `<rect x="${W - 130}" y="10" width="118" height="20" rx="6" fill="#244f3b"/><text x="${W - 71}" y="24" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">${esc(d.primary)}</text>`;
+      return s + "</svg>"; }
+    const c = d.columns || ["A", "B", "C"]; const W = 360; const cw = (W - 28) / c.length; let s = `<svg viewBox="0 0 ${W} 210" width="${W}" height="210" role="img" aria-label="Worklist"><rect x="1" y="1" width="${W - 2}" height="208" rx="10" fill="#fff" stroke="#9fb3a7"/><text x="14" y="24" font-size="12" font-weight="700" fill="#25292c">${esc(d.title)}</text>`;
+    if (d.primary) s += `<rect x="${W - 110}" y="10" width="98" height="20" rx="6" fill="#244f3b"/><text x="${W - 61}" y="24" text-anchor="middle" font-size="9.5" fill="#fff" font-weight="700">${esc(d.primary)}</text>`;
+    s += `<rect x="14" y="40" width="200" height="16" rx="5" fill="#f6f7f7" stroke="#e3e8e4"/><text x="20" y="52" font-size="9" fill="#8a9a90">Search · filter</text>`;
+    c.forEach((h, i) => { s += `<text x="${14 + i * cw}" y="76" font-size="9.5" font-weight="700" fill="#52675a">${esc(h)}</text>`; });
+    for (let r = 0; r < 5; r++) { const y = 88 + r * 22; s += `<line x1="14" y1="${y + 12}" x2="${W - 14}" y2="${y + 12}" stroke="#e3e8e4"/>`; c.forEach((h, i) => { s += `<rect x="${14 + i * cw}" y="${y}" width="${Math.max(24, cw - 16)}" height="8" rx="3" fill="${i === c.length - 1 ? (r % 3 === 0 ? "#e4c37e" : "#cfe0d5") : "#e6ebe8"}"/>`; }); }
+    return s + "</svg>";
+  },
+  timeline(d) {
+    const W = 680, n = d.items.length, colW = (W - 20) / n, H = 120;
+    let s = `<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Timeline"><line x1="10" y1="34" x2="${W - 10}" y2="34" stroke="#c3c2b7" stroke-width="2"/>`;
+    d.items.forEach((it, i) => { const x = 10 + colW * i + colW / 2, col = it.state === "done" ? "#2e8b57" : it.state === "active" ? "#244f3b" : "#fff", stroke = it.state ? "#244f3b" : "#9fb3a7";
+      s += `<circle cx="${x}" cy="34" r="8" fill="${col}" stroke="${stroke}" stroke-width="2"/><text x="${x}" y="58" text-anchor="middle" font-size="10.5" font-weight="700" fill="#25292c">${esc(it.label)}</text>`;
+      if (it.detail) { const words = it.detail.split(" "); const lines = []; let cur = ""; for (const w of words) { if ((cur + " " + w).trim().length > colW / 5.6) { lines.push(cur.trim()); cur = w; } else cur += " " + w; if (lines.length === 3) break; } if (lines.length < 3 && cur.trim()) lines.push(cur.trim()); lines.slice(0, 3).forEach((ln, j) => { s += `<text x="${x}" y="${74 + j * 12}" text-anchor="middle" font-size="9" fill="#52675a">${esc(ln)}</text>`; }); } });
+    return s + "</svg>";
+  },
+};
+function diagram(b) { const fn = D[b.kind]; const clickable = (b.steps || b.sequence || []).some((s) => s.detail); const cap = (b.caption || "") + (clickable ? (b.caption ? " " : "") + "Click a step for details." : ""); return `<figure class="diagram">${fn ? fn(b) : ""}${cap ? `<figcaption>${esc(cap)}</figcaption>` : ""}</figure>`; }
+function stepDetail(d, index) { const item = (d.kind === "swimlane" ? d.sequence : d.steps)[index]; if (!item) return null; return { title: item.label, lane: d.kind === "swimlane" ? d.lanes[item.lane] : null, detail: item.detail, artifact: item.artifact, position: `Step ${index + 1} of ${(d.kind === "swimlane" ? d.sequence : d.steps).length}` }; }
+function showPopup(info) { const p = $("#popup"); p.innerHTML = `<div class="popup-card" role="dialog" aria-label="${esc(info.title)}"><div class="popup-head"><span class="eyebrow">${esc(info.position)}${info.lane ? " · " + esc(info.lane) : ""}</span><button class="btn small" id="popupClose">Close</button></div><h3>${esc(info.title)}</h3><p>${esc(info.detail)}</p>${info.artifact ? `<div class="popup-artifact"><span>Produces</span>${esc(info.artifact)}</div>` : ""}</div>`; p.classList.add("on"); $("#popupClose").onclick = () => p.classList.remove("on"); }
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") $("#popup").classList.remove("on"); });
+document.addEventListener("click", (e) => { const p = $("#popup"); if (e.target === p) p.classList.remove("on"); });
+
+/* ---------- blocks ---------- */
+function block(b) {
+  switch (b.type) {
+    case "paragraph": return `<p>${esc(b.text)}</p>`;
+    case "heading": return `<h3>${esc(b.text)}</h3>`;
+    case "bullets": return `<ul>${b.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`;
+    case "numbered": return `<ol>${b.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ol>`;
+    case "key_value": return `<dl class="kv">${b.rows.map((r) => `<dt>${esc(r.label)}</dt><dd>${esc(r.value)}</dd>`).join("")}</dl>`;
+    case "table": return `<div class="tablewrap"><table class="tbl"><thead><tr>${b.columns.map((c) => `<th>${esc(c)}</th>`).join("")}</tr></thead><tbody>${b.rows.map((r) => `<tr>${r.map((c) => `<td>${esc(c)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+    case "callout": return `<div class="callout ${b.tone}">${b.title ? `<strong>${esc(b.title)}</strong>` : ""}${esc(b.text)}</div>`;
+    case "steps": return `<ol class="steps">${b.items.map((s) => `<li><span></span><div><b>${esc(s.title)}</b><span>${esc(s.detail)}</span></div></li>`).join("")}</ol>`;
+    case "example": return `<div class="example"><b>${esc(b.title)}</b><div class="ba"><div><span>Today</span>${esc(b.before)}</div><div><span>With the application</span>${esc(b.after)}</div></div><div class="feat">${b.features.map((f) => `<i>${esc(f)}</i>`).join("")}</div></div>`;
+    case "installed_capabilities": return `<p>${esc(b.intro)}</p><div class="callout">In this prototype every described capability is shown as installed. In PL the list comes from the running platform.</div><div class="caps">${PKG.capabilities.map((c) => `<div><b>${esc(c.title)}</b><small>${esc(c.summary)}</small></div>`).join("")}</div>`;
+    case "diagram": return diagram(b);
+    default: return "";
+  }
+}
+
+/* ---------- conversation ---------- */
+const conv = $("#conversation");
+const scrollDown = () => { conv.scrollTop = conv.scrollHeight; };
+function toast(t) { const x = $("#toast"); x.textContent = t; x.classList.add("on"); setTimeout(() => x.classList.remove("on"), 1800); }
+function renderEntry() {
+  conv.innerHTML = ""; state.current = null;
+  const m = el("div", "message entry");
+  m.innerHTML = `<p class="actor">Platform guide</p><h2>${esc(PKG.entry.title)}</h2><p>${esc(PKG.entry.body)}</p>`;
+  const paths = el("div", "paths");
+  PKG.entry.starters.forEach((id) => { const t = byId.get(id); const b = el("button", "path", `<b>${esc(t.prompt)}</b><span>${esc(t.summary)}</span>`); b.onclick = () => openTopic(id); paths.appendChild(b); });
+  m.appendChild(paths);
+  m.appendChild(el("p", "eyebrow", "Or explore by area"));
+  const tr = el("div", "tracks");
+  PKG.tracks.forEach((t) => { const topics = PKG.topics.filter((x) => x.track === t.id); const done = topics.filter((x) => state.visited[x.id]).length; const b = el("button", "trackcard", `<b>${esc(t.title)}</b><small>${esc(t.summary)}</small><div class="bar"><i style="width:${topics.length ? (done / topics.length) * 100 : 0}%"></i></div><small>${done} of ${topics.length} explored</small>`); b.onclick = () => openTopic(topics.sort((a, b2) => a.level - b2.level)[0].id); tr.appendChild(b); });
+  m.appendChild(tr);
+  conv.appendChild(m); renderSide();
+}
+function openTopic(id, fromUser) {
+  const t = byId.get(id); if (!t) return;
+  if (state.current === id) { toast("You are here"); return; }
+  state.visited[id] = new Date().toISOString(); state.history = state.history.filter((h) => h !== id).concat(id); state.current = id; save();
+  conv.appendChild(el("div", "message message--user", esc(fromUser || t.prompt)));
+  const m = el("div", "message answer");
+  const track = trackOf(t.track), level = levelOf(t.level);
+  const figures = t.blocks.filter((b) => b.type === "diagram").length;
+  const wordsCount = JSON.stringify(t.blocks).split(/\s+/).length;
+  const statusLabel = { available: "Available today", partial: "Partly available", planned: "Planned" };
+  let figureNo = 0;
+  const body = t.blocks.map((b) => { if (b.type === "diagram") { figureNo += 1; return diagram(b).replace('<figure class="diagram">', `<figure class="diagram"><span class="fig-label">Figure ${figureNo}</span>`); } return block(b); }).join("");
+  m.innerHTML = `<div class="band"><p class="actor light">Platform guide <span class="crumb">${esc(track.title)} · Level ${t.level} ${esc(level.title)}</span></p><h2>${esc(t.title)}</h2>${t.status ? `<span class="status status-${t.status}">${statusLabel[t.status]}${t.statusNote ? " · " + esc(t.statusNote) : ""}</span>` : ""}</div>
+    <div class="lede"><span>Bottom line</span>${esc(t.summary)}</div>
+    ${t.takeaways && t.takeaways.length ? `<ul class="takeaways">${t.takeaways.map((k) => `<li>${esc(k)}</li>`).join("")}</ul>` : ""}
+    <p class="glance">${figures} figure${figures === 1 ? "" : "s"} · ${Math.max(1, Math.round(wordsCount / 180))} min read · ${t.followUps.length} next questions${t.plPrompts.length ? ` · ${t.plPrompts.length} prompt${t.plPrompts.length === 1 ? "" : "s"} to try` : ""}</p>
+    <div class="body">${body}</div>`;
+  const fu = el("div", "followups");
+  fu.appendChild(el("h4", "", "Explore next"));
+  const groups = { deeper: [], related: [], up: [] };
+  t.followUps.forEach((fid) => { const f = byId.get(fid); if (!f) return; (f.level > t.level ? groups.deeper : f.level < t.level ? groups.up : groups.related).push(f); });
+  const labels = { deeper: "Go deeper", related: "Related", up: "Back up" };
+  for (const [k, list] of Object.entries(groups)) { if (!list.length) continue; const g = el("div", "grp", `<span>${labels[k]}</span>`); list.forEach((f) => { const c = el("button", "chip" + (k === "up" ? " up" : "") + (state.visited[f.id] ? " done" : ""), esc(f.prompt)); c.onclick = () => openTopic(f.id); g.appendChild(c); }); fu.appendChild(g); }
+  m.appendChild(fu);
+  if (t.plPrompts.length) { const tr = el("div", "try", `<h4>Try this in PL</h4>`); t.plPrompts.forEach((p) => { const row = el("div", "p", `<div><b>${esc(p.label)}</b><code>${esc(p.prompt)}</code><small style="color:#52675a">Needs: ${p.requires.length ? esc(p.requires.join(", ")) : "no specific capability"} · In PL this pre-fills your message box; nothing is sent automatically.</small></div>`); const b = el("button", "btn small", "Copy prompt"); b.onclick = () => { navigator.clipboard?.writeText(p.prompt).then(() => toast("Prompt copied")); }; row.appendChild(b); tr.appendChild(row); }); m.appendChild(tr); }
+  m.appendChild(el("div", "understood", `<span><b>Explored:</b> ${Object.keys(state.visited).length} of ${PKG.topics.length}</span><span><b>Track:</b> ${esc(track.title)}</span><span><b>Next:</b> ${groups.deeper[0] ? esc(groups.deeper[0].prompt) : groups.related[0] ? esc(groups.related[0].prompt) : "back to the start"}</span>`));
+  conv.appendChild(m);
+  m.querySelectorAll(".mapnode[data-topic]").forEach((n) => { if (n.dataset.topic) n.addEventListener("click", () => openTopic(n.dataset.topic)); });
+  const diagrams = t.blocks.filter((b) => b.type === "diagram");
+  m.querySelectorAll(".body figure.diagram").forEach((f, i) => { f.addEventListener("click", (e) => { const g = e.target.closest("[data-step]"); if (!g) return; const info = stepDetail(diagrams[i], Number(g.dataset.step)); if (info) showPopup(info); }); });
+  m.scrollIntoView({ block: "start", behavior: "smooth" });
+  renderSide(); renderMap($("#search").value);
+}
+
+/* ---------- direct typing: match a question to the closest topic ---------- */
+const STOP = new Set(["the", "a", "an", "of", "to", "and", "or", "is", "are", "this", "that", "with", "for", "in", "on", "how", "what", "can", "i", "my", "me", "it", "be", "do", "does", "using", "use", "platform", "application", "app"]);
+const words = (s) => s.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter((w) => w && !STOP.has(w));
+function bestTopic(q) {
+  const qw = new Set(words(q)); if (!qw.size) return null;
+  let best = null, score = 0;
+  for (const t of PKG.topics) { const tw = new Set([...words(t.prompt), ...words(t.title), ...t.keywords.flatMap(words)]); let s = 0; for (const w of qw) if (tw.has(w)) s += 1; s = s / Math.sqrt(qw.size); if (s > score) { score = s; best = t; } }
+  return score >= 0.5 ? best : null;
+}
+$("#composer").addEventListener("submit", (e) => {
+  e.preventDefault(); const q = $("#ask").value.trim(); if (!q) return; $("#ask").value = "";
+  const t = bestTopic(q);
+  if (t) { openTopic(t.id, q); return; }
+  conv.appendChild(el("div", "message message--user", esc(q)));
+  const m = el("div", "message", `<p class="actor">Platform guide</p><p>This guide does not have a prepared answer for that. In PL you can ask it directly: PL answers from its own knowledge and your project context.</p><div class="callout tip">Type the same question in your PL chat, or pick one of the prepared questions on the left.</div>`);
+  conv.appendChild(m); scrollDown();
+});
+
+/* ---------- side panels and map ---------- */
+function renderSide() {
+  const t = state.current ? byId.get(state.current) : null;
+  $("#where").innerHTML = `<h2>Where am I</h2>` + (t ? `<div class="row"><span class="k">Track</span><span>${esc(trackOf(t.track).title)}</span><span class="k">Level</span><span>${t.level} · ${esc(levelOf(t.level).title)}</span><span class="k">Question</span><span>${esc(t.prompt)}</span></div>` : `<p style="color:#52675a;font-size:.8rem;margin:0">Pick a question to begin. Levels go from overview to procedure.</p>`) + `<div class="levels" style="margin-top:8px">${PKG.levels.map((l) => `<div><span class="lvl l${l.id}">${l.id}</span>${esc(l.title)}</div>`).join("")}</div>`;
+  const total = PKG.topics.length, done = Object.keys(state.visited).filter((id) => byId.has(id)).length;
+  $("#progress").innerHTML = `<h2>Progress</h2><div class="prog"><i style="width:${(done / total) * 100}%"></i></div><div style="font-size:.8rem;color:#52675a">${done} of ${total} questions explored</div>` + PKG.tracks.map((tr) => { const tt = PKG.topics.filter((x) => x.track === tr.id); const d = tt.filter((x) => state.visited[x.id]).length; return `<div style="display:flex;justify-content:space-between;font-size:.76rem;margin-top:4px"><span>${esc(tr.title)}</span><span style="color:#52675a">${d}/${tt.length}</span></div>`; }).join("");
+  const h = $("#history"); h.innerHTML = `<h2>Recent questions</h2>`; const list = el("div", "history"); state.history.slice(-8).reverse().forEach((id) => { const x = byId.get(id); if (!x) return; const b = el("button", "", "↩ " + esc(x.prompt)); b.onclick = () => openTopic(id); list.appendChild(b); }); if (!state.history.length) list.appendChild(el("p", "", "Nothing yet.")); h.appendChild(list);
+}
+function renderMap(filter = "") {
+  const q = filter.trim().toLowerCase(); const map = $("#map"); map.innerHTML = "";
+  PKG.tracks.forEach((tr) => {
+    const topics = PKG.topics.filter((t) => t.track === tr.id && (!q || (t.prompt + " " + t.title + " " + t.keywords.join(" ")).toLowerCase().includes(q))).sort((a, b) => a.level - b.level);
+    if (!topics.length) return;
+    const d = el("div", "track" + ((q || (state.current && byId.get(state.current).track === tr.id)) ? " open" : ""));
+    const head = el("button", "", `${esc(tr.title)}<small>${PKG.topics.filter((t) => t.track === tr.id && state.visited[t.id]).length}/${PKG.topics.filter((t) => t.track === tr.id).length}</small>`); head.onclick = () => d.classList.toggle("open"); d.appendChild(head);
+    const ul = el("ul"); topics.forEach((t) => { const li = el("li"); const b = el("button", state.current === t.id ? "on" : "", `<span class="lvl l${t.level}">${t.level}</span><span>${esc(t.prompt)}</span>${state.visited[t.id] ? '<span class="tick">✓</span>' : ""}`); b.onclick = () => openTopic(t.id); li.appendChild(b); ul.appendChild(li); }); d.appendChild(ul); map.appendChild(d);
+  });
+}
+$("#search").addEventListener("input", (e) => renderMap(e.target.value));
+$("#homeBtn").onclick = () => renderEntry();
+$("#resetBtn").onclick = () => { state.visited = {}; state.history = []; save(); renderEntry(); renderMap(); toast("Progress cleared"); };
+$("#pkgVersion").textContent = PKG.version;
+renderEntry(); renderMap();
+</script>
+</body>
+</html>

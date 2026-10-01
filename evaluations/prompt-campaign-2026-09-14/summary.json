@@ -1,0 +1,16 @@
+{
+  "recordedAt": "2026-09-14T03:04:32.004Z",
+  "api": "http://127.0.0.1:3002",
+  "cases": 92,
+  "byVerdict": {
+    "asked": 3,
+    "pass": 85,
+    "fail": 4
+  },
+  "byKind": {
+    "direct": 47,
+    "recommended": 45
+  },
+  "medianSeconds": 27,
+  "out": "D:\\ai\\platformtraining\\evaluations\\prompt-campaign-2026-09-14"
+}

@@ -1,0 +1,1381 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Prompt Campaign Report</title>
+<style>
+body{margin:0;background:#f9f9f7;color:#25292c;font:14px/1.55 Aptos,"Segoe UI",system-ui,sans-serif}main{max-width:1180px;margin:0 auto;padding:28px 22px 60px}
+h1{font:500 1.7rem/1.2 Georgia,serif;margin:0 0 4px}.meta{color:#52675a;font-size:.82rem;margin-bottom:16px}
+.band{background:linear-gradient(135deg,#244f3b,#2f6a50);color:#fff;border-radius:12px;padding:16px 20px;margin-bottom:14px}.band h1{color:#fff}.band .meta{color:#cfe0d5}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0 18px}.tile{background:#fff;border:1px solid #dfe5e1;border-radius:10px;padding:12px}.tile b{display:block;font-size:1.5rem;color:#244f3b}.tile span{color:#52675a;font-size:.78rem}
+h2{font:600 1.1rem/1.3 Georgia,serif;color:#244f3b;border-bottom:2px solid #edf3ef;padding-bottom:4px;margin:22px 0 10px}
+table{border-collapse:collapse;width:100%;font-size:.82rem;background:#fff}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #e3e8e4;vertical-align:top}th{background:#244f3b;color:#fff;font-size:.74rem}
+td.p{max-width:320px}td.a{max-width:420px}td.n{text-align:right}td.t{color:#52675a;font-size:.76rem}
+.badge{display:inline-block;padding:1px 8px;border-radius:999px;font-size:.72rem;font-weight:700;color:#fff}.badge.pass{background:#2e8b57}.badge.partial{background:#b77a1b}.badge.asked{background:#2a78d6}.badge.boundary{background:#52675a}.badge.misrouted{background:#8a4b9a}.badge.fail{background:#b42318}
+details summary{cursor:pointer}pre{white-space:pre-wrap;font:12px/1.45 ui-monospace,Consolas,monospace;background:#fbfcfb;border:1px solid #e3e8e4;border-radius:8px;padding:8px;max-height:420px;overflow:auto}
+ul.findings li{margin:4px 0}.wrap{overflow-x:auto}
+</style></head><body><main>
+<div class="band"><h1>Prompt campaign: every guide question and recommended prompt sent to PL LOOP</h1><div class="meta">Generated 2026-09-14T03:07:39.858Z · account: fresh synthetic PL user created for this run · PL API 127.0.0.1:3002</div></div>
+<div class="tiles"><div class="tile"><b>92</b><span>cases sent to PL</span></div><div class="tile"><b>76</b><span>pass</span></div><div class="tile"><b>6</b><span>partial (generic)</span></div><div class="tile"><b>5</b><span>asked a question instead</span></div><div class="tile"><b>2</b><span>correct boundary</span></div><div class="tile"><b>3</b><span>misrouted by PL</span></div><div class="tile"><b>0</b><span>fail</span></div><div class="tile"><b>27s / 41s</b><span>median / p90 per prompt</span></div><div class="tile"><b>61/61</b><span>guide topics ok (package 2.1.0)</span></div></div>
+<h2>How to read this</h2><p><b>Pass</b>: PL answered with substance. <b>Partial</b>: PL answered but said it lacked platform specifics (generic answer). <b>Asked</b>: PL asked a clarifying question instead of answering; expected for discovery-style prompts. <b>Correct boundary</b>: the prompt referred to the current application and the project had none, so PL refused with a typed result. <b>Misrouted</b>: a general platform question was routed to the application-overview capability and refused; a PL routing finding. <b>Fail</b>: error, timeout or no answer. Capabilities: unknown (3), answer_boundary (36), general-answer (48), application_overview_unavailable (5).</p>
+<h2>Findings (non-pass cases)</h2><ul class="findings"><li><span class="badge asked">asked</span> direct:platform-purpose · 12s · status waiting_for_user · PL asked: “Which of these should PL do next?”</li><li><span class="badge partial">partial</span> direct:delivery-swimlane · 34s · status completed</li><li><span class="badge asked">asked</span> recommended:getting-started:start-discovery-from-a-rough-idea · 38s · status waiting_for_user · PL asked: “What business problem would you most like to improve?”</li><li><span class="badge asked">asked</span> recommended:build-an-app:start-discovery-for-your-application · 20s · status completed</li><li><span class="badge asked">asked</span> recommended:business-idea-journey:run-this-exact-discovery-in-pl · 25s · status completed</li><li><span class="badge partial">partial</span> recommended:environments:ask-pl-about-environments · 24s · status completed</li><li><span class="badge asked">asked</span> recommended:enhance-deployed:preview-an-enhancement-in-pl · 18s · status waiting_for_user · PL asked: “Review this requirements summary. Confirm it or provide a correction.”</li><li><span class="badge partial">partial</span> recommended:roles:ask-pl-about-roles · 30s · status completed</li><li><span class="badge boundary">boundary</span> recommended:six-months-later:ask-for-the-application-overview · 12s · status completed</li><li><span class="badge partial">partial</span> recommended:automation-vs-approval:ask-pl-what-it-will-not-do-alone · 36s · status completed</li><li><span class="badge misrouted">misrouted</span> recommended:correctness:ask-pl-how-it-verifies-apps · 14s · status completed</li><li><span class="badge misrouted">misrouted</span> recommended:moderate-approach:ask-pl-how-it-would-approach-a-moderate- · 14s · status completed</li><li><span class="badge partial">partial</span> recommended:simple-effort:ask-pl-to-estimate-a-simple-app · 41s · status completed</li><li><span class="badge misrouted">misrouted</span> recommended:examples-by-size:ask-pl-for-examples-it-can-build · 15s · status completed</li><li><span class="badge boundary">boundary</span> recommended:floorplans:ask-pl-to-propose-screens · 16s · status completed</li><li><span class="badge partial">partial</span> recommended:complexity-factors:ask-pl-to-size-an-idea · 37s · status completed</li></ul>
+<h2>All cases</h2><div class="wrap"><table><thead><tr><th>#</th><th>Kind</th><th>Prompt</th><th>Verdict</th><th>s</th><th>Capability</th><th>Key terms found</th><th>PL answer (expand)</th></tr></thead><tbody><tr class="v-asked"><td>1</td><td>direct</td><td class="p">What is this platform, and what problem is it designed to solve?</td><td><span class="badge asked">asked</span></td><td class="n">12</td><td></td><td class="t"></td><td class="a"><details><summary>PL asked: Which of these should PL do next?</summary><pre>{
+ &quot;type&quot;: &quot;question&quot;,
+ &quot;prompt&quot;: &quot;Which of these should PL do next?&quot;,
+ &quot;options&quot;: [
+  &quot;Answer a question&quot;,
+  &quot;Describe an application&quot;
+ ]
+}</pre></details></td></tr><tr class="v-pass"><td>2</td><td>direct</td><td class="p">What is this platform primarily used for?</td><td><span class="badge pass">pass</span></td><td class="n">18</td><td>answer_boundary</td><td class="t">use</td><td class="a"><details><summary>The platform is not identified in the supplied context. Please provide its name or a link so I can explain its primary use.</summary><pre>The platform is not identified in the supplied context. Please provide its name or a link so I can explain its primary use.</pre></details></td></tr><tr class="v-pass"><td>3</td><td>direct</td><td class="p">What can I do with this platform as a user or developer?</td><td><span class="badge pass">pass</span></td><td class="n">19</td><td>answer_boundary</td><td class="t">user, developer, capabilit</td><td class="a"><details><summary>Platform not identified: Which platform do you mean? Please provide its name or a link, and I’ll summarize its user-facing and developer-facing capabilities.</summary><pre>Platform not identified: Which platform do you mean? Please provide its name or a link, and I’ll summarize its user-facing and developer-facing capabilities.</pre></details></td></tr><tr class="v-pass"><td>4</td><td>direct</td><td class="p">I am new to this platform. How should I get started?</td><td><span class="badge pass">pass</span></td><td class="n">19</td><td>general-answer</td><td class="t">ume</td><td class="a"><details><summary>Getting started 1. Complete your profile and enable available security features, especially multifactor authentication. 2. Review the platform’s onboarding tuto</summary><pre>Getting started
+
+1. Complete your profile and enable available security features, especially multifactor authentication.
+2. Review the platform’s onboarding tutorial, help center, or introductory documentation.
+3. Choose one simple task you want to accomplish and try it in a test or low-risk setting.
+4. Learn the main navigation, saving or publishing workflow, and privacy controls.
+5. Tell me the platform’s name and what you want to accomplish for tailored steps.</pre></details></td></tr><tr class="v-pass"><td>5</td><td>direct</td><td class="p">How can I use this platform to build a software application?</td><td><span class="badge pass">pass</span></td><td class="n">23</td><td>answer_boundary</td><td class="t">build, application</td><td class="a"><details><summary>Platform not identified: Please provide the platform’s name or URL. Also mention whether you want to build a web, mobile, desktop, or API application.</summary><pre>Platform not identified: Please provide the platform’s name or URL. Also mention whether you want to build a web, mobile, desktop, or API application.</pre></details></td></tr><tr class="v-pass"><td>6</td><td>direct</td><td class="p">Walk me through the typical application development process using this platform.</td><td><span class="badge pass">pass</span></td><td class="n">22</td><td>answer_boundary</td><td class="t">steps, requirements</td><td class="a"><details><summary>Typical application development lifecycle Diagram flowchart LR A[Define requirements] --&gt; B[Set up project and environment] B --&gt; C[Design architecture and data</summary><pre>Typical application development lifecycle
+
+Diagram
+flowchart LR
+    A[Define requirements] --&gt; B[Set up project and environment]
+    B --&gt; C[Design architecture and data]
+    C --&gt; D[Build interface and logic]
+    D --&gt; E[Integrate platform services]
+    E --&gt; F[Test and debug]
+    F --&gt; G[Configure security and operations]
+    G --&gt; H[Deploy]
+    H --&gt; I[Monitor and improve]
+    I --&gt; C
+
+This is the typical high-level flow, but the exact tools, commands, environments, review gates, and deployment steps depend on the platform. Please provide its name or a link for a platform-specific walkthrough.</pre></details></td></tr><tr class="v-pass"><td>7</td><td>direct</td><td class="p">How does the platform take an idea or business requirement and turn it into a working application?</td><td><span class="badge pass">pass</span></td><td class="n">22</td><td>general-answer</td><td class="t">requirements</td><td class="a"><details><summary>Typical idea-to-application workflow Diagram flowchart LR A[Idea or business need] --&gt; B[Clarify users and outcomes] B --&gt; C[Define requirements and acceptance </summary><pre>Typical idea-to-application workflow
+
+Diagram
+flowchart LR
+    A[Idea or business need] --&gt; B[Clarify users and outcomes]
+    B --&gt; C[Define requirements and acceptance criteria]
+    C --&gt; D[Design data, interface, and workflow]
+    D --&gt; E[Generate or configure application]
+    E --&gt; F[Integrate services and data]
+    F --&gt; G[Test and validate]
+    G --&gt; H[Deploy and monitor]
+    H --&gt; I[Collect feedback and improve]
+    G --&gt;|Issues found| D
+
+Usually you describe the goal in natural language; the platform or development team turns it into features, screens, data models, business rules, and integrations. A preview is tested against acceptance criteria, corrected, secured, and deployed. Monitoring and user feedback then drive later versions. Because the platform has not been identified, platform-specific automation, approvals, and publishing steps cannot be confirmed.</pre></details></td></tr><tr class="v-pass"><td>8</td><td>direct</td><td class="p">What are the main components of this platform, and what is the purpose of each component?</td><td><span class="badge pass">pass</span></td><td class="n">19</td><td>answer_boundary</td><td class="t">components, ume, ume</td><td class="a"><details><summary>Platform not identified: Please provide the platform’s name, product page, or documentation link. Its main components and their purposes depend on the specific </summary><pre>Platform not identified: Please provide the platform’s name, product page, or documentation link. Its main components and their purposes depend on the specific platform.</pre></details></td></tr><tr class="v-pass"><td>9</td><td>direct</td><td class="p">What are the major stages involved in developing an application from discovery through production?</td><td><span class="badge pass">pass</span></td><td class="n">24</td><td>general-answer</td><td class="t">stages, eal, requirements, ume, solution design, release</td><td class="a"><details><summary>Application development lifecycle 1. Discovery: Identify users, problems, goals, constraints, risks, and measures of success. 2. Requirements: Define scope, use</summary><pre>Application development lifecycle
+
+1. Discovery: Identify users, problems, goals, constraints, risks, and measures of success.
+2. Requirements: Define scope, user journeys, functional needs, quality attributes, and acceptance criteria.
+3. Solution design: Create the architecture, data model, integrations, security approach, and user experience.
+4. Planning: Prioritize features, estimate effort, divide work into increments, and assign responsibilities.
+5. Implementation: Build the application, infrastructure, automated checks, and documentation using version control and code review.
+6. Testing and validation: Verify functionality, usability, performance, accessibility, security, and compatibility; resolve defects.
+7. Release preparation: Configure production environments, migrate data, complete operational checks, and establish rollback and recovery procedures.
+8. Production deployment: Release gradually where practical, verify system health, and confirm critical workflows.
+9. Operations and improvement: Monitor reliability and user outcomes, provide support, fix issues, apply security updates, and iterate based on feedback.
+
+These stages often overlap and repeat, especially in iterative or agile development.</pre></details></td></tr><tr class="v-pass"><td>10</td><td>direct</td><td class="p">How do the different platform components work together during application development?</td><td><span class="badge pass">pass</span></td><td class="n">22</td><td>general-answer</td><td class="t">integration, requirements</td><td class="a"><details><summary>How platform components work together Diagram flowchart LR A[Requirements] --&gt; B[Application designer] B --&gt; C[User interface] B --&gt; D[Data model] B --&gt; E[Busin</summary><pre>How platform components work together
+
+Diagram
+flowchart LR
+    A[Requirements] --&gt; B[Application designer]
+    B --&gt; C[User interface]
+    B --&gt; D[Data model]
+    B --&gt; E[Business logic]
+    C --&gt; E
+    D --&gt; E
+    E --&gt; F[APIs and integrations]
+    G[Identity and security] --&gt; C
+    G --&gt; D
+    G --&gt; E
+    C --&gt; H[Testing and preview]
+    D --&gt; H
+    E --&gt; H
+    F --&gt; H
+    H --&gt;|Approved| I[Build and deployment]
+    H --&gt;|Issues| B
+    I --&gt; J[Runtime and monitoring]
+    J --&gt; K[Usage and feedback]
+    K --&gt; B
+
+The designer acts as the coordination layer: screens read and update the data model, business logic validates actions and runs workflows, integrations connect external services, and security controls access throughout. Testing checks the assembled application before deployment; runtime monitoring and user feedback then inform the next revision. Because the platform is unidentified, its exact component names and automation cannot be confirmed.</pre></details></td></tr><tr class="v-pass"><td>11</td><td>direct</td><td class="p">Where are applications built by this platform deployed?</td><td><span class="badge pass">pass</span></td><td class="n">19</td><td>answer_boundary</td><td class="t">deploy, ume</td><td class="a"><details><summary>Platform not identified: Deployment could be to the platform’s managed cloud, your own cloud account, on-premises infrastructure, or another hosting provider. P</summary><pre>Platform not identified: Deployment could be to the platform’s managed cloud, your own cloud account, on-premises infrastructure, or another hosting provider. Please provide the platform’s name or documentation link for a precise answer.</pre></details></td></tr><tr class="v-pass"><td>12</td><td>direct</td><td class="p">Where does application development actually happen?</td><td><span class="badge pass">pass</span></td><td class="n">18</td><td>general-answer</td><td class="t">development, eal, local development, release</td><td class="a"><details><summary>Application development usually happens on developers’ local computers and in shared cloud or on-premises environments, using source control and automated deliv</summary><pre>Application development usually happens on developers’ local computers and in shared cloud or on-premises environments, using source control and automated delivery systems.
+
+- Local development: Developers write, run, and debug code using editors, IDEs, containers, or local emulators.
+- Shared development: Teams integrate code and services in a common environment.
+- Testing: Automated and manual checks run in isolated environments.
+- Staging: A production-like environment validates the complete application before release.
+- Production: The application serves real users and is monitored; changes normally reach it through a controlled deployment pipeline.</pre></details></td></tr><tr class="v-pass"><td>13</td><td>direct</td><td class="p">Where do the deployed applications run?</td><td><span class="badge pass">pass</span></td><td class="n">22</td><td>general-answer</td><td class="t">runtime</td><td class="a"><details><summary>Deployed applications typically run in a managed cloud runtime operated by the platform provider. Some platforms also support deployment to your organization’s </summary><pre>Deployed applications typically run in a managed cloud runtime operated by the platform provider. Some platforms also support deployment to your organization’s own cloud account, containers or Kubernetes, or on-premises servers.
+
+Platform not identified: The exact hosting provider, region, isolation model, and deployment options cannot be confirmed without the platform’s name.</pre></details></td></tr><tr class="v-pass"><td>14</td><td>direct</td><td class="p">How does the platform handle application configuration, infrastructure, deployment, and runtime management?</td><td><span class="badge pass">pass</span></td><td class="n">21</td><td>answer_boundary</td><td class="t">configuration, infrastructure, runtime, deployment, ume</td><td class="a"><details><summary>Platform not identified: Please provide the platform’s name or documentation link. Configuration, infrastructure provisioning, deployment automation, scaling, m</summary><pre>Platform not identified: Please provide the platform’s name or documentation link. Configuration, infrastructure provisioning, deployment automation, scaling, monitoring, logging, secrets, and runtime controls vary substantially by platform.</pre></details></td></tr><tr class="v-pass"><td>15</td><td>direct</td><td class="p">What development, testing, staging, and production environments does the platform support?</td><td><span class="badge pass">pass</span></td><td class="n">23</td><td>answer_boundary</td><td class="t">staging, production</td><td class="a"><details><summary>Platform not identified: Please provide the platform’s name or URL so I can describe its development, testing, staging, and production environment support.</summary><pre>Platform not identified: Please provide the platform’s name or URL so I can describe its development, testing, staging, and production environment support.</pre></details></td></tr><tr class="v-pass"><td>16</td><td>direct</td><td class="p">After an application has already been deployed, how can I use this platform to enhance or modify it?</td><td><span class="badge pass">pass</span></td><td class="n">22</td><td>general-answer</td><td class="t">modify, release</td><td class="a"><details><summary>Typical post-deployment workflow 1. Open the deployed application in the platform’s designer or development workspace. 2. Create a new version, branch, or edita</summary><pre>Typical post-deployment workflow
+
+1. Open the deployed application in the platform’s designer or development workspace.
+2. Create a new version, branch, or editable copy rather than changing production directly.
+3. Modify its screens, data model, business rules, workflows, integrations, or access controls.
+4. Test the revision in preview, development, or staging, including data migrations and regression checks.
+5. Obtain any required review or approval, then publish or redeploy the new version.
+6. Monitor errors and usage after release; roll back to the previous version if necessary.
+7. Use feedback and monitoring results to begin the next revision.
+
+Platform not identified: Exact editing, versioning, approval, and redeployment commands depend on the platform. Its name is needed for platform-specific instructions.</pre></details></td></tr><tr class="v-pass"><td>17</td><td>direct</td><td class="p">How does the platform handle changes to an existing application's requirements, design, code, testing, and deployment?</td><td><span class="badge pass">pass</span></td><td class="n">28</td><td>answer_boundary</td><td class="t">change, eal, requirements, ume, release</td><td class="a"><details><summary>Typical change-management lifecycle Diagram flowchart LR A[Capture changed requirement] --&gt; B[Review and approve] B --&gt; C[Assess design and dependencies] C --&gt; </summary><pre>Typical change-management lifecycle
+
+Diagram
+flowchart LR
+    A[Capture changed requirement] --&gt; B[Review and approve]
+    B --&gt; C[Assess design and dependencies]
+    C --&gt; D[Update design and configuration]
+    D --&gt; E[Modify versioned code]
+    E --&gt; F[Run automated and manual tests]
+    F --&gt; G{Tests and reviews pass?}
+    G --&gt;|No| C
+    G --&gt;|Yes| H[Promote through environments]
+    H --&gt; I[Deploy with controlled release]
+    I --&gt; J[Monitor and verify]
+    J --&gt; K{Healthy?}
+    K --&gt;|No| L[Rollback or remediate]
+    L --&gt; C
+    K --&gt;|Yes| M[Close change and retain audit history]
+
+Most platforms connect requirements to tracked work items, assess architectural and dependency impacts, preserve code and configuration changes in version control, run regression, integration, security, and acceptance tests, and deploy through development, test, staging, and production environments using approvals or CI/CD automation. Safer releases may use feature flags, canary or blue-green deployment, monitoring, and rollback. The platform name or documentation is required to confirm its exact workflow, tools, approval gates, traceability, and deployment strategy.</pre></details></td></tr><tr class="v-pass"><td>18</td><td>direct</td><td class="p">Can the platform understand an existing application and help me add new features to it?</td><td><span class="badge pass">pass</span></td><td class="n">25</td><td>answer_boundary</td><td class="t">ume, capabilit</td><td class="a"><details><summary>Potentially, but the platform is not identified, so I cannot confirm its specific capabilities. A platform with repository access can typically analyze an appli</summary><pre>Potentially, but the platform is not identified, so I cannot confirm its specific capabilities.
+
+A platform with repository access can typically analyze an application’s structure, dependencies, data flows, tests, and conventions, then help design and implement new features. Effectiveness depends on source-code access, supported technologies, project documentation, and available build and test environments.
+
+Platform identification needed: Provide the platform’s name or URL for a definitive answer.</pre></details></td></tr><tr class="v-pass"><td>19</td><td>direct</td><td class="p">How does the platform determine which development activities can be automated and which ones require human approval?</td><td><span class="badge pass">pass</span></td><td class="n">26</td><td>answer_boundary</td><td class="t">automation, approval, requirements, ume, release</td><td class="a"><details><summary>Automation versus human approval Platforms typically evaluate each activity against configured policies, permissions, risk levels, and environmental controls. -</summary><pre>Automation versus human approval
+
+Platforms typically evaluate each activity against configured policies, permissions, risk levels, and environmental controls.
+
+- Automation is favored for repeatable, reversible tasks with predictable results, such as code generation, formatting, routine tests, dependency checks, and deployment to isolated development environments.
+- Human approval is commonly required for production releases, destructive data changes, security or access-control changes, handling sensitive information, costly infrastructure changes, and exceptions to policy.
+- Automated checks may examine test results, security scans, policy compliance, change scope, affected environment, user permissions, audit requirements, and whether rollback is available.
+- Organizations usually configure approval gates by role and environment. Passing every automated check can advance an activity automatically; a failed check or elevated risk sends it to an authorized reviewer.
+- All actions and approvals are generally recorded in an audit trail, and emergency overrides may require extra justification or retrospective review.
+
+Platform not identified: The exact risk thresholds, approval roles, and configurable controls cannot be confirmed without the platform’s name or documentation.</pre></details></td></tr><tr class="v-pass"><td>20</td><td>direct</td><td class="p">How does the platform ensure that generated applications meet requirements and are technically correct?</td><td><span class="badge pass">pass</span></td><td class="n">24</td><td>general-answer</td><td class="t">verification, tests, eal, requirements, ume</td><td class="a"><details><summary>Typical quality-assurance mechanisms - Requirements are converted into explicit acceptance criteria and traced to designs, generated components, and tests. - Sc</summary><pre>Typical quality-assurance mechanisms
+
+- Requirements are converted into explicit acceptance criteria and traced to designs, generated components, and tests.
+- Schema validation, compilation, static analysis, type checking, dependency scanning, and policy checks catch technical defects early.
+- Unit, integration, API, user-interface, regression, performance, accessibility, and security tests verify behavior at multiple levels.
+- Generated output is compared with acceptance criteria through automated checks, demonstrations, or user acceptance testing.
+- Peer review and approval gates address architectural suitability, maintainability, security, and cases that automation cannot judge reliably.
+- Deployment proceeds through isolated environments, with monitoring, health checks, rollback controls, and production verification providing final safeguards.
+
+Platform not identified: These are common mechanisms rather than confirmed features. The platform’s name or documentation is needed to explain its exact validation workflow and guarantees.</pre></details></td></tr><tr class="v-pass"><td>21</td><td>direct</td><td class="p">What roles do AI agents, developers, architects, testers, product owners, and business users play during application delivery?</td><td><span class="badge pass">pass</span></td><td class="n">26</td><td>general-answer</td><td class="t">roles, agents, developer, product owner, eal, requirements</td><td class="a"><details><summary>Roles during application delivery Role | Primary responsibilities AI agents | Analyze requirements and code, suggest designs, generate or modify code and tests,</summary><pre>Roles during application delivery
+
+Role | Primary responsibilities
+AI agents | Analyze requirements and code, suggest designs, generate or modify code and tests, assist with documentation, and help diagnose defects. Their output requires appropriate human review, testing, security controls, and approval.
+Developers | Translate requirements and designs into working software, integrate services, write automated tests, review code, resolve defects, and support deployment and operations.
+Architects | Define the technical direction, system boundaries, data and integration patterns, quality attributes, security approach, and major technology decisions.
+Testers | Design and perform functional and nonfunctional testing, automate checks, investigate failures, report risks, and provide evidence about release readiness.
+Product owners | Set product goals, prioritize the backlog, clarify requirements and acceptance criteria, balance stakeholder needs, and accept delivered outcomes.
+Business users | Explain real workflows and constraints, validate needs and usability, participate in acceptance testing, provide feedback, and confirm that the application delivers business value.
+
+These roles collaborate throughout delivery rather than working only in separate stages. Humans remain accountable for business priorities, architectural decisions, risk acceptance, and release approval; AI agents accelerate work but do not replace that accountability.</pre></details></td></tr><tr class="v-pass"><td>22</td><td>direct</td><td class="p">How are testing, validation, code review, security review, and quality checks handled?</td><td><span class="badge pass">pass</span></td><td class="n">23</td><td>general-answer</td><td class="t">testing, security, review, quality, ume, release</td><td class="a"><details><summary>Review and quality controls These activities are typically handled through automated pipeline checks plus human approval gates: - Testing: Unit, integration, in</summary><pre>Review and quality controls
+
+These activities are typically handled through automated pipeline checks plus human approval gates:
+
+- Testing: Unit, integration, interface, workflow, regression, and end-to-end tests run in development or staging. Failures block promotion until corrected.
+- Validation: The platform checks data types, required fields, business rules, configurations, dependencies, permissions, and deployment readiness.
+- Code review: Changes are versioned and compared before merging. Automated linting and static analysis supplement review by authorized developers, especially for complex or high-impact changes.
+- Security review: Dependency, secret, vulnerability, access-control, and configuration scans identify risks. Changes involving sensitive data, authentication, permissions, or production commonly require security approval.
+- Quality checks: Formatting, maintainability, performance, accessibility, reliability, test coverage, and policy-compliance thresholds may be enforced as release gates.
+- Traceability: Results, reviewer decisions, exceptions, and releases are generally recorded in an audit trail. Failed checks return the change for correction; approved changes advance toward deployment.
+
+Platform not identified: The exact tools, test types, quality thresholds, reviewer roles, and mandatory approval gates cannot be confirmed without the platform’s name or documentation.</pre></details></td></tr><tr class="v-pass"><td>23</td><td>direct</td><td class="p">How are errors, failed builds, failed tests, or deployment problems handled?</td><td><span class="badge pass">pass</span></td><td class="n">21</td><td>general-answer</td><td class="t">errors, failed build, failed tests, recovery, eal, ume</td><td class="a"><details><summary>Typical failure handling - Errors are captured in logs and diagnostics with the failing step, relevant output, and correlation details; alerts or tracked incide</summary><pre>Typical failure handling
+
+- Errors are captured in logs and diagnostics with the failing step, relevant output, and correlation details; alerts or tracked incidents may be created.
+- Failed builds stop the pipeline. Compilation, dependency, configuration, or policy errors must be corrected before rebuilding from a clean, versioned state.
+- Failed tests block promotion to later environments. Reports identify failing cases, and the application is revised and retested, usually including regression checks.
+- Deployment failures halt or pause the release. Health checks verify the new version; unsuccessful releases may be retried, rolled back, or redirected to the previous healthy version.
+- Production problems are detected through monitoring, logs, metrics, traces, and alerts. Teams mitigate impact, diagnose the cause, deploy a fix or rollback, and record follow-up actions.
+- Automated remediation may regenerate or amend code and configuration, but consequential changes ordinarily remain subject to validation and approval gates.
+
+Platform not identified: These are common practices, not confirmed platform features. The platform name or documentation is required to describe its exact retry rules, diagnostics, rollback behavior, notifications, and recovery guarantees.</pre></details></td></tr><tr class="v-pass"><td>24</td><td>direct</td><td class="p">How does the platform know when an application is ready to move from development to testing and then to production?</td><td><span class="badge pass">pass</span></td><td class="n">27</td><td>general-answer</td><td class="t">gates, promotion, eal, requirements, ume, release</td><td class="a"><details><summary>Application promotion readiness The platform typically evaluates predefined promotion gates. A release advances only when required checks pass, evidence is reco</summary><pre>Application promotion readiness
+
+The platform typically evaluates predefined promotion gates. A release advances only when required checks pass, evidence is recorded, blocking defects are resolved or accepted, and the responsible people approve it.
+
+Development to testing
+
+- Code is committed, reviewed, and traceable to requirements or work items.
+- The application builds successfully and deploys consistently.
+- Unit tests, static analysis, dependency checks, and basic security scans pass.
+- Required configuration, test data, and deployment artifacts are available.
+- No unresolved defect blocks meaningful testing.
+
+Testing to production
+
+- Functional, integration, regression, and acceptance criteria are satisfied.
+- Required performance, security, accessibility, compatibility, and reliability checks pass.
+- Critical defects are closed; remaining risks are documented and explicitly accepted.
+- Production configuration, data migration, monitoring, support, backup, recovery, and rollback procedures are ready.
+- Testers provide validation evidence, the product owner accepts the outcome, and authorized technical or business owners approve release.
+
+These gates are often enforced in a delivery pipeline using pass or fail rules, quality thresholds, signed approvals, audit records, and deployment policies. After deployment, health checks and monitoring confirm the release; failed checks can pause rollout or trigger rollback.
+
+Platform-specific details unavailable: Because the platform is not identified, its exact checks, thresholds, approval roles, and automation cannot be confirmed.</pre></details></td></tr><tr class="v-pass"><td>25</td><td>direct</td><td class="p">If I ask the platform to build a very simple application, approximately how much effort and time should I expect?</td><td><span class="badge pass">pass</span></td><td class="n">25</td><td>general-answer</td><td class="t">simple, requirements, ume</td><td class="a"><details><summary>Rough estimate Basic prototype: About 1–4 hours elapsed time and 1–3 hours of human input. Tested, deployable application: About 1–3 working days elapsed time a</summary><pre>Rough estimate
+
+Basic prototype: About 1–4 hours elapsed time and 1–3 hours of human input.
+Tested, deployable application: About 1–3 working days elapsed time and 2–8 hours of human input.
+
+This assumes a few screens, a simple data model and workflow, standard authentication, no custom integrations, and minimal approval requirements. Complex security, external systems, data migration, or unclear requirements can extend the work to several days or weeks.
+
+Platform not identified: The platform’s actual automation and build speed cannot be confirmed, so these are general low-code or AI-assisted development ranges rather than a platform-specific quote.</pre></details></td></tr><tr class="v-pass"><td>26</td><td>direct</td><td class="p">How would the platform handle a highly complex application involving multiple systems, integrations, APIs, databases, security requirements, and business processes?</td><td><span class="badge pass">pass</span></td><td class="n">24</td><td>general-answer</td><td class="t">security, capabilit</td><td class="a"><details><summary>Managing a complex application Scope: Because the platform is not identified, this describes a typical enterprise-platform approach rather than confirmed produc</summary><pre>Managing a complex application
+
+Scope: Because the platform is not identified, this describes a typical enterprise-platform approach rather than confirmed product capabilities.
+
+- Divide the application into bounded modules or services with clear ownership and interfaces.
+- Connect internal and external systems through managed APIs, connectors, events, queues, and integration workflows.
+- Place an API gateway in front of services to handle authentication, authorization, validation, throttling, versioning, and monitoring.
+- Use appropriate databases for each workload while governing schemas, migrations, transactions, replication, backups, and data lineage.
+- Apply security across every layer using centralized identity, least-privilege access, secrets management, encryption, audit logging, and policy enforcement.
+- Represent business processes as workflows or orchestration logic, including approvals, business rules, timeouts, retries, and compensating actions.
+- Provide shared observability through logs, metrics, traces, dashboards, alerts, and correlation identifiers spanning systems.
+- Support controlled delivery with automated testing, environment configuration, deployment pipelines, rollback mechanisms, and infrastructure automation.
+- Improve resilience through asynchronous processing, idempotency, circuit breakers, retry policies, caching, scaling, and disaster-recovery controls.
+- Maintain governance through reusable standards, service catalogs, dependency mapping, compliance evidence, and lifecycle ownership.
+
+The platform should act as a coordination and governance layer rather than forcing the entire application into one monolith. Each domain can evolve independently while common security, integration, data, operational, and delivery controls keep the overall system consistent and manageable.</pre></details></td></tr><tr class="v-pass"><td>27</td><td>direct</td><td class="p">How would the development approach change for a moderately complex enterprise application?</td><td><span class="badge pass">pass</span></td><td class="n">22</td><td>general-answer</td><td class="t">moderate, enterprise, workflow, integration, eal, requirements</td><td class="a"><details><summary>How the development approach changes For a moderately complex enterprise application, the approach shifts from informal feature development toward controlled, i</summary><pre>How the development approach changes
+
+For a moderately complex enterprise application, the approach shifts from informal feature development toward controlled, iterative engineering across multiple business and technical concerns.
+
+- Clarify business workflows, roles, compliance needs, integrations, and nonfunctional requirements early; maintain traceability for important decisions.
+- Use clear modular boundaries and documented interfaces. Prefer a modular monolith unless independent scaling, deployment, or ownership genuinely justifies services.
+- Design identity, authorization, audit logging, data protection, secrets management, and threat mitigation from the outset.
+- Treat data models, migrations, retention, consistency, reporting, and recovery as first-class design concerns.
+- Automate unit, integration, contract, security, and end-to-end tests, with greater emphasis on integration and critical business workflows.
+- Standardize code review, branching, dependency management, CI/CD, environment configuration, and release controls.
+- Add production readiness practices such as structured logs, metrics, tracing, health checks, alerting, backups, rollback, and incident procedures.
+- Deliver in vertical increments, validate frequently with stakeholders, and use architectural governance that guides teams without creating excessive ceremony.
+
+The central change is not simply adding more process. It is managing risk and coordination explicitly while keeping feedback cycles short.</pre></details></td></tr><tr class="v-pass"><td>28</td><td>direct</td><td class="p">What factors determine whether an application is considered simple, medium, complex, or enterprise-scale?</td><td><span class="badge pass">pass</span></td><td class="n">23</td><td>general-answer</td><td class="t">complexity, factors, eal, requirements, ume, release</td><td class="a"><details><summary>Application complexity classification There is no universal classification standard. Organizations usually score several dimensions, and a demanding requirement</summary><pre>Application complexity classification
+
+There is no universal classification standard. Organizations usually score several dimensions, and a demanding requirement in one critical area can raise the overall classification.
+
+Primary factors
+
+- Functional scope: number of features, workflows, business rules, roles, and exception paths.
+- Users and scale: user count, geographic reach, transaction volume, data volume, and growth expectations.
+- Architecture: number of components, services, platforms, deployment environments, and dependencies.
+- Integrations: quantity and difficulty of APIs, legacy systems, vendors, payment services, and real-time data exchanges.
+- Data complexity: number of data models, relationships, migrations, analytics needs, retention rules, and consistency requirements.
+- Security and compliance: identity controls, sensitive data, auditing, regulatory obligations, and threat exposure.
+- Performance and availability: response-time targets, concurrency, uptime commitments, disaster recovery, and fault tolerance.
+- Operational needs: monitoring, support coverage, release frequency, automation, and incident response.
+- Organization and delivery: team size, stakeholder count, cross-team coordination, customization, and expected lifespan.
+
+Typical classifications
+
+Level | Typical characteristics
+Simple | Narrow purpose; few screens and roles; basic data; little or no integration; modest traffic; standard security; straightforward deployment and support.
+Medium | Several workflows and roles; moderate business rules; one or more integrations; meaningful data volume; routine authentication, reporting, testing, and monitoring.
+Complex | Many interconnected workflows; substantial domain logic; multiple integrations or services; high scale or availability needs; sensitive data; advanced security and operational requirements.
+Enterprise-scale | Business-critical across departments, regions, or customers; very high scale; extensive integration and governance; strict compliance and availability targets; disaster recovery; long-term ownership by multiple teams.
+
+Practical rule: Classification should reflect risk and effort, not just size. A small application handling regulated financial or health data may be complex, while a large informational site using standard technology may remain medium.</pre></details></td></tr><tr class="v-pass"><td>29</td><td>direct</td><td class="p">Can you give me an example of a simple application, a moderately complex application, and a highly complex application that could be built using this platform?</td><td><span class="badge pass">pass</span></td><td class="n">26</td><td>answer_boundary</td><td class="t">examples, simple, moderate, complex, eal, ume</td><td class="a"><details><summary>Application examples by complexity Simple: Employee leave-request tracker with a submission form, manager approval, status display, notifications, and basic rep</summary><pre>Application examples by complexity
+
+Simple: Employee leave-request tracker with a submission form, manager approval, status display, notifications, and basic reporting.
+Moderately complex: Customer service portal with role-based access, case workflows, document storage, dashboards, audit history, and integrations with CRM, identity, and email systems.
+Highly complex: Global supply-chain operations platform with real-time inventory, forecasting, procurement and fulfillment workflows, partner portals, many system integrations, regional compliance, high availability, and advanced analytics.
+
+Assumption: The platform is not identified in the supplied context, so these are representative examples rather than confirmed capability claims.</pre></details></td></tr><tr class="v-pass"><td>30</td><td>direct</td><td class="p">Walk me through the complete end-to-end application delivery process using this platform.</td><td><span class="badge pass">pass</span></td><td class="n">30</td><td>answer_boundary</td><td class="t">delivery, eal, requirements, release, capabilit</td><td class="a"><details><summary>End-to-end application delivery Because this platform’s specific capabilities are not identified, the walkthrough below shows the standard delivery lifecycle. C</summary><pre>End-to-end application delivery
+
+Because this platform’s specific capabilities are not identified, the walkthrough below shows the standard delivery lifecycle. Complexity affects the depth of governance, architecture, testing, security, and release controls at each stage.
+
+Diagram
+flowchart TD
+    A[Capture idea and business outcome] --&gt; B[Discover users and requirements]
+    B --&gt; C[Classify complexity risk and scale]
+    C --&gt; D[Define scope and acceptance criteria]
+    D --&gt; E[Design user experience architecture and data]
+    E --&gt; F[Review security privacy and compliance]
+    F --&gt; G[Create backlog and delivery increments]
+    G --&gt; H[Configure environments and delivery pipeline]
+    H --&gt; I[Build application and integrations]
+    I --&gt; J[Run automated code and security checks]
+    J --&gt; K[Deploy to test environment]
+    K --&gt; L[Functional integration performance and accessibility testing]
+    L --&gt; M{Quality criteria met}
+    M -- No --&gt; I
+    M -- Yes --&gt; N[User acceptance testing]
+    N --&gt; O{Business approval granted}
+    O -- No --&gt; G
+    O -- Yes --&gt; P[Prepare release migration rollback and support]
+    P --&gt; Q[Production approval]
+    Q --&gt; R[Deploy progressively to production]
+    R --&gt; S[Validate health data and user journeys]
+    S --&gt; T{Release healthy}
+    T -- No --&gt; U[Rollback or remediate]
+    U --&gt; I
+    T -- Yes --&gt; V[Operate monitor and support]
+    V --&gt; W[Measure outcomes and collect feedback]
+    W --&gt; X[Prioritize improvements]
+    X --&gt; G
+    V --&gt; Y[Retire application when appropriate]
+    Y --&gt; Z[Archive or migrate data and remove access]</pre></details></td></tr><tr class="v-pass"><td>31</td><td>direct</td><td class="p">For each of those examples, explain how the development process would differ.</td><td><span class="badge pass">pass</span></td><td class="n">50</td><td>answer_boundary</td><td class="t">release</td><td class="a"><details><summary>Development-process differences by approach Scope: Because the platform is unidentified, this comparison is platform-neutral. Approach | How development changes</summary><pre>Development-process differences by approach
+
+Scope: Because the platform is unidentified, this comparison is platform-neutral.
+
+Approach | How development changes | Primary validation
+Modularization | Teams first define domain boundaries, ownership, interfaces, and shared libraries. Modules can then be designed, implemented, and released independently. | Unit tests, contract tests, dependency checks, and cross-module integration tests.
+System integrations | Developers map source and destination formats, build adapters or connectors, and explicitly handle transformation, latency, retries, and external-system limitations. | Sandbox tests, integration tests, malformed-message tests, and external-system failure simulations.
+API gateway | Teams design API contracts and lifecycle rules before implementation, then configure routing, authentication, throttling, validation, and versioning separately from business logic. | Contract, authorization, rate-limit, compatibility, and performance tests.
+Databases | Development includes data modeling, ownership rules, migration scripts, transaction boundaries, and strategies for replication, backup, and retention. | Migration, integrity, concurrency, rollback, recovery, and performance tests.
+Security | Threat modeling and control definition begin during design rather than after coding. Identity, permissions, secrets, encryption, and auditability become acceptance criteria for every feature. | Security scanning, access-control tests, penetration tests, dependency checks, and audit verification.
+Business workflows | Teams model states, transitions, approvals, timers, retries, and compensating actions before implementing individual tasks. Business rules are separated from orchestration where practical. | End-to-end path, timeout, retry, duplicate-event, exception, and compensation tests.
+Observability | Developers add structured logs, metrics, traces, correlation identifiers, dashboards, and alert conditions as part of each feature rather than as later operational work. | Telemetry completeness, trace propagation, dashboard, and alert tests.
+Delivery automation | Build, test, configuration, infrastructure, deployment, promotion, and rollback steps are encoded in version-controlled pipelines. Changes must pass automated quality gates. | Pipeline, environment-parity, deployment, smoke, rollback, and infrastructure-policy tests.
+Resilience | Failure behavior is designed explicitly through asynchronous processing, idempotency, retries, circuit breakers, caching, scaling, and recovery objectives. | Load, failover, chaos, duplicate-request, degraded-dependency, and disaster-recovery tests.
+Governance | Teams use approved templates, standards, catalogs, dependency records, compliance controls, and named lifecycle owners. Reviews and evidence collection become part of normal delivery. | Architecture checks, policy-as-code, ownership verification, dependency audits, and compliance evidence reviews.</pre></details></td></tr><tr class="v-pass"><td>32</td><td>direct</td><td class="p">Start with a business idea and explain how it moves through discovery, requirements, solution design, planning, development, testing, release, deployment, operations, and continuous improvement.</td><td><span class="badge pass">pass</span></td><td class="n">25</td><td>general-answer</td><td class="t">example, eal, requirements, ume, solution design, release</td><td class="a"><details><summary>Business idea lifecycle Example idea: Create a customer service portal that lets customers submit and track cases while agents manage work efficiently. Each sta</summary><pre>Business idea lifecycle
+
+Example idea: Create a customer service portal that lets customers submit and track cases while agents manage work efficiently. Each stage refines the idea, reduces risk, and supplies evidence or inputs to the next stage.
+
+End-to-end progression
+flowchart TD
+    A[Business idea: Customer service portal] --&gt; B[Discovery: Interview customers and agents, map current workflows, identify pain points, test value, and define success measures]
+    B --&gt; C[Requirements: Specify user journeys, roles, case rules, integrations, security, audit, performance, and acceptance criteria]
+    C --&gt; D[Solution design: Define architecture, data model, interfaces, user experience, identity controls, observability, and deployment approach]
+    D --&gt; E[Planning: Prioritize an MVP, split work into increments, estimate effort, assign ownership, identify dependencies, and manage risks]
+    E --&gt; F[Development: Build tested vertical features such as case submission, assignment, status tracking, notifications, and reporting]
+    F --&gt; G[Testing: Verify units, integrations, workflows, security, accessibility, performance, recovery, and stakeholder acceptance]
+    G --&gt; H[Release: Approve the tested version, document changes, prepare support and training, confirm rollback, and schedule launch]
+    H --&gt; I[Deployment: Promote the release through controlled environments, migrate data, configure production, verify health, and enable users]
+    I --&gt; J[Operations: Monitor reliability, security, usage, and service levels while handling support, incidents, backups, and maintenance]
+    J --&gt; K[Continuous improvement: Analyze feedback and metrics, identify new needs, prioritize enhancements, and feed them into discovery]
+    K --&gt; B</pre></details></td></tr><tr class="v-pass"><td>33</td><td>direct</td><td class="p">During the end-to-end process, what artifacts does the platform create at each stage?</td><td><span class="badge pass">pass</span></td><td class="n">28</td><td>general-answer</td><td class="t">artifacts, requirements, release, capabilit</td><td class="a"><details><summary>End-to-end artifact map Because the platform is unidentified, this shows typical artifacts. Depending on the product, some are generated automatically while oth</summary><pre>End-to-end artifact map
+
+Because the platform is unidentified, this shows typical artifacts. Depending on the product, some are generated automatically while others are authored by teams and managed by the platform.
+
+Diagram
+flowchart TD
+  A[Discovery: goals, stakeholder map, scope, capability map, risk register] --&gt; B[Requirements: stories, use cases, process models, acceptance criteria, traceability]
+  B --&gt; C[Architecture: system context, service boundaries, dependency map, architecture decisions]
+  C --&gt; D[Detailed design: API contracts, data models, workflow definitions, security model, UI specifications]
+  D --&gt; E[Configuration and build: source code, connectors, schemas, migrations, policies, infrastructure definitions]
+  E --&gt; F[Testing: test cases, test data, automation suites, scan reports, defects, evidence]
+  F --&gt; G[Release: versioned packages, container images, release notes, approvals, software bill of materials]
+  G --&gt; H[Deployment: environment configuration, secrets references, deployment manifests, pipeline records]
+  H --&gt; I[Operations: logs, metrics, traces, dashboards, alerts, audit records, incident tickets]
+  I --&gt; J[Evolution and governance: change requests, lineage, compliance evidence, service catalog, deprecation records]
+  J --&gt; B</pre></details></td></tr><tr class="v-pass"><td>34</td><td>direct</td><td class="p">What decisions and approvals would typically occur throughout the delivery lifecycle?</td><td><span class="badge pass">pass</span></td><td class="n">31</td><td>general-answer</td><td class="t">approvals, decisions, gates, eal, requirements, solution design</td><td class="a"><details><summary>Typical lifecycle decisions and approvals Approval depth should be proportional to cost, complexity, security exposure, regulatory obligations, and business cri</summary><pre>Typical lifecycle decisions and approvals
+
+Approval depth should be proportional to cost, complexity, security exposure, regulatory obligations, and business criticality. Smaller low-risk changes may use automated or delegated approvals, while enterprise releases usually require formal evidence and separation of duties.
+
+Lifecycle stage | Key decisions | Typical approval or gate | Typical accountable roles
+Intake and triage | Is the problem worth solving, strategically aligned, and feasible enough to investigate? | Idea accepted, rejected, deferred, or sent to discovery | Business sponsor, product leadership, portfolio management
+Discovery and business case | What outcomes, users, benefits, costs, dependencies, and major risks define the initiative? | Business case and funding approved | Executive sponsor, finance, portfolio board
+Classification and governance | How complex, critical, regulated, and security-sensitive is the application? What delivery controls apply? | Risk tier, governance path, and required reviewers confirmed | Enterprise architecture, security, risk, compliance
+Scope and requirements | What is included, excluded, prioritized, and measurable? What constitutes acceptance? | Scope baseline, requirements, acceptance criteria, and delivery increment approved | Product owner, sponsor, business stakeholders
+Solution design | Which architecture, technologies, integrations, data models, and hosting patterns should be used? | Architecture and technical design approved; exceptions formally accepted | Architecture review board, engineering lead, data owner
+Security, privacy, and compliance | Are identity, access, data handling, threat controls, retention, and regulatory requirements adequate? | Security and privacy design approved; residual risks accepted by authorized owners | Security, privacy, legal, compliance, risk owner
+Delivery readiness | Is the backlog actionable, team funded, environments available, and delivery approach realistic? | Build authorization or iteration commitment | Product owner, delivery lead, engineering lead
+Build and change control | Do changes meet coding, review, traceability, configuration, and dependency standards? | Peer review and automated quality gates passed; significant changes approved | Engineering team, repository owners, change authority
+Testing and acceptance | Does the application satisfy functional, integration, performance, accessibility, security, and recovery expectations? | Test exit criteria passed and user acceptance granted; defects accepted or resolved | Quality lead, product owner, business representatives, security
+Release readiness | Are deployment, migration, rollback, monitoring, communications, training, and support arrangements ready? | Operational readiness and change or release approval | Release manager, operations, service owner, change advisory authority
+Production deployment | Should the release proceed, pause, roll back, or expand after initial rollout? | Go or no-go decision and production access authorization | Business owner, technical owner, release authority
+Post-release validation | Is the release healthy and producing expected results? | Release accepted, remediated, or rolled back | Product owner, operations, engineering, business owner
+Operations and improvement | Which incidents, risks, technical debt, patches, and enhancements should be prioritized? | Service reviews, risk acceptances, maintenance approvals, and backlog decisions | Service owner, product owner, security, operations
+Retirement | Should the application be replaced or decommissioned, and how will data and obligations be handled? | Retirement, migration, archival, access removal, and closure approved | Business owner, data owner, architecture, security, records management</pre></details></td></tr><tr class="v-pass"><td>35</td><td>direct</td><td class="p">How does the platform maintain context and knowledge about the application throughout the entire lifecycle?</td><td><span class="badge pass">pass</span></td><td class="n">27</td><td>general-answer</td><td class="t">context, knowledge, requirements, ume, solution design, release</td><td class="a"><details><summary>Lifecycle-wide context and knowledge continuity A platform typically maintains continuity by treating application knowledge as a connected, versioned system of </summary><pre>Lifecycle-wide context and knowledge continuity
+
+A platform typically maintains continuity by treating application knowledge as a connected, versioned system of record rather than isolated documents. Every artifact links back to its source, owner, decisions, dependencies, and current status.
+
+- Discovery records goals, stakeholders, workflows, constraints, assumptions, risks, and success measures.
+- Requirements connect user needs to acceptance criteria, policies, data, integrations, and nonfunctional expectations.
+- Solution design links architecture, interfaces, data models, security controls, and design decisions to the requirements they satisfy.
+- Planning turns requirements and risks into prioritized increments, dependencies, estimates, and ownership without losing traceability.
+- Development connects source changes, components, configurations, and technical decisions to planned work and requirements.
+- Testing links test cases, automated results, defects, and approvals to acceptance criteria and affected components.
+- Release and deployment preserve version history, approvals, environment configuration, migrations, dependencies, and rollback information.
+- Operations add telemetry, incidents, support cases, security findings, service levels, and usage data to the same application record.
+- Continuous improvement converts operational evidence and stakeholder feedback into new discoveries and requirements, completing the feedback loop.
+
+Versioning, access controls, searchable relationships, change history, and impact analysis keep this knowledge current and accessible. When something changes, the platform can show why it exists, what depends on it, what validates it, what version contains it, and which operational evidence should guide the next change.
+
+Capability limitation: The specific platform and its actual context-management features were not identified, so these mechanisms are representative and should not be read as confirmed product capabilities.</pre></details></td></tr><tr class="v-pass"><td>36</td><td>direct</td><td class="p">Once an application is running in production, how does the platform continue to monitor, maintain, enhance, and improve it?</td><td><span class="badge pass">pass</span></td><td class="n">24</td><td>general-answer</td><td class="t">monitor, maintain, improve, eal, requirements, release</td><td class="a"><details><summary>Production lifecycle support Scope: Because the platform is unidentified, this describes a typical enterprise-platform approach rather than confirmed product ca</summary><pre>Production lifecycle support
+
+Scope: Because the platform is unidentified, this describes a typical enterprise-platform approach rather than confirmed product capabilities.
+
+Monitor
+
+- Collect logs, metrics, traces, audit events, user-experience signals, and dependency health data.
+- Track availability, latency, errors, throughput, capacity, security events, and business outcomes against service objectives.
+- Use dashboards, anomaly detection, and actionable alerts to identify problems and initiate incident workflows.
+
+Maintain
+
+- Manage incidents through triage, diagnosis, remediation, communication, and post-incident review.
+- Apply patches, dependency upgrades, certificate rotation, database maintenance, backups, recovery tests, and capacity adjustments.
+- Detect configuration drift, vulnerabilities, policy violations, expiring integrations, and unsupported components.
+
+Enhance
+
+- Convert feature requests and operational findings into a prioritized backlog with traceability to affected services and requirements.
+- Deliver changes through automated build, security, test, approval, deployment, and rollback controls.
+- Use feature flags, canary releases, or phased rollouts to reduce risk and verify behavior before broad release.
+
+Continuously improve
+
+- Analyze incidents, performance trends, support tickets, user feedback, and business metrics to identify improvement opportunities.
+- Tune performance, reliability, cost, usability, security, and operational automation based on measured results.
+- Feed lessons into architecture decisions, tests, runbooks, standards, service objectives, and future roadmap priorities.
+
+This creates a closed loop: production telemetry and feedback reveal needs, prioritized changes pass through controlled delivery, and post-release measurements confirm whether each change improved the application.</pre></details></td></tr><tr class="v-pass"><td>37</td><td>direct</td><td class="p">If I return six months later and ask about an application that was previously built, what information should the platform know about that application?</td><td><span class="badge pass">pass</span></td><td class="n">33</td><td>general-answer</td><td class="t">history, requirements, release</td><td class="a"><details><summary>Persistent application knowledge Six months later, the platform should reconstruct what the application is, why it exists, how it works, who owns it, where it r</summary><pre>Persistent application knowledge
+
+Six months later, the platform should reconstruct what the application is, why it exists, how it works, who owns it, where it runs, and what has changed.
+
+Identity and purpose
+
+- Application name, description, business problem, intended outcomes, status, and criticality.
+- Users, stakeholders, owners, support contacts, funding source, and organizational context.
+- Scope, exclusions, assumptions, constraints, success measures, and complexity classification.
+
+Requirements and decisions
+
+- Approved functional and nonfunctional requirements, user journeys, business rules, and acceptance criteria.
+- Key decisions, alternatives considered, rationale, approvers, approval dates, exceptions, and accepted risks.
+- Backlog items, delivered scope, deferred work, known limitations, and technical debt.
+
+Design and implementation
+
+- Architecture, components, data models, integrations, dependencies, technology choices, and design artifacts.
+- Source repositories, branches, build configuration, dependency versions, generated artifacts, and traceability from requirements to implementation.
+- Security model, roles, permissions, data classifications, privacy controls, retention rules, and compliance obligations.
+
+Testing and delivery
+
+- Test strategy, results, unresolved defects, accessibility findings, performance evidence, security assessments, and user acceptance.
+- Environment inventory, configuration references, deployment pipeline, release history, migrations, rollback procedures, and production approvals.
+- The exact application version deployed in each environment and the commit, build, configuration, and database schema associated with it.
+
+Operations and evolution
+
+- Service objectives, monitoring, alerts, dashboards, runbooks, backup and recovery arrangements, and support model.
+- Incidents, problems, vulnerabilities, patches, maintenance activity, usage trends, costs, and outcome measurements.
+- A chronological audit trail showing who changed what, when, why, and under which approval.
+
+Retention principles
+
+- Store durable facts and artifacts as versioned records with provenance, timestamps, ownership, and confidence rather than relying only on conversation transcripts.
+- Separate the historical build-time snapshot from current operational state, and identify when current facts were last verified.
+- Retain links or authorized retrieval references for large artifacts; do not place passwords, access tokens, or unnecessary personal data in conversational memory.
+- Apply access control, retention schedules, legal holds, deletion rules, and audit logging consistently.
+- When answering later, cite the relevant version and explicitly flag stale, missing, conflicting, or unverified information.</pre></details></td></tr><tr class="v-pass"><td>38</td><td>direct</td><td class="p">Show me the complete lifecycle of an application built using this platform as a process flow.</td><td><span class="badge pass">pass</span></td><td class="n">31</td><td>general-answer</td><td class="t">lifecycle, eal, requirements, ume, solution design, release</td><td class="a"><details><summary>Complete application lifecycle Diagram flowchart TD A[Business idea and desired outcomes] --&gt; B[Discovery: users, problems, value, constraints, success measures</summary><pre>Complete application lifecycle
+
+Diagram
+flowchart TD
+    A[Business idea and desired outcomes] --&gt; B[Discovery: users, problems, value, constraints, success measures]
+    B --&gt; C{Idea viable?}
+    C --&gt;|No| A
+    C --&gt;|Yes| D[Requirements: journeys, rules, data, integrations, security, acceptance criteria]
+    D --&gt; E[Solution design: architecture, UX, data model, interfaces, controls, operations]
+    E --&gt; F[Planning: scope, increments, estimates, ownership, dependencies, risks]
+    F --&gt; G[Development: code, configuration, migrations, documentation, reviews]
+    G --&gt; H[Continuous integration: build, static analysis, automated checks]
+    H --&gt; I[Testing: functional, integration, security, accessibility, performance, acceptance]
+    I --&gt; J{Quality criteria met?}
+    J --&gt;|No| G
+    J --&gt;|Yes| K[Release: version, approvals, notes, training, support and rollback readiness]
+    K --&gt; L[Deployment: provision, configure, migrate, promote and verify]
+    L --&gt; M{Production healthy?}
+    M --&gt;|No| N[Rollback or remediate]
+    N --&gt; G
+    M --&gt;|Yes| O[Operations: monitor, support, secure, back up, maintain and respond]
+    O --&gt; P[Continuous improvement: analyze telemetry, incidents, feedback and outcomes]
+    P --&gt; B
+    Q[Connected knowledge record: decisions, requirements, designs, work, tests, versions and telemetry]
+    B -. updates .-&gt; Q
+    D -. updates .-&gt; Q
+    E -. updates .-&gt; Q
+    F -. updates .-&gt; Q
+    G -. updates .-&gt; Q
+    I -. updates .-&gt; Q
+    K -. updates .-&gt; Q
+    L -. updates .-&gt; Q
+    O -. updates .-&gt; Q
+    P -. updates .-&gt; Q
+
+Because the platform is unidentified, this is a representative lifecycle rather than a claim about specific product capabilities.</pre></details></td></tr><tr class="v-pass"><td>39</td><td>direct</td><td class="p">Show me the major platform components involved in application delivery as an architecture diagram.</td><td><span class="badge pass">pass</span></td><td class="n">29</td><td>general-answer</td><td class="t">requirements, release</td><td class="a"><details><summary>Application Delivery Platform Architecture Diagram flowchart LR DEV[Delivery Teams] --&gt; PLAN[Planning and Requirements] PLAN --&gt; SCM[Source and Artifact Managem</summary><pre>Application Delivery Platform Architecture
+
+Diagram
+flowchart LR
+  DEV[Delivery Teams] --&gt; PLAN[Planning and Requirements]
+  PLAN --&gt; SCM[Source and Artifact Management]
+  SCM --&gt; CICD[CI/CD Orchestration]
+
+  CICD --&gt; BUILD[Build and Packaging]
+  CICD --&gt; TEST[Automated Testing]
+  CICD --&gt; SCAN[Security and Compliance Scanning]
+  BUILD --&gt; REG[Artifact and Container Registry]
+  TEST --&gt; GATE[Quality and Approval Gates]
+  SCAN --&gt; GATE
+  REG --&gt; GATE
+
+  GATE --&gt; CONFIG[Configuration and Secrets]
+  GATE --&gt; DEPLOY[Deployment and Release Management]
+  CONFIG --&gt; DEPLOY
+  DEPLOY --&gt; RUNTIME[Application Runtime]
+  DEPLOY --&gt; INTEG[API and Integration Runtime]
+  DEPLOY --&gt; DATA[Databases and Data Services]
+
+  USERS[Users and External Systems] --&gt; EDGE[DNS, CDN, Load Balancing and API Gateway]
+  EDGE --&gt; RUNTIME
+  EDGE --&gt; INTEG
+  RUNTIME &lt;--&gt; INTEG
+  RUNTIME &lt;--&gt; DATA
+  INTEG &lt;--&gt; DATA
+
+  IAM[Identity and Access Management] --&gt; CICD
+  IAM --&gt; EDGE
+  IAM --&gt; RUNTIME
+  POLICY[Governance and Policy Management] --&gt; GATE
+  POLICY --&gt; DEPLOY
+  POLICY --&gt; RUNTIME
+
+  RUNTIME --&gt; OBS[Logs, Metrics and Traces]
+  INTEG --&gt; OBS
+  DATA --&gt; OBS
+  OBS --&gt; OPS[Monitoring, Alerting and Incident Management]
+  OPS --&gt; PLAN
+  OPS --&gt; CICD</pre></details></td></tr><tr class="v-pass"><td>40</td><td>direct</td><td class="p">Who is this platform for?</td><td><span class="badge pass">pass</span></td><td class="n">23</td><td>general-answer</td><td class="t">requirements, ume, release, capabilit</td><td class="a"><details><summary>Intended audience Based on the capabilities discussed, the platform appears designed for cross-functional teams that create and operate business applications fr</summary><pre>Intended audience
+
+Based on the capabilities discussed, the platform appears designed for cross-functional teams that create and operate business applications from initial discovery through continuous improvement.
+
+- Business leaders and product managers defining outcomes and priorities.
+- Business analysts documenting processes and requirements.
+- Designers and architects shaping user experiences and technical solutions.
+- Developers and engineers building applications and integrations.
+- Quality, security, and compliance teams validating releases.
+- Release, operations, and support teams running applications in production.
+- Organizations that need shared context, governance, and traceability across the application lifecycle.
+
+Scope: The platform itself is not identified in the supplied context, so this is a reasoned audience profile rather than a confirmed product description.</pre></details></td></tr><tr class="v-pass"><td>41</td><td>direct</td><td class="p">Show me the app development process as a process diagram.</td><td><span class="badge pass">pass</span></td><td class="n">22</td><td>general-answer</td><td class="t">requirements, release</td><td class="a"><details><summary>Application Development Process Diagram flowchart TD A[Discover needs and goals] --&gt; B[Define requirements and scope] B --&gt; C[Design architecture and user exper</summary><pre>Application Development Process
+
+Diagram
+flowchart TD
+  A[Discover needs and goals] --&gt; B[Define requirements and scope]
+  B --&gt; C[Design architecture and user experience]
+  C --&gt; D[Plan delivery and prioritize work]
+  D --&gt; E[Develop and configure]
+  E --&gt; F[Integrate systems and data]
+  F --&gt; G[Test quality, security, and performance]
+  G --&gt; H{Release criteria met?}
+  H -- No --&gt; E
+  H -- Yes --&gt; I[Deploy and release]
+  I --&gt; J[Operate and monitor]
+  J --&gt; K[Collect telemetry and feedback]
+  K --&gt; L[Maintain, enhance, and improve]
+  L --&gt; B
+  J --&gt; M{Production issue?}
+  M -- Yes --&gt; N[Respond, recover, and learn]
+  N --&gt; D
+  M -- No --&gt; K</pre></details></td></tr><tr class="v-pass"><td>42</td><td>direct</td><td class="p">What is the application lifecycle?</td><td><span class="badge pass">pass</span></td><td class="n">20</td><td>general-answer</td><td class="t">lifecycle, migrate, release, requirements, ume, solution design</td><td class="a"><details><summary>Application lifecycle The application lifecycle is the continuous process of creating, delivering, operating, and improving an application, from the initial ide</summary><pre>Application lifecycle
+
+The application lifecycle is the continuous process of creating, delivering, operating, and improving an application, from the initial idea through eventual retirement.
+
+1. Conception and discovery: Define the business problem, users, expected value, constraints, and success measures.
+2. Requirements: Describe capabilities, workflows, data, integrations, security needs, and acceptance criteria.
+3. Solution design: Design the user experience, architecture, data model, interfaces, and operational controls.
+4. Planning: Prioritize scope, divide work into increments, estimate effort, assign ownership, and manage dependencies and risks.
+5. Development: Build, configure, review, and document the application.
+6. Testing: Validate functionality, integrations, security, accessibility, performance, and user acceptance.
+7. Release and deployment: Approve and package a version, prepare support and rollback measures, and deploy it to production.
+8. Operations: Monitor reliability, security, usage, and service levels while handling support, incidents, backups, and maintenance.
+9. Continuous improvement: Use feedback, telemetry, and business results to identify and deliver improvements.
+10. Retirement: When the application no longer provides sufficient value, migrate users and data, remove dependencies, and decommission it safely.
+
+The lifecycle is iterative rather than strictly linear: testing can return work to development, operational findings can create new requirements, and continuous improvement begins another cycle.</pre></details></td></tr><tr class="v-pass"><td>43</td><td>direct</td><td class="p">Finally, explain how the entire platform works together, from a user's initial idea to a running production application and its continuous improvement.</td><td><span class="badge pass">pass</span></td><td class="n">51</td><td>general-answer</td><td class="t">eal, requirements, release, capabilit</td><td class="a"><details><summary>Integrated application lifecycle Because specific platform components are not identified, this is a capability-level model. In this model, the platform should m</summary><pre>Integrated application lifecycle
+
+Because specific platform components are not identified, this is a capability-level model. In this model, the platform should maintain one versioned application record linking purpose, ownership, requirements, decisions, risks, designs, code, tests, approvals, deployments, telemetry, incidents, costs, and feedback. Automation performs repeatable checks and delivery tasks, while accountable people make risk-appropriate decisions. Production evidence then updates the backlog, closing the loop.
+
+Diagram
+flowchart TD
+    A[User submits idea and desired outcome] --&gt; B[Platform captures purpose users ownership and success measures]
+    B --&gt; C[Discovery clarifies scope requirements constraints and acceptance criteria]
+    C --&gt; D[Classify complexity criticality security and compliance risk]
+    D --&gt; E{Initiative approved}
+    E -- No --&gt; F[Reject defer or preserve for later review]
+    E -- Yes --&gt; G[Fund prioritize and create governed backlog]
+    G --&gt; H[Design experience architecture data integrations and controls]
+    H --&gt; I{Design and residual risk accepted}
+    I -- No --&gt; G
+    I -- Yes --&gt; J[Provision environments repositories access and delivery pipeline]
+    J --&gt; K[Build configuration code data changes and integrations]
+    K --&gt; L[Automated review build test and security checks]
+    L --&gt; M{Quality gates passed}
+    M -- No --&gt; K
+    M -- Yes --&gt; N[Integration performance accessibility recovery and user testing]
+    N --&gt; O{Acceptance and release readiness approved}
+    O -- No --&gt; G
+    O -- Yes --&gt; P[Package version migration rollback monitoring and support plans]
+    P --&gt; Q[Deploy progressively to production]
+    Q --&gt; R[Validate health data integrity and critical user journeys]
+    R --&gt; S{Release healthy}
+    S -- No --&gt; T[Rollback contain incident and remediate]
+    T --&gt; K
+    S -- Yes --&gt; U[Operate monitor secure support backup and recover]
+    U --&gt; V[Measure usage reliability cost risk and business outcomes]
+    V --&gt; W[Combine telemetry incidents feedback and strategic changes]
+    W --&gt; X[Prioritize enhancements fixes and technical debt]
+    X --&gt; G
+    U --&gt; Y{Retirement appropriate}
+    Y -- Yes --&gt; Z[Migrate or archive data remove access and close service]
+    Y -- No --&gt; V</pre></details></td></tr><tr class="v-pass"><td>44</td><td>direct</td><td class="p">What is the AI-native app runtime architecture?</td><td><span class="badge pass">pass</span></td><td class="n">24</td><td>general-answer</td><td class="t">runtime architecture, ai-native, eal, eal, release</td><td class="a"><details><summary>AI-native app runtime architecture An AI-native app runtime architecture is the production environment for applications in which AI models or agents are core ru</summary><pre>AI-native app runtime architecture
+
+An AI-native app runtime architecture is the production environment for applications in which AI models or agents are core runtime components rather than optional integrations. Unlike a conventional deterministic runtime, it must coordinate probabilistic model output, contextual data, tools, policies, and feedback.
+
+Core runtime components
+
+- Experience and API layer receives user, system, and event-driven requests.
+- AI gateway routes requests across models and manages authentication, quotas, caching, cost, and failover.
+- Agent or workflow orchestrator plans tasks, manages multi-step execution, and coordinates specialized agents.
+- Context layer assembles prompts using session state, memory, enterprise data, vector retrieval, and knowledge graphs.
+- Model layer provides language, vision, speech, embedding, and domain-specific inference.
+- Tool and integration layer lets agents call approved APIs, databases, business systems, and automation services.
+- State and data layer stores conversations, workflow state, application data, embeddings, and audit records.
+- Trust layer enforces identity, authorization, privacy, content safety, grounding, validation, and human approvals.
+- Observability and evaluation layer records traces, prompts, responses, tool calls, quality, latency, cost, and safety outcomes.
+- Feedback loop uses production evidence to improve prompts, retrieval, policies, workflows, and models through controlled releases.
+
+Typical execution flow
+
+A request is authenticated, enriched with relevant context, routed to an appropriate model or agent, and processed through one or more model and tool calls. Policies validate each sensitive action, the runtime persists state and evidence, and telemetry feeds continuous evaluation and improvement.
+
+Platform-neutral description: There is no single standard AI-native runtime architecture. Exact components depend on whether the application uses simple model calls, retrieval-augmented generation, autonomous agents, real-time data, or regulated workflows.</pre></details></td></tr><tr class="v-partial"><td>45</td><td>direct</td><td class="p">Show the app delivery process as a cross-functional swimlane diagram.</td><td><span class="badge partial">partial</span></td><td class="n">34</td><td>general-answer</td><td class="t">eal, release</td><td class="a"><details><summary>Cross-functional app delivery process The lanes are representative because the platform’s specific roles and terminology were not supplied. Diagram flowchart LR</summary><pre>Cross-functional app delivery process
+
+The lanes are representative because the platform’s specific roles and terminology were not supplied.
+
+Diagram
+flowchart LR
+  subgraph U[User and Business]
+    direction TB
+    A[Submit idea and desired outcome]
+    B[Clarify users scope and success measures]
+    C[Perform user acceptance]
+    D[Review outcomes and feedback]
+  end
+
+  subgraph P[Product and Governance]
+    direction TB
+    E[Capture application record]
+    F[Classify complexity risk and criticality]
+    G{Initiative approved}
+    H[Fund prioritize and create backlog]
+    I{Acceptance and release approved}
+    J[Prioritize improvements]
+  end
+
+  subgraph X[Architecture Security and Data]
+    direction TB
+    K[Design experience architecture data and integrations]
+    L[Assess security privacy and compliance]
+    M{Design and residual risk accepted}
+  end
+
+  subgraph E1[Engineering and Delivery]
+    direction TB
+    N[Provision environments repositories and pipeline]
+    O[Build application and integrations]
+    P1[Run automated quality and security checks]
+    Q{Quality gates passed}
+    R[Package release migration and rollback]
+    S[Remediate defects or incidents]
+  end
+
+  subgraph T[Quality Assurance]
+    direction TB
+    T1[Test function integration performance accessibility and recovery]
+  end
+
+  subgraph O1[Release and Operations]
+    direction TB
+    U1[Deploy progressively to production]
+    V[Validate health data and user journeys]
+    W{Release healthy}
+    X1[Operate monitor secure and support]
+    Y[Measure usage reliability cost and outcomes]
+    Z[Retire migrate or archive when approved]
+  end
+
+  A --&gt; E --&gt; B --&gt; F --&gt; G
+  G -- No --&gt; A
+  G -- Yes --&gt; H --&gt; K --&gt; L --&gt; M
+  M -- No --&gt; K
+  M -- Yes --&gt; N --&gt; O --&gt; P1 --&gt; Q
+  Q -- No --&gt; O
+  Q -- Yes --&gt; T1 --&gt; C --&gt; I
+  I -- No --&gt; H
+  I -- Yes --&gt; R --&gt; U1 --&gt; V --&gt; W
+  W -- No --&gt; S --&gt; O
+  W -- Yes --&gt; X1 --&gt; Y --&gt; D --&gt; J --&gt; H
+  X1 --&gt; Z</pre></details></td></tr><tr class="v-pass"><td>46</td><td>direct</td><td class="p">What is EAL and what is it used for?</td><td><span class="badge pass">pass</span></td><td class="n">40</td><td>general-answer</td><td class="t">eal, eal, requirements</td><td class="a"><details><summary>EAL meanings EAL most commonly means Evaluation Assurance Level in cybersecurity. Under the Common Criteria, levels EAL1 through EAL7 describe increasing rigor </summary><pre>EAL meanings
+
+EAL most commonly means Evaluation Assurance Level in cybersecurity. Under the Common Criteria, levels EAL1 through EAL7 describe increasing rigor and depth in evaluating whether a product satisfies specified security requirements. It supports security certification, risk assessment, and product comparison. A higher EAL indicates more rigorous evaluation, not automatically stronger security.
+
+Contextual ambiguity: In this conversation, EAL might instead be a platform-specific abbreviation for Enterprise Application Lifecycle. That interpretation could cover managing an application from idea through retirement, but the supplied context does not define EAL or identify the platform, so this meaning cannot be confirmed.</pre></details></td></tr><tr class="v-pass"><td>47</td><td>recommended</td><td class="p">What is this platform, and what problem is it designed to solve? Explain in simple language using the capabilities installed in this workspace, and give three practical examples. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">32</td><td>general-answer</td><td class="t">problem, eal, ume</td><td class="a"><details><summary>AI-native application platform Scope: The specific product is not identified, so this explanation describes the AI-native application platform implied by the wo</summary><pre>AI-native application platform
+
+Scope: The specific product is not identified, so this explanation describes the AI-native application platform implied by the workspace context rather than confirmed features of a named product.
+
+In simple terms, the platform is a managed place for building and running applications where AI models or agents do real work. It connects the AI to trusted data, APIs, databases, business workflows, security controls, human approvals, and operational monitoring.
+
+It solves a coordination problem. Calling an AI model is relatively easy, but making an AI application reliable, secure, observable, and useful inside a real organization is difficult. The platform brings those pieces together and manages the application from delivery through production improvement.
+
+Three practical examples
+
+1. Customer support: An agent reads a customer’s history, searches approved documentation, drafts an answer, and updates the support system. Sensitive actions require permission or human approval.
+2. Insurance claims: An AI workflow extracts information from submitted documents, checks policy data, calls fraud and payment services, and routes uncertain cases to an adjuster.
+3. Internal knowledge assistant: An employee asks a question and receives an answer grounded in authorized company documents. Identity controls restrict what can be retrieved, while traces and feedback help improve answer quality.</pre></details></td></tr><tr class="v-pass"><td>48</td><td>direct</td><td class="p">What is the AI-native app local development architecture?</td><td><span class="badge pass">pass</span></td><td class="n">28</td><td>general-answer</td><td class="t">architecture, requirements, local development, ume, release</td><td class="a"><details><summary>AI-native app local development architecture Assuming AI-native means a general architecture rather than a specific product, the local environment should reprod</summary><pre>AI-native app local development architecture
+
+Assuming AI-native means a general architecture rather than a specific product, the local environment should reproduce the application’s important behavior while allowing developers to change prompts, models, tools, retrieval, and conventional code safely and quickly.
+
+Core layers
+
+- Developer interface: Web, mobile, or command-line client with authentication and streaming AI responses.
+- Application backend: APIs, domain logic, authorization, workflow orchestration, and durable application state.
+- AI orchestration layer: Prompt templates, model routing, structured outputs, tool calling, agent workflows, context management, safety policies, retries, and token budgets.
+- Model access layer: A common model gateway that can route to local models, mocked models, or approved external providers without coupling the application to one vendor.
+- Knowledge layer: Document ingestion, chunking, embeddings, vector search, metadata filtering, reranking, and citations for retrieval-augmented generation.
+- Local services: Relational or document database, vector store, cache, queue, object storage, identity emulator, and mocked third-party integrations.
+- Evaluation and observability: Traces for prompts, retrieval, tool calls, latency, tokens, cost, errors, and outputs, plus repeatable quality, safety, and regression evaluations.
+- Delivery tooling: Containers or a local orchestrator, environment configuration, database migrations, seed data, automated tests, and CI-equivalent checks.
+
+Typical request path
+
+1. The client sends an authenticated request to the application API.
+2. The backend loads application state and invokes the AI orchestrator.
+3. The orchestrator assembles instructions and context, optionally retrieving relevant knowledge.
+4. The model gateway invokes a local or remote model.
+5. The model may request controlled tools; the orchestrator validates permissions and executes them through application services.
+6. The response is validated, persisted, streamed to the client, and recorded as an observable trace.
+7. Evaluation tests compare behavior against quality, safety, latency, and cost thresholds.
+
+Important design principles
+
+- Keep business logic and authorization outside prompts so model output cannot bypass application controls.
+- Version prompts, model settings, tools, schemas, evaluations, and datasets alongside code.
+- Use dependency interfaces so models, vector stores, and external services can be replaced or mocked.
+- Store secrets outside source control and redact sensitive data from prompts, logs, and traces.
+- Make local runs reproducible through pinned dependencies, migrations, seed data, and one-command startup.
+- Treat nondeterministic AI behavior as something measured through evaluations rather than conventional tests alone.
+- Preserve traceability from requirements and decisions through code, prompts, tests, releases, and observed production behavior.</pre></details></td></tr><tr class="v-pass"><td>49</td><td>recommended</td><td class="p">What can I do with this platform as a user or developer? Distinguish what is installed, what needs configuration or approval, and what is unavailable in this workspace. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">26</td><td>answer_boundary</td><td class="t">capabilit</td><td class="a"><details><summary>Workspace capability assessment Installed: No capabilities can be verified as installed. Needs configuration or approval: No capabilities can be reliably classi</summary><pre>Workspace capability assessment
+
+Installed: No capabilities can be verified as installed.
+Needs configuration or approval: No capabilities can be reliably classified without configuration and access-policy data.
+Unavailable: No capabilities can be verified as unavailable.
+
+Required information: Please provide the platform name and a workspace capability, integration, permissions, or configuration inventory. Read-only screenshots or exported settings would also suffice.</pre></details></td></tr><tr class="v-asked"><td>50</td><td>recommended</td><td class="p">Help me turn a business problem into an application idea. Start with three simple examples, propose a direction, and ask one question at a time. Do not build anything.</td><td><span class="badge asked">asked</span></td><td class="n">38</td><td></td><td class="t"></td><td class="a"><details><summary>PL asked: What business problem would you most like to improve?</summary><pre>{
+ &quot;type&quot;: &quot;question&quot;,
+ &quot;prompt&quot;: &quot;What business problem would you most like to improve?&quot;,
+ &quot;options&quot;: [
+  &quot;Missed follow-ups&quot;,
+  &quot;Inventory visibility&quot;,
+  &quot;Slow approvals&quot;
+ ]
+}</pre></details></td></tr><tr class="v-pass"><td>51</td><td>recommended</td><td class="p">What is this platform primarily used for? Show the main capabilities available in this workspace and give one example each. Do not perform any build or deployment.</td><td><span class="badge pass">pass</span></td><td class="n">33</td><td>answer_boundary</td><td class="t">purpose, deliver, requirements, local development, release, capabilit</td><td class="a"><details><summary>Platform and workspace overview This platform appears primarily intended to help teams define, design, govern, and reason about applications throughout their li</summary><pre>Platform and workspace overview
+
+This platform appears primarily intended to help teams define, design, govern, and reason about applications throughout their lifecycle while preserving relevant context and decisions.
+
+Capability | What it supports | Example
+Conversational analysis | Explains concepts and answers application-delivery questions. | Classify an application as simple, medium, complex, or enterprise-scale.
+Lifecycle guidance | Describes work from idea and discovery through production and improvement. | Walk through the complete end-to-end application delivery process.
+Architecture guidance | Develops capability-level technical architectures and design principles. | Describe an AI-native local development architecture.
+Governance and decision support | Identifies decisions, approvals, risks, and accountable roles. | Outline release-readiness approvals and go or no-go decisions.
+Process visualization | Represents workflows and responsibilities as diagrams. | Create a cross-functional application-delivery swimlane diagram.
+Application knowledge continuity | Organizes durable facts about purpose, ownership, requirements, design, releases, and operations. | Reconstruct what changed in an application when asked about it six months later.
+
+Inventory limitation: The supplied workspace data does not identify the platform product or provide an authoritative tool and capability inventory. Only the capabilities demonstrated by the conversation can be confirmed; no build or deployment was performed.</pre></details></td></tr><tr class="v-pass"><td>52</td><td>recommended</td><td class="p">Show me the major platform components involved in application delivery as an architecture description with layers and the connections between them. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">36</td><td>general-answer</td><td class="t">architecture</td><td class="a"><details><summary>Layered application-delivery architecture This is a platform-neutral reference architecture rather than a verified description of this workspace. Delivery flows</summary><pre>Layered application-delivery architecture
+
+This is a platform-neutral reference architecture rather than a verified description of this workspace. Delivery flows from source through build and deployment into runtime; user traffic flows through the edge to applications and data services, with security and observability spanning the platform.
+
+Diagram
+flowchart TB
+  subgraph Experience[Experience layer]
+    Users[Users and developers]
+    Clients[Web mobile and API clients]
+  end
+
+  subgraph Edge[Access and edge layer]
+    DNS[DNS and traffic management]
+    Gateway[CDN load balancer and API gateway]
+    Identity[Identity and access management]
+  end
+
+  subgraph Delivery[Application delivery layer]
+    Source[Source control]
+    Pipeline[CI and CD pipeline]
+    Registry[Artifact and image registry]
+    Deploy[Deployment controller]
+  end
+
+  subgraph Runtime[Application runtime layer]
+    Compute[Containers functions or virtual machines]
+    Services[Application services and workers]
+    Mesh[Service discovery and messaging]
+  end
+
+  subgraph Data[Data and integration layer]
+    Cache[Cache]
+    Database[Databases]
+    Storage[Object and file storage]
+    External[External systems and APIs]
+  end
+
+  subgraph Foundation[Infrastructure layer]
+    Network[Networks and connectivity]
+    Platform[Compute orchestration and operating platform]
+    Secrets[Secrets keys and configuration]
+  end
+
+  Observe[Observability logging metrics and tracing]
+  Policy[Security policy governance and compliance]
+
+  Users --&gt; Clients
+  Clients --&gt; DNS --&gt; Gateway
+  Identity --&gt; Gateway
+  Gateway --&gt; Services
+
+  Users --&gt; Source
+  Source --&gt; Pipeline --&gt; Registry --&gt; Deploy
+  Deploy --&gt; Compute
+  Deploy --&gt; Secrets
+
+  Compute --&gt; Services
+  Services &lt;--&gt; Mesh
+  Services --&gt; Cache
+  Services --&gt; Database
+  Services --&gt; Storage
+  Services --&gt; External
+
+  Network --&gt; Gateway
+  Network --&gt; Platform
+  Platform --&gt; Compute
+  Secrets --&gt; Services
+
+  Gateway --&gt; Observe
+  Pipeline --&gt; Observe
+  Compute --&gt; Observe
+  Services --&gt; Observe
+  Policy --&gt; Identity
+  Policy --&gt; Pipeline
+  Policy --&gt; Deploy
+  Policy --&gt; Platform</pre></details></td></tr><tr class="v-pass"><td>53</td><td>recommended</td><td class="p">Explain how the entire platform works together, from a user's initial idea to a running application and its continuous improvement. Be concrete about what exists in this workspace today. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">29</td><td>answer_boundary</td><td class="t">requirements</td><td class="a"><details><summary>Platform lifecycle and workspace evidence Conceptually, the platform turns an idea into explicit requirements, implementation, validation, deployment, observati</summary><pre>Platform lifecycle and workspace evidence
+
+Conceptually, the platform turns an idea into explicit requirements, implementation, validation, deployment, observation, and feedback-driven revisions. In this workspace, only project identity metadata, version 1, session metadata, and an empty approved-work-product list are evidenced; no application components or running deployment can be confirmed without a workspace tree or repository contents.
+
+End-to-end lifecycle
+flowchart LR
+    A[User idea] --&gt; B[Requirements and constraints]
+    B --&gt; C[Workspace artifacts and source]
+    C --&gt; D[Build and automated validation]
+    D --&gt; E[Deploy to runtime]
+    E --&gt; F[Running application]
+    F --&gt; G[Logs metrics feedback]
+    G --&gt; H[Prioritized improvements]
+    H --&gt; B
+    W[Current evidence: project metadata only] -. cannot verify .-&gt; C
+    W -. cannot verify .-&gt; D
+    W -. cannot verify .-&gt; E
+    W -. cannot verify .-&gt; F</pre></details></td></tr><tr class="v-pass"><td>54</td><td>recommended</td><td class="p">What are the main components of this platform, and what is the purpose of each component? Use plain language and distinguish what is installed here from what is planned. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">19</td><td>answer_boundary</td><td class="t">components, ume, ume</td><td class="a"><details><summary>Missing platform details: The available context does not identify the platform, its installed components, or its planned components, so I cannot reliably classi</summary><pre>Missing platform details: The available context does not identify the platform, its installed components, or its planned components, so I cannot reliably classify or explain them.
+
+Please provide the platform name or paste its component list, documentation, or configuration, along with any planned additions. I can then give a plain-language overview separated into installed and planned components without building anything.</pre></details></td></tr><tr class="v-pass"><td>55</td><td>recommended</td><td class="p">What is EAL and what is it used for? Explain how it differs from this chat and what a business user does there. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">32</td><td>answer_boundary</td><td class="t">eal, eal, ume</td><td class="a"><details><summary>EAL compared with this chat Meaning not established: EAL is an ambiguous acronym. The supplied context does not identify the product, expand the acronym, or doc</summary><pre>EAL compared with this chat
+
+Meaning not established: EAL is an ambiguous acronym. The supplied context does not identify the product, expand the acronym, or document its available workflows.
+
+Provisionally, EAL appears to mean a separate application or business workspace. Its purpose would be to let users perform governed, repeatable work with persistent records, permissions, forms, workflows, and status tracking.
+
+EAL: Likely the operational environment where business work and records are managed.
+This chat: A conversational interface used to ask questions, explore ideas, and request explanations or assistance.
+Business user in EAL: Typically opens or submits records, completes forms, reviews assigned work, approves or rejects items, tracks status, searches information, and views reports, subject to permissions.
+
+To give an authoritative definition and exact user activities, I need the platform or product name, or the full expansion of EAL.</pre></details></td></tr><tr class="v-pass"><td>56</td><td>recommended</td><td class="p">Who is this platform for, and what can each role (business user, analyst, product manager, architect, developer, tester) do with it? Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">26</td><td>answer_boundary</td><td class="t">roles, ume, capabilit</td><td class="a"><details><summary>Platform details needed The available context does not identify the platform or describe its capabilities, so assigning functions to these roles would be specul</summary><pre>Platform details needed
+
+The available context does not identify the platform or describe its capabilities, so assigning functions to these roles would be speculation.
+
+Please provide the platform name or its documentation. I can then explain what business users, analysts, product managers, architects, developers, and testers can do with it, without building anything.</pre></details></td></tr><tr class="v-pass"><td>57</td><td>recommended</td><td class="p">Show me the app development process on this platform as an ordered list of steps, marking which steps need my decision and what each step produces. Do not start execution.</td><td><span class="badge pass">pass</span></td><td class="n">28</td><td>general-answer</td><td class="t">requirements, solution design, release</td><td class="a"><details><summary>App development process 1. Define the idea. User decision: Yes—choose the users, problem, and desired outcome. Output: A product goal. 2. Clarify requirements. </summary><pre>App development process
+
+1. Define the idea. User decision: Yes—choose the users, problem, and desired outcome. Output: A product goal.
+2. Clarify requirements. User decision: Yes—approve scope, features, constraints, and acceptance criteria. Output: An agreed requirements specification.
+3. Choose the solution. User decision: Yes—approve the proposed experience, architecture, integrations, and priorities. Output: A solution design and implementation direction.
+4. Create workspace artifacts. User decision: Usually only for significant trade-offs or scope changes. Output: Application source, configuration, schemas, and supporting files.
+5. Build and validate. User decision: Required if tests expose a product ambiguity or unacceptable trade-off. Output: Build results, test results, and a list of defects or required revisions.
+6. Review the application. User decision: Yes—accept it, request changes, or reject it. Output: Approval or a prioritized revision list.
+7. Configure deployment. User decision: Yes—select the target environment and approve settings, credentials, cost, and release timing. Output: A deployment-ready release configuration.
+8. Deploy and operate. User decision: Yes for production release or rollback. Output: A running application, release record, and runtime endpoint where applicable.
+9. Observe and improve. User decision: Yes—prioritize feedback, defects, and enhancements for the next cycle. Output: Logs, metrics, feedback, and a revised backlog that feeds into requirements.
+
+Workspace limitation: This is the conceptual lifecycle supported by the supplied context. The workspace snapshot shows project and session metadata but no approved work products or repository contents, so platform-specific implementation details and any running application cannot be verified.</pre></details></td></tr><tr class="v-pass"><td>58</td><td>recommended</td><td class="p">What is the application lifecycle on this platform, from creating or migrating an application through release to DEV, QA and PRD, operation and enhancement? Say what is available today. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">27</td><td>answer_boundary</td><td class="t">lifecycle, enhance, release, release, capabilit</td><td class="a"><details><summary>Application lifecycle Platform-neutral lifecycle: create or import the application and dependencies; configure and validate it in DEV; promote a versioned relea</summary><pre>Application lifecycle
+
+Platform-neutral lifecycle: create or import the application and dependencies; configure and validate it in DEV; promote a versioned release to QA for testing and approval; promote the approved release to PRD; monitor, support, secure, and recover it in operation; then prioritize enhancements and repeat the cycle. The platform name and workspace inventory are missing, so none of these capabilities can be confirmed as available today.</pre></details></td></tr><tr class="v-asked"><td>59</td><td>recommended</td><td class="p">I want to build an application. Ask me one question at a time to understand the problem, the people involved and the main process before proposing anything. Do not build anything.</td><td><span class="badge asked">asked</span></td><td class="n">20</td><td>general-answer</td><td class="t">application</td><td class="a"><details><summary>What problem should the application solve?</summary><pre>What problem should the application solve?</pre></details></td></tr><tr class="v-pass"><td>60</td><td>recommended</td><td class="p">Show the app delivery process on this platform as a cross-functional view: for each step, who acts (business user, architect or developer, the platform, the runtime) and what is handed over. Do not start execution.</td><td><span class="badge pass">pass</span></td><td class="n">40</td><td>answer_boundary</td><td class="t">eal, requirements, release</td><td class="a"><details><summary>Provisional cross-functional app delivery process Because the platform is unidentified, this is a generic working view rather than a confirmed platform-specific</summary><pre>Provisional cross-functional app delivery process
+
+Because the platform is unidentified, this is a generic working view rather than a confirmed platform-specific process. The arrow labels show each handoff.
+
+Actors, steps, and handoffs
+flowchart LR
+  subgraph BU[Business user]
+    A[Define need and success criteria]
+    H[Review and accept outcome]
+  end
+  subgraph AD[Architect or developer]
+    B[Design solution]
+    C[Build and configure app]
+    F[Review test results and approve release]
+  end
+  subgraph PF[Platform]
+    D[Validate package and dependencies]
+    E[Build and test deployment artifact]
+    G[Deploy and configure release]
+    J[Collect status and telemetry]
+  end
+  subgraph RT[Runtime]
+    I[Start and run application]
+    K[Serve users and emit health data]
+  end
+
+  A --&gt;|Requirements and acceptance criteria| B
+  B --&gt;|Architecture and technical specification| C
+  C --&gt;|Source, configuration, and dependencies| D
+  D --&gt;|Validated application package| E
+  E --&gt;|Test results and deployable artifact| F
+  F --&gt;|Approved release| G
+  G --&gt;|Application image, configuration, and secrets references| I
+  I --&gt;|Running application endpoint| H
+  I --&gt;|Runtime status and logs| J
+  H --&gt;|Usage and feedback| K
+  K --&gt;|Requests, metrics, logs, and alerts| J
+  J --&gt;|Operational feedback and incidents| C</pre></details></td></tr><tr class="v-pass"><td>61</td><td>recommended</td><td class="p">How does the platform take an idea or business requirement and turn it into a working application? Explain the stages and what is generated at each. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">27</td><td>general-answer</td><td class="t">requirements, release</td><td class="a"><details><summary>From business idea to working application Because the platform is unidentified, this is a platform-neutral workflow; the exact automation and artifacts availabl</summary><pre>From business idea to working application
+
+Because the platform is unidentified, this is a platform-neutral workflow; the exact automation and artifacts available in this workspace cannot be verified.
+
+Stages and generated outputs
+flowchart TB
+  S1[1. Discover and frame the idea] --&gt; O1[Output: problem statement, goals, stakeholders, scope]
+  O1 --&gt; S2[2. Define requirements]
+  S2 --&gt; O2[Output: user stories, process rules, acceptance criteria, data and security needs]
+  O2 --&gt; S3[3. Design the solution]
+  S3 --&gt; O3[Output: architecture, data model, workflows, interfaces, UX prototypes]
+  O3 --&gt; S4[4. Generate or configure the application]
+  S4 --&gt; O4[Output: source code or low-code configuration, screens, services, schemas, tests]
+  O4 --&gt; S5[5. Connect dependencies]
+  S5 --&gt; O5[Output: API integrations, identity settings, secrets, environment configuration]
+  O5 --&gt; S6[6. Build and validate]
+  S6 --&gt; O6[Output: versioned deployable artifact, test results, defect records]
+  O6 --&gt; S7[7. Review and release]
+  S7 --&gt; O7[Output: approved release, deployment package, release notes, audit evidence]
+  O7 --&gt; S8[8. Deploy and operate]
+  S8 --&gt; O8[Output: working application, runtime configuration, logs, metrics, support records]
+  O8 --&gt; S9[9. Learn and enhance]
+  S9 --&gt; O9[Output: feedback, usage insights, prioritized improvements, new requirements]
+  O9 --&gt; S2</pre></details></td></tr><tr class="v-pass"><td>62</td><td>recommended</td><td class="p">What are the major stages involved in developing an application from discovery through production on this platform, and which gate ends each stage? Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">31</td><td>answer_boundary</td><td class="t">requirements, ume, solution design, release</td><td class="a"><details><summary>Application lifecycle and gates Diagram flowchart LR A[Discovery] --&gt; AG{Problem and outcome approved} AG --&gt; B[Requirements] B --&gt; BG{Scope and acceptance crit</summary><pre>Application lifecycle and gates
+
+Diagram
+flowchart LR
+    A[Discovery] --&gt; AG{Problem and outcome approved}
+    AG --&gt; B[Requirements]
+    B --&gt; BG{Scope and acceptance criteria approved}
+    BG --&gt; C[Solution design]
+    C --&gt; CG{Design and architecture approved}
+    CG --&gt; D[Implementation]
+    D --&gt; DG{Build complete}
+    DG --&gt; E[Validation]
+    E --&gt; EG{Tests passed and application accepted}
+    EG --&gt; F[Release preparation]
+    F --&gt; FG{Production release approved}
+    FG --&gt; G[Production]
+    G --&gt; GG{Operational acceptance}
+    GG --&gt; H[Continuous improvement]
+    H --&gt; B
+
+These are conceptual stage and gate names supported by the supplied lifecycle context. The workspace contains project and session metadata but no approved work products or platform documentation, so official platform-specific terminology cannot be confirmed.</pre></details></td></tr><tr class="v-asked"><td>63</td><td>recommended</td><td class="p">Employees submit service requests through email and things get lost. Help me explore a simple application: employees submit requests and track status; managers work a queue, assign an owner and resolve. Fields: title, description, category, requester, owner, status. Rule: one owner per request. Scope: Local Development only. Ask one question at a time. Do not build anything.</td><td><span class="badge asked">asked</span></td><td class="n">25</td><td>general-answer</td><td class="t"></td><td class="a"><details><summary>The initial concept is a local service-request tracker where employees submit and monitor their requests while managers manage a shared queue, assign one owner,</summary><pre>The initial concept is a local service-request tracker where employees submit and monitor their requests while managers manage a shared queue, assign one owner, and resolve requests.
+
+What statuses should a request move through from submission to resolution?</pre></details></td></tr><tr class="v-pass"><td>64</td><td>recommended</td><td class="p">Walk me through the typical application development process using this platform. Explain each stage briefly, what I would do, and what evidence is produced. Do not start execution.</td><td><span class="badge pass">pass</span></td><td class="n">38</td><td>general-answer</td><td class="t">process, eal, requirements, solution design, release</td><td class="a"><details><summary>Typical application development process Because the platform is unidentified, this is a generic provisional workflow rather than a confirmed platform-specific p</summary><pre>Typical application development process
+
+Because the platform is unidentified, this is a generic provisional workflow rather than a confirmed platform-specific process. No execution is being started.
+
+Diagram
+flowchart TD
+  A[1. Discover
+You define the problem, users, goals, and constraints
+Evidence: problem statement and success criteria]
+  B[2. Specify
+You describe requirements, workflows, data, and acceptance criteria
+Evidence: backlog, requirements, and acceptance tests]
+  C[3. Design
+You review architecture, interfaces, security, and deployment choices
+Evidence: solution design, diagrams, and decisions]
+  D[4. Build and configure
+You create application logic, user interfaces, integrations, and configuration
+Evidence: source files, configuration, dependencies, and change history]
+  E[5. Validate
+You run reviews and functional, security, and performance tests
+Evidence: review records, test results, defects, and fixes]
+  F[6. Package and approve
+You select a tested version and approve it for release
+Evidence: versioned artifact, release notes, and approval record]
+  G[7. Deploy
+You provide environment settings and initiate the approved deployment
+Evidence: deployment record, configuration, status, and endpoint]
+  H[8. Operate and improve
+You monitor usage, health, incidents, and feedback
+Evidence: logs, metrics, alerts, feedback, and improvement backlog]
+  A --&gt; B --&gt; C --&gt; D --&gt; E --&gt; F --&gt; G --&gt; H
+  H --&gt; A</pre></details></td></tr><tr class="v-pass"><td>65</td><td>recommended</td><td class="p">During the end-to-end process, what artifacts does the platform create at each stage, and where can I see each one in this project? Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">32</td><td>answer_boundary</td><td class="t">artifacts, work products, requirements, ume, solution design, release</td><td class="a"><details><summary>Artifacts by lifecycle stage Stage | Expected artifacts | Location in this project Discovery | Product goal, user/problem definition, desired outcomes | Convers</summary><pre>Artifacts by lifecycle stage
+
+Stage | Expected artifacts | Location in this project
+Discovery | Product goal, user/problem definition, desired outcomes | Conversation history only; no separate discovery artifact is exposed.
+Requirements | Scope, requirements, constraints, acceptance criteria | Conversation history contains requests and constraints; no approved requirements document is exposed.
+Solution design | Experience design, architecture, integration decisions | Unavailable or unverified; no approved design work product is listed.
+Implementation | Application source, configuration, schemas, supporting files | Unavailable or unverified because no repository tree or workspace files were supplied.
+Validation | Build results, test reports, defects, revision list | Unavailable or unverified; no build or test outputs are exposed.
+Release preparation | Release configuration, environment settings, release candidate | Unavailable or unverified; no deployment configuration is exposed.
+Production | Deployed application, endpoint, release record | Unavailable or unverified; no running deployment or release record is exposed.
+Continuous improvement | Logs, metrics, feedback, incidents, prioritized backlog | Unavailable or unverified; no operational telemetry or improvement backlog is exposed.
+
+Project identity: Visible in projectSnapshot under projectId and workspaceIdentity.
+Workspace folder identity: training-prompt-validation-2026-09-14-w3-0ac5-f5ddb05b3a, visible under projectSnapshot.workspaceIdentity.workspaceRelativeFolder.
+Project version: Version 1, visible under projectSnapshot.projectVersion.
+Conversation artifacts: Visible in discussionSources.userTurns and supportingConversation.
+Approved work products: projectSnapshot.approvedWorkProductVersions is empty.
+
+Verification limit: Official platform artifact names and exact file locations cannot be confirmed without the workspace tree, repository contents, platform documentation, and deployment records. Nothing was built or executed.</pre></details></td></tr><tr class="v-pass"><td>66</td><td>recommended</td><td class="p">Walk me through the complete end-to-end application delivery process using this platform, naming the command or approval at each step. Do not start execution.</td><td><span class="badge pass">pass</span></td><td class="n">35</td><td>answer_boundary</td><td class="t">eal, requirements, release</td><td class="a"><details><summary>Provisional end-to-end delivery lifecycle The platform is not identified, so its exact commands, approval gates, and complete workflow cannot be stated reliably</summary><pre>Provisional end-to-end delivery lifecycle
+
+The platform is not identified, so its exact commands, approval gates, and complete workflow cannot be stated reliably. Below is a generic lifecycle using command categories rather than executable platform commands. No execution is started.
+
+Diagram
+flowchart TD
+  A[1. Define need and success criteria&lt;br/&gt;Approval: business owner approves scope]
+  B[2. Specify requirements and acceptance tests&lt;br/&gt;Approval: product owner accepts backlog]
+  C[3. Design architecture, data, security, and operations&lt;br/&gt;Approval: architecture and security review]
+  D[4. Create project or application workspace&lt;br/&gt;Command category: create or initialize application]
+  E[5. Develop logic, interface, integrations, and configuration&lt;br/&gt;Command category: build or generate]
+  F[6. Check source and configuration&lt;br/&gt;Command category: validate or lint]
+  G[7. Run automated tests and security scans&lt;br/&gt;Command category: test or scan]
+  H[8. Package and version the release&lt;br/&gt;Command category: package or publish artifact]
+  I[9. Deploy to test environment&lt;br/&gt;Command category: deploy to test]
+  J[10. Perform acceptance and operational checks&lt;br/&gt;Approval: tester and business owner sign off]
+  K[11. Authorize production release&lt;br/&gt;Approval: release or change authority]
+  L[12. Deploy to production&lt;br/&gt;Command category: deploy or promote]
+  M[13. Verify health and release outcome&lt;br/&gt;Command category: status, health, or smoke test]
+  N[14. Operate, monitor, and improve&lt;br/&gt;Command category: logs, metrics, rollback, or update]
+  A --&gt; B --&gt; C --&gt; D --&gt; E --&gt; F --&gt; G --&gt; H --&gt; I --&gt; J --&gt; K --&gt; L --&gt; M --&gt; N
+  N --&gt; A</pre></details></td></tr><tr class="v-pass"><td>67</td><td>recommended</td><td class="p">Show me the complete lifecycle of an application built using this platform as a process flow, including how a later change becomes a new version. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">53</td><td>answer_boundary</td><td class="t">requirements, release, capabilit</td><td class="a"><details><summary>Application lifecycle Because the platform is unidentified, this is a platform-neutral flow; its exact workspace capabilities cannot be verified. Diagram flowch</summary><pre>Application lifecycle
+
+Because the platform is unidentified, this is a platform-neutral flow; its exact workspace capabilities cannot be verified.
+
+Diagram
+flowchart TD
+  Idea[Idea or business requirement] --&gt; Define[Define scope requirements and acceptance criteria]
+  Define --&gt; Design[Design data workflows interfaces and security]
+  Design --&gt; Create[Create or migrate application]
+  Create --&gt; Validate[Validate configuration dependencies and tests]
+  Validate --&gt; RC1[Package version 1.0 release candidate 1]
+  RC1 --&gt; DEV[Deploy release candidate to DEV]
+  DEV --&gt; DevPass{DEV validation passed?}
+  DevPass -- No --&gt; Fix[Correct defects and package next release candidate or patch]
+  Fix --&gt; DEV
+  DevPass -- Yes --&gt; QA[Promote same release candidate to QA]
+  QA --&gt; QaPass{QA testing and approval passed?}
+  QaPass -- No --&gt; Fix
+  QaPass -- Yes --&gt; Release[Approve immutable version 1.0]
+  Release --&gt; PRD[Deploy version 1.0 to PRD]
+  PRD --&gt; DeployPass{Deployment successful?}
+  DeployPass -- No --&gt; Rollback[Restore prior approved production version]
+  DeployPass -- Yes --&gt; Operate[Operate monitor support and secure]
+  Rollback --&gt; Fix
+  Operate --&gt; Incident{Critical production incident?}
+  Incident -- Yes --&gt; Rollback
+  Incident -- No --&gt; Feedback[Collect feedback and enhancement requests]
+  Feedback --&gt; Change[Approve and define a later change]
+  Change --&gt; Implement[Create change set and implement updates]
+  Implement --&gt; V2[Package version 2.0 release candidate 1]
+  V2 --&gt; DEV
+  Operate --&gt; Needed{Application still needed?}
+  Needed -- Yes --&gt; Operate
+  Needed -- No --&gt; Retire[Archive required data and decommission]</pre></details></td></tr><tr class="v-pass"><td>68</td><td>recommended</td><td class="p">Where does application development actually happen on this platform: which directories, repositories and databases are involved for a generated application? Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">38</td><td>answer_boundary</td><td class="t">workspace, where, development, ume</td><td class="a"><details><summary>Where generated application development happens Visible workspace folder: training-prompt-validation-2026-09-14-w3-0ac5-f5ddb05b3a Generated source directories:</summary><pre>Where generated application development happens
+
+Visible workspace folder: training-prompt-validation-2026-09-14-w3-0ac5-f5ddb05b3a
+Generated source directories: Not exposed. Normally these contain application code, configuration, database schemas or migrations, tests, and deployment files.
+Application repository: Not exposed. Development would normally be versioned in a repository associated with the workspace, but no repository identity, tree, branch, or remote is supplied.
+Application database: Not exposed. A generated application may use a runtime database for domain data, but no database engine, schema, connection configuration, or instance is shown.
+Platform databases: Not exposed. Platform services may persist project, conversation, artifact, build, deployment, and operational metadata separately from application data, but their implementation cannot be verified here.
+What is present today: Project and workspace identity metadata, conversation records, project version 1, and an empty approvedWorkProductVersions list.
+
+In practical terms, application development happens in generated files inside a workspace and its backing source repository. Builds and deployments consume those files; application databases support runtime behavior rather than serving as the primary place where source development occurs.
+
+Verification limit: The snapshot contains no workspace tree, repository metadata, generated application, database configuration, or platform documentation. Therefore, no exact source path, repository name, or database can be confirmed, and it is also unknown whether this project currently contains a generated application.</pre></details></td></tr><tr class="v-partial"><td>69</td><td>recommended</td><td class="p">What development, testing, staging, and production environments does the platform support today, and which are planned? Be explicit about what is available in this workspace. Do not build anything.</td><td><span class="badge partial">partial</span></td><td class="n">24</td><td>answer_boundary</td><td class="t">environments, staging, production, ume, release</td><td class="a"><details><summary>Environment support status Environment | Platform support today | Planned support | Available in this workspace Development | Not verifiable from supplied conte</summary><pre>Environment support status
+
+Environment | Platform support today | Planned support | Available in this workspace
+Development | Not verifiable from supplied context | No roadmap supplied | Not confirmed; no source tree, repository, runtime, or build configuration is exposed
+Testing | Not verifiable from supplied context | No roadmap supplied | Not confirmed; no test configuration, runner, reports, or test deployment is exposed
+Staging | Not verifiable from supplied context | No roadmap supplied | Not confirmed; no staging configuration, endpoint, or deployment record is exposed
+Production | Not verifiable from supplied context | No roadmap supplied | Not confirmed; no production configuration, endpoint, release record, or running application is exposed
+
+What is actually visible: The workspace snapshot exposes project identity, workspace folder identity, project version 1, conversation records, and an empty approvedWorkProductVersions list. These establish a workspace record, not application environments.
+
+Verification limit: Authoritative platform documentation, a roadmap, workspace files, deployment configuration, and environment inventory were not supplied. Therefore, current support and planned support cannot be stated reliably.</pre></details></td></tr><tr class="v-pass"><td>70</td><td>recommended</td><td class="p">What decisions and approvals would typically occur throughout the delivery lifecycle on this platform, and which of them are required before Start build? Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">52</td><td>general-answer</td><td class="t">eal, requirements, ume, start build, solution design, release</td><td class="a"><details><summary>Typical delivery decisions and approvals Platform limitation: The platform is unidentified. This is a generic lifecycle model; only its documentation or configu</summary><pre>Typical delivery decisions and approvals
+
+Platform limitation: The platform is unidentified. This is a generic lifecycle model; only its documentation or configured governance can establish mandatory prerequisites for Start build.
+
+Stage | Typical decision or approval | Typical approver | Usual timing relative to Start build
+Discovery | Confirm the problem, expected value, funding, ownership, and success measures. | Business sponsor or product owner | Typically beforehand
+Scope and requirements | Agree scope, priorities, constraints, acceptance criteria, and exclusions. | Product owner and key stakeholders | Typically beforehand
+Solution design | Choose architecture, data flows, integrations, environments, and nonfunctional targets. | Architect or technical authority | Typically beforehand
+Risk and compliance | Review security, privacy, regulatory, accessibility, and data-handling risks. | Security, privacy, compliance, or risk owner | Typically beforehand when applicable
+Delivery readiness | Check team capacity, access, dependencies, environments, estimates, and delivery approach. | Delivery lead, engineering lead, and platform owners | Typically beforehand
+Build initiation | Confirm that locally required prerequisites are satisfied before invoking Start build. | Authority defined by platform governance | Immediate pre-build check if configured
+Build and review | Review implementation choices, source changes, dependencies, and exceptions. | Engineering lead and reviewers | After Start build
+Validation | Assess functional, integration, security, performance, and operational evidence. | Test, security, product, and operational owners | After Start build
+Release readiness | Approve the release candidate, known risks, rollback plan, and deployment window. | Release or change authority | After Start build
+Deployment | Authorize promotion and confirm environment configuration and access. | Environment owner or change authority | After Start build
+Operational acceptance | Confirm health, monitoring, support ownership, and incident readiness. | Operations or service owner | After Start build
+Post-release review | Assess outcomes, incidents, benefits, and improvement priorities. | Product owner, sponsor, and operations | After Start build</pre></details></td></tr><tr class="v-pass"><td>71</td><td>recommended</td><td class="p">Where do the deployed applications run, how do users reach them, and how does an application check who is calling it? Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">43</td><td>general-answer</td><td class="t">release</td><td class="a"><details><summary>Application runtime, access, and caller identity Platform-specific limitation: The supplied context does not identify the platform or its configured workspace a</summary><pre>Application runtime, access, and caller identity
+
+Platform-specific limitation: The supplied context does not identify the platform or its configured workspace architecture, so the exact hosting, URLs, and authentication services cannot be verified.
+
+Where applications run: A deployed release runs in an environment such as DEV, QA, or PRD on managed compute, commonly containers, virtual machines, functions, or a low-code runtime. It connects to environment-specific data, secrets, and services.
+How users reach them: Users open a published web URL or call an API endpoint. DNS directs traffic through an edge layer such as a load balancer, ingress controller, CDN, or API gateway, which routes the request to the application runtime.
+How callers are identified: The user or calling service authenticates with an identity provider. With session-based authentication, the application uses a session cookie to locate and validate server-side session state. With token-based authentication, it validates the signed token’s signature, issuer, audience, expiration, and required claims.
+How access is decided: After authentication establishes identity, the application applies authorization rules using roles, groups, scopes, permissions, tenant membership, or record-level policies. Service-to-service calls commonly use workload identities, client credentials, or mutual TLS.</pre></details></td></tr><tr class="v-pass"><td>72</td><td>recommended</td><td class="p">Describe the local development architecture of this platform: which services run on this workstation, on which ports, which databases they own, and where a generated application runs. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">29</td><td>answer_boundary</td><td class="t">ports, workstation, local development</td><td class="a"><details><summary>Local development architecture Services on this workstation: Not exposed or verifiable. Service ports: Not exposed or verifiable. Database ownership: Not expose</summary><pre>Local development architecture
+
+Services on this workstation: Not exposed or verifiable.
+Service ports: Not exposed or verifiable.
+Database ownership: Not exposed or verifiable.
+Generated application runtime: Not exposed; the snapshot does not confirm that a generated application exists or is running.
+Visible workspace: training-prompt-validation-2026-09-14-w3-0ac5-f5ddb05b3a
+Visible project state: Project version 1 with no approved work-product versions.
+
+Verification limit: An authoritative description requires the workstation process or container inventory, port mappings, database configuration, workspace tree, and runtime or deployment configuration. None was supplied, and no build or execution was performed.</pre></details></td></tr><tr class="v-pass"><td>73</td><td>recommended</td><td class="p">Where are applications built by this platform deployed in this workspace, and what is registered with EAL and UME during deployment? Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">28</td><td>answer_boundary</td><td class="t">deploy, eal, ume</td><td class="a"><details><summary>Deployment details cannot be confirmed Missing platform-specific information: The supplied context contains no runtime target, environment configuration, deploy</summary><pre>Deployment details cannot be confirmed
+
+Missing platform-specific information: The supplied context contains no runtime target, environment configuration, deployment record, or definitions of EAL and UME.
+
+Deployment destination: Unknown. No cluster, cloud account, namespace, server, region, or runtime is identified.
+EAL registration: Unknown. EAL is not defined, and no registration schema or deployment record is supplied.
+UME registration: Unknown. UME is not defined, and no registration schema or deployment record is supplied.
+
+A reliable answer requires this platform’s deployment documentation or configuration and the local definitions of EAL and UME. No build or execution was performed.</pre></details></td></tr><tr class="v-pass"><td>74</td><td>recommended</td><td class="p">Describe the runtime architecture of an application built on this platform: how users reach it, how identity and authority work, where data lives and what is audited. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">31</td><td>answer_boundary</td><td class="t">authority</td><td class="a"><details><summary>Provisional runtime architecture Platform not identified: The following is a generic runtime model. Naming the platform is necessary to confirm exact components</summary><pre>Provisional runtime architecture
+
+Platform not identified: The following is a generic runtime model. Naming the platform is necessary to confirm exact components, boundaries, data residency, and audit coverage.
+
+Application access
+
+Users normally reach the application through a platform-hosted HTTPS URL, custom domain, portal, or embedded client. Traffic commonly passes through DNS, edge protection, TLS termination, and a platform gateway before reaching the application runtime.
+
+Identity and authority
+
+Authentication is typically delegated to the platform identity service or an external identity provider using federation. After sign-in, the runtime receives identity claims. Authorization then evaluates roles, groups, permissions, policies, ownership, or record-level rules. Service-to-service operations generally use managed service identities or scoped credentials rather than the end user’s password.
+
+Data location
+
+Application data may reside in a platform-managed database, object or file storage, or connected external systems. Configuration, secrets, logs, and cached data are usually stored separately. The selected deployment region, tenant boundaries, backup policy, encryption controls, and external connectors determine the actual residency and security boundary.
+
+Auditing
+
+- Authentication successes, failures, and session events.
+- Authorization decisions and denied access, where supported.
+- Reads, exports, creations, updates, and deletions of protected data, depending on configured data-audit coverage.
+- Administrative changes to applications, permissions, identities, policies, integrations, and deployment settings.
+- Runtime requests, errors, security events, and service-identity activity.
+- Audit records usually include actor, action, target, timestamp, outcome, and available request or correlation identifiers.</pre></details></td></tr><tr class="v-pass"><td>75</td><td>recommended</td><td class="p">What do you currently know about this project: decisions, assumptions, open questions and the source of each? Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">44</td><td>general-answer</td><td class="t">context, ume</td><td class="a"><details><summary>Current known project state Decisions No substantive project decisions are documented in the supplied context. Assumptions No substantive project assumptions ar</summary><pre>Current known project state
+
+Decisions
+
+No substantive project decisions are documented in the supplied context.
+
+Assumptions
+
+No substantive project assumptions are documented in the supplied context.
+
+Open questions
+
+No substantive open questions are documented in the supplied context.
+
+Review constraint
+
+Do not build or implement anything. Source: user event 2c8a6e6b-84be-410f-80ba-3f4959597be1.
+
+Context limitation: The supplied context contains only the review request and workspace metadata; it contains no substantive project history or approved work products.</pre></details></td></tr><tr class="v-pass"><td>76</td><td>recommended</td><td class="p">How does the platform handle application configuration, infrastructure, deployment, and runtime management for a generated application? Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">34</td><td>answer_boundary</td><td class="t">configuration, infrastructure, runtime, deployment, eal, ume</td><td class="a"><details><summary>Provisional management model Platform details unavailable: No platform documentation, application specification, infrastructure definition, deployment configura</summary><pre>Provisional management model
+
+Platform details unavailable: No platform documentation, application specification, infrastructure definition, deployment configuration, or runtime target was supplied. The description below is a generic model, not a confirmed account of this platform.
+
+Application configuration: The generated application normally keeps code separate from environment-specific settings. Variables, feature flags, endpoints, and secrets are supplied at deployment or runtime, with secrets held in protected storage rather than generated source.
+Infrastructure: Compute, networking, storage, databases, identity, and permissions are typically defined through version-controlled templates or platform policies. Changes are reviewed and applied consistently per environment.
+Deployment: A tested, versioned artifact is promoted through environments. The platform injects approved configuration, records the deployed version and status, performs health checks, and should support rollback or redeployment.
+Runtime management: The runtime starts and isolates the application, manages service connections and credentials, monitors logs and health, applies scaling and restart policies, and supports patching, alerting, incident response, backup, and recovery.
+
+The exact ownership boundaries, deployment destination, commands, approval gates, and integrations such as EAL or UME remain unknown. No build or execution was performed.</pre></details></td></tr><tr class="v-pass"><td>77</td><td>recommended</td><td class="p">Give me an overview of the current application: what it does, its roles, its releases and versions, where it runs, and what evidence exists for it. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">32</td><td>answer_boundary</td><td class="t">ume, release</td><td class="a"><details><summary>Application overview unavailable Missing evidence: The supplied context does not identify the current application or include release history, deployment invento</summary><pre>Application overview unavailable
+
+Missing evidence: The supplied context does not identify the current application or include release history, deployment inventory, role definitions, or supporting records.
+
+Please provide the application name or relevant documentation, and clarify whether roles means user roles, operational roles, or application responsibilities.</pre></details></td></tr><tr class="v-asked"><td>78</td><td>recommended</td><td class="p">Add an optional field to the current application and show the impact of the change for review. Do not build or create files yet.</td><td><span class="badge asked">asked</span></td><td class="n">18</td><td></td><td class="t"></td><td class="a"><details><summary>PL asked: Review this requirements summary. Confirm it or provide a correction.</summary><pre>{
+ &quot;type&quot;: &quot;confirmation&quot;,
+ &quot;prompt&quot;: &quot;Review this requirements summary. Confirm it or provide a correction.&quot;,
+ &quot;options&quot;: []
+}</pre></details></td></tr><tr class="v-partial"><td>79</td><td>recommended</td><td class="p">What roles do AI agents, developers, architects, testers, product owners, and business users play during application delivery on this platform? Do not build anything.</td><td><span class="badge partial">partial</span></td><td class="n">30</td><td>general-answer</td><td class="t">agents, developer, product owner, eal, requirements, ume</td><td class="a"><details><summary>Roles in application delivery Scope: Because the platform’s specific workflow and governance model were not supplied, this is a general role interpretation. AI </summary><pre>Roles in application delivery
+
+Scope: Because the platform’s specific workflow and governance model were not supplied, this is a general role interpretation.
+
+AI agents: Assist with requirements analysis, design suggestions, code or configuration generation, documentation, testing, troubleshooting, and repetitive workflow automation. Their outputs require appropriate human review, permissions, and governance.
+Developers: Turn requirements and designs into working software or platform configurations, integrate systems, review changes, resolve defects, and support deployment and maintenance.
+Architects: Define the solution structure, technology patterns, integration boundaries, security and data approaches, nonfunctional requirements, and technical guardrails.
+Testers: Develop test strategies and cases, verify functional and nonfunctional behavior, identify defects, assess release risk, and support quality automation.
+Product owners: Set product goals, represent stakeholder value, prioritize the backlog, clarify acceptance criteria, make scope tradeoffs, and accept or reject completed outcomes.
+Business users: Provide domain knowledge and real-world needs, review prototypes, participate in user acceptance testing, validate usability and business fit, and provide operational feedback.
+
+Responsibility remains shared: AI agents augment delivery, while accountable people make decisions, approve changes, and validate that the application is valuable, safe, and fit for use.</pre></details></td></tr><tr class="v-boundary"><td>80</td><td>recommended</td><td class="p">I am returning to this application after a long time. Give me an overview: purpose, requirements, releases and versions, roles, where it runs, evidence, decisions, assumptions and deferred items. Do not build anything.</td><td><span class="badge boundary">boundary</span></td><td class="n">12</td><td>application_overview_unavailable</td><td class="t"></td><td class="a"><details><summary>No delivered application exists in your projects yet, and this conversation is not bound to one.</summary><pre>No delivered application exists in your projects yet, and this conversation is not bound to one.</pre></details></td></tr><tr class="v-partial"><td>81</td><td>recommended</td><td class="p">Which development activities do you automate and which ones require my approval? Distinguish proposals from authorized execution. Do not build anything.</td><td><span class="badge partial">partial</span></td><td class="n">36</td><td>answer_boundary</td><td class="t">approval, requirements, ume, release</td><td class="a"><details><summary>Development authorization boundary Platform policy not supplied: This is the conservative default boundary. A specific platform may impose stricter approval req</summary><pre>Development authorization boundary
+
+Platform policy not supplied: This is the conservative default boundary. A specific platform may impose stricter approval requirements.
+
+Automatically performed when answering
+
+- Analyze requirements and supplied artifacts.
+- Explain options, risks, tradeoffs, and architecture.
+- Draft designs, code, configuration, tests, migrations, commands, and documentation as proposals.
+- Review code or evidence and suggest changes.
+
+Requires explicit authorization
+
+- Create, edit, or delete project files.
+- Run commands, builds, tests, scripts, migrations, or package installations.
+- Change source control, dependencies, secrets, permissions, infrastructure, or persistent data.
+- Deploy, publish, merge, release, send communications, or invoke external systems.
+- Perform destructive, costly, security-sensitive, production, or otherwise consequential actions; these may require action-specific confirmation.
+
+Proposal versus execution
+
+Proposal: A recommendation, draft, code sample, command, or described action. It does not authorize execution.
+Authorization: A clear instruction to perform a defined action within a stated scope.
+Execution: Using available tools to cause the authorized change or side effect, limited to that scope.
+
+Your instruction here authorizes explanation only and explicitly prohibits building, so nothing was implemented or executed.</pre></details></td></tr><tr class="v-misrouted"><td>82</td><td>recommended</td><td class="p">How does the platform ensure that generated applications meet requirements and are technically correct? Name the checks that run at build and review time. Do not build anything.</td><td><span class="badge misrouted">misrouted</span></td><td class="n">14</td><td>application_overview_unavailable</td><td class="t"></td><td class="a"><details><summary>No delivered application exists in your projects yet, and this conversation is not bound to one.</summary><pre>No delivered application exists in your projects yet, and this conversation is not bound to one.</pre></details></td></tr><tr class="v-misrouted"><td>83</td><td>recommended</td><td class="p">How would the development approach change for a moderately complex enterprise application with several roles, a workflow and a PostgreSQL system of record? Do not build anything.</td><td><span class="badge misrouted">misrouted</span></td><td class="n">14</td><td>application_overview_unavailable</td><td class="t"></td><td class="a"><details><summary>No authorized application matches the requested name. Select an application or provide its exact name.</summary><pre>No authorized application matches the requested name. Select an application or provide its exact name.</pre></details></td></tr><tr class="v-partial"><td>84</td><td>recommended</td><td class="p">If I ask you to build a very simple single-entity application with two roles, what steps, approvals and time should I expect in this workspace? Do not build anything.</td><td><span class="badge partial">partial</span></td><td class="n">41</td><td>general-answer</td><td class="t">time, requirements, release</td><td class="a"><details><summary>Expected delivery path Diagram flowchart TD A[Clarify fields roles permissions and acceptance criteria: several hours] --&gt; B{Product owner scope approval if req</summary><pre>Expected delivery path
+
+Diagram
+flowchart TD
+    A[Clarify fields roles permissions and acceptance criteria: several hours] --&gt; B{Product owner scope approval if required}
+    B --&gt; C[Confirm data model security environment and release approach: several hours]
+    C --&gt; D{Architecture or security approval if required}
+    D --&gt; E[Implement application and role controls: 1 to 2 days]
+    E --&gt; F[Test functions permissions and failure cases: 0.5 to 1 day]
+    F --&gt; G{Acceptance approval by product owner or business users if required}
+    G --&gt; H{Deployment approval by release owner if required}
+    H --&gt; I[Deploy and perform smoke check: several hours]
+    I --&gt; J[Typical active effort: 2 to 5 working days; typically 1 to 2 weeks elapsed]
+
+The workspace’s actual workflow, approval gates, and automation are not supplied, so these steps and approvals are typical rather than confirmed. Integrations, sensitive data, complex permissions, nonfunctional requirements, or scheduled reviews could extend the timeline.</pre></details></td></tr><tr class="v-misrouted"><td>85</td><td>recommended</td><td class="p">Give me an example of a simple, a moderately complex and a highly complex application that could be built with the capabilities installed in this workspace, and say what would be needed for each. Do not build anything.</td><td><span class="badge misrouted">misrouted</span></td><td class="n">15</td><td>application_overview_unavailable</td><td class="t"></td><td class="a"><details><summary>No delivered application exists in your projects yet, and this conversation is not bound to one.</summary><pre>No delivered application exists in your projects yet, and this conversation is not bound to one.</pre></details></td></tr><tr class="v-pass"><td>86</td><td>recommended</td><td class="p">Is the current application ready for Start build? List which work products are approved on the active revision and what is still missing. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">44</td><td>general-answer</td><td class="t">readiness, requirements, release</td><td class="a"><details><summary>Start-build readiness Readiness: Cannot be established from the supplied evidence Approved work products: None recorded on the active revision Build activity: N</summary><pre>Start-build readiness
+
+Readiness: Cannot be established from the supplied evidence
+Approved work products: None recorded on the active revision
+Build activity: None performed
+
+Evidence gaps
+
+- The complete Start-build readiness criteria are unavailable.
+- No approved work-product versions are attached to the active revision.
+- Evidence demonstrating satisfaction of any required readiness criteria is unavailable.
+- Application-specific requirements, architecture, roles, release details, deployment target, and supporting records are unavailable and may represent additional gaps if required by the readiness process.
+
+Assessment boundary: The empty approved-work-product list establishes only that no approvals are recorded in the supplied snapshot; it cannot rule out approvals recorded elsewhere.</pre></details></td></tr><tr class="v-boundary"><td>87</td><td>recommended</td><td class="p">Based on the accepted users and workflow, propose the screens this application needs, name the floorplan for each, and mark open questions. Do not build files.</td><td><span class="badge boundary">boundary</span></td><td class="n">16</td><td>application_overview_unavailable</td><td class="t"></td><td class="a"><details><summary>No delivered application exists in your projects yet, and this conversation is not bound to one.</summary><pre>No delivered application exists in your projects yet, and this conversation is not bound to one.</pre></details></td></tr><tr class="v-partial"><td>88</td><td>recommended</td><td class="p">Assess the complexity of this idea before building anything: name the entities, roles, workflow states, integrations and security needs you see, and say whether it is simple, medium or complex. Do not build anything.</td><td><span class="badge partial">partial</span></td><td class="n">37</td><td>general-answer</td><td class="t">requirements</td><td class="a"><details><summary>Provisional complexity assessment Entities: One primary business entity. Its identity, fields, relationships, attachments, and history requirements remain unspe</summary><pre>Provisional complexity assessment
+
+Entities: One primary business entity. Its identity, fields, relationships, attachments, and history requirements remain unspecified.
+Roles: Two unspecified roles, provisionally interpreted as a standard user who manages permitted records and an administrator who manages all records and access.
+Workflow states: No states are confirmed. A simple lifecycle might be draft, active or submitted, completed, and archived, with only basic transitions.
+Integrations: None are currently identified. Authentication, email notifications, file storage, payments, reporting, or third-party APIs would add complexity if required.
+Security needs: Authentication, role-based authorization, record-level access rules, input validation, secure data storage and transport, audit logging where needed, and protection of administrative actions.
+Overall rating: Simple, provisionally. It becomes medium if it needs sensitive data controls, approvals, complex state transitions, record ownership rules, auditability, or external integrations.
+
+Assessment limitation: The entity definition, exact permissions, workflow, integrations, and data sensitivity are not supplied, so this is a conditional assessment rather than a confirmed design classification.</pre></details></td></tr><tr class="v-pass"><td>89</td><td>recommended</td><td class="p">How would you handle a highly complex application involving multiple systems, integrations, APIs, databases, security requirements and business processes? Be explicit about what this workspace supports today. Do not build anything.</td><td><span class="badge pass">pass</span></td><td class="n">32</td><td>general-answer</td><td class="t">complex, integrations, security, requirements, ume, release</td><td class="a"><details><summary>Handling a complex application Complexity should be controlled by dividing the application into bounded systems while maintaining an end-to-end model of depende</summary><pre>Handling a complex application
+
+Complexity should be controlled by dividing the application into bounded systems while maintaining an end-to-end model of dependencies, trust boundaries, data movement, ownership, failure behavior, and business outcomes.
+
+How I would handle it
+
+- Systems: Define responsibilities, owners, interfaces, deployment boundaries, dependencies, service levels, and failure isolation for each system.
+- Integrations: Record protocols, schemas, identity propagation, retries, timeouts, idempotency, ordering, rate limits, reconciliation, and degraded-operation behavior.
+- APIs: Establish versioned contracts, authentication and authorization rules, validation, error semantics, quotas, compatibility expectations, and observability requirements.
+- Databases: Identify systems of record, ownership, consistency needs, transaction boundaries, retention, lineage, replication, backup, recovery, migration, and residency requirements.
+- Security: Apply least privilege, threat modeling, secrets management, encryption, tenant isolation, secure defaults, vulnerability controls, and auditable administrative access across every boundary.
+- Business processes: Model actors, decisions, state transitions, exceptions, approvals, compensating actions, deadlines, and evidence requirements rather than treating workflows as isolated screens.
+- Cross-system assurance: Trace requirements through architecture, implementation proposals, tests, operational controls, monitoring, incident response, and release evidence.
+
+What this workspace supports today
+
+Confirmed support: Conversational analysis of supplied requirements and evidence; explanations of architecture, risks, tradeoffs, security, data, integrations, and business processes; and drafting proposed designs, specifications, code, tests, migrations, commands, or documentation.
+Execution status: No build, implementation, command execution, deployment, or external-system action has been performed.
+Approval state: The supplied project snapshot records no approved work-product versions on the active revision.
+Not established: The available evidence does not identify file-editing tools, command execution, repositories, databases, cloud accounts, network access, connectors, deployment targets, secrets, permissions, or platform-specific automation.
+Authorization boundary: A proposal or draft is not authorization to execute it. Your current instruction permits explanation only and prohibits building.
+
+Capability limitation: I cannot truthfully claim that this workspace can inspect, modify, test, deploy, or connect to the named systems without evidence identifying its tools and permissions. Any such capability would currently be hypothetical.</pre></details></td></tr><tr class="v-pass"><td>90</td><td>recommended</td><td class="p">Show the Business Review for the current release.</td><td><span class="badge pass">pass</span></td><td class="n">26</td><td>answer_boundary</td><td class="t">business review, release, business review, release</td><td class="a"><details><summary>Business Review unavailable Missing artifact: No Business Review artifact is included in the supplied context, and the current release is not identified. The pr</summary><pre>Business Review unavailable
+
+Missing artifact: No Business Review artifact is included in the supplied context, and the current release is not identified. The project snapshot also lists no approved work product versions.</pre></details></td></tr><tr class="v-pass"><td>91</td><td>recommended</td><td class="p">Build a Mileage Reimbursement Log. Employees log trips (date, from, to, miles, rate per mile); the app computes amount = miles x rate rounded half-up to 2 decimals. Managers approve or reject; employees see only their own claims, managers see their team. The name field is not tied to identity. Scope: Local Development only. Finalize discovery from this description and generate the Discovery Blueprint for review. Do not design or build yet.</td><td><span class="badge pass">pass</span></td><td class="n">44</td><td>general-answer</td><td class="t">discovery, blueprint, requirements, local development, ume, capabilit</td><td class="a"><details><summary>Mileage Reimbursement Log Discovery Blueprint Outcome: Employees record mileage claims and managers decide whether to approve or reject them. Users: Employees a</summary><pre>Mileage Reimbursement Log Discovery Blueprint
+
+Outcome: Employees record mileage claims and managers decide whether to approve or reject them.
+Users: Employees and managers.
+Authorized phase: Discovery documentation for review only.
+Environment scope: Local Development only.
+Excluded: Application design, implementation, deployment, and build execution.
+
+Confirmed capabilities
+
+- Employees record a trip date, origin, destination, miles, rate per mile, and name.
+- The system calculates the reimbursement amount as miles multiplied by rate per mile.
+- The calculated amount uses half-up rounding to two decimal places.
+- Managers approve or reject claims.
+- Employees can see only claims belonging to their authenticated identity.
+- Managers can see claims belonging to employees on their team.
+- The name field is descriptive claim data and must not establish ownership, identity, or authorization.
+
+Roles and access boundaries
+
+Employee: Creates trip claims and accesses only claims associated with their authenticated identity.
+Manager: Reviews and decides claims associated with members of their team.
+Identity boundary: Claim ownership and team access require an identity mechanism separate from the editable name field.
+
+Claim information
+
+Field | Purpose | Discovery status
+Trip date | Date of travel | Required concept; validation unspecified
+From | Trip origin | Confirmed
+To | Trip destination | Confirmed
+Miles | Distance used in calculation | Confirmed; precision and limits unspecified
+Rate per mile | Rate used in calculation | Confirmed; currency, defaults, and limits unspecified
+Amount | Miles multiplied by rate, rounded half-up to two decimals | Calculated value
+Name | Descriptive claim field | Must not be used as identity
+Owner identity | Controls employee ownership and visibility | Required concept; mechanism unspecified
+Team relationship | Controls manager visibility | Required concept; mechanism unspecified
+Decision status | Records approval or rejection | Confirmed concept; full lifecycle unspecified
+
+Business rules
+
+1. Calculate the unrounded amount as miles multiplied by rate per mile.
+2. Round the result half-up to two decimal places.
+3. Determine employee ownership from authenticated identity, never from the name field.
+4. Permit an employee to access only their own claims.
+5. Permit a manager to access only claims for their team.
+6. Permit managers to approve or reject claims.
+
+Workflow boundary
+
+The confirmed workflow is claim recording followed by manager approval or rejection. Draft, submission, editing, rejection-reason, cancellation, and resubmission behavior remain unspecified and are not assumed.
+
+Acceptance signals
+
+- A claim captures all confirmed trip fields.
+- Amount calculations consistently apply the confirmed formula and rounding rule.
+- Employee visibility is restricted by authenticated ownership.
+- Manager visibility is restricted by team membership.
+- Changing the name field cannot change identity, ownership, or authorization.
+- Managers can record approval or rejection decisions.
+- The discovery output remains limited to Local Development and contains no application design or implementation.
+
+Assumptions
+
+- From and to mean trip origin and destination.
+- The eventual outcome is an application, but only discovery documentation is currently authorized.
+
+Open discovery questions
+
+- How are users authenticated, and how is employee-to-manager team membership established?
+- What claim states and transitions are required beyond approval and rejection?
+- Can claims be edited after submission, and are rejection reasons or resubmission required?
+- What currency applies, and what precision, defaults, minimums, and maximums govern miles and rate?
+- Are decision timestamps, decision-maker identity, or other audit records required?
+
+Review status: The supplied description is sufficient to finalize this discovery blueprint, but the open questions must be resolved before complete requirements or design can be established.</pre></details></td></tr><tr class="v-pass"><td>92</td><td>recommended</td><td class="p">Show the main capabilities available in this workspace. Distinguish what is installed, what needs configuration or approval, and what is unavailable. Do not perform any build or deployment.</td><td><span class="badge pass">pass</span></td><td class="n">46</td><td>answer_boundary</td><td class="t">installed, workspace, requirements, ume, release, capabilit</td><td class="a"><details><summary>Workspace capability overview Status | Capabilities Installed | No installed workspace tools or integrations are verified by the supplied evidence. Confirmed av</summary><pre>Workspace capability overview
+
+Status | Capabilities
+Installed | No installed workspace tools or integrations are verified by the supplied evidence.
+Confirmed available | Conversational requirements analysis; architecture, security, data, API, integration, and workflow guidance; review of supplied evidence; drafting proposed specifications, designs, code, tests, migrations, commands, and documentation.
+Would require approval and verified availability | File changes; command, test, build, script, migration, or package execution; repository or database operations; external-system access; permission or secret changes; deployment, publishing, merging, and releases.
+Unavailable or unverified | No capability is proven permanently unavailable. File editors, command runners, repositories, databases, cloud accounts, connectors, network access, deployment targets, secrets, and permissions are unverified and therefore unavailable for execution unless confirmed.
+
+Current boundary: The active revision records no approved work-product versions. No build or deployment was performed.</pre></details></td></tr></tbody></table></div>
+</main></body></html>

@@ -1,0 +1,276 @@
+[
+  {
+    "id": "platform-purpose",
+    "track": "about",
+    "level": 0,
+    "title": "PL turns business needs into governed, working applications",
+    "prompt": "What is this platform, and what problem is it designed to solve?",
+    "summary": "Platform Loops (PL) is a governed development loop: you describe a business need, PL discovers what to build, proposes and designs it, builds and verifies it, and releases it into a runtime where your users work.",
+    "takeaways": [
+      "One conversation carries a need from words to a running, verified application.",
+      "Every step leaves evidence: decisions, hashes, tests, browser checks, releases.",
+      "PL proposes and executes; you decide at typed gates; nothing external happens without authority."
+    ],
+    "status": "available",
+    "blocks": [
+      { "type": "paragraph", "text": "Platform Loops (PL LOOP) is the development loop of the Intelligent Platform. It exists to close the gap between a business need and a working, trustworthy application without a long specification, a hand-off to a development team, or a black box that produces code nobody can verify. You start with a problem in plain words; PL discovers the actors, process, data and rules, proposes the application, writes the design and plan, generates and verifies the code, and releases it to the Enterprise AI Launchpad (EAL) where people use it." },
+      { "type": "diagram", "kind": "map", "center": "Platform Loops", "nodes": [
+        { "label": "You describe the need", "note": "plain words, one question at a time", "topic": "getting-started" },
+        { "label": "Discovery Blueprint", "note": "actors, process, data, rules", "topic": "idea-to-app" },
+        { "label": "Design and plan", "note": "requirements, design, build plan", "topic": "artifacts-per-stage" },
+        { "label": "Build and verify", "note": "generated code, tests, browser checks", "topic": "correctness" },
+        { "label": "Release to EAL", "note": "users sign in and work", "topic": "where-run" },
+        { "label": "Improve", "note": "evolve with impact analysis", "topic": "enhance-deployed" }
+      ], "caption": "The loop in one picture: every arm is a question you can ask next." },
+      { "type": "heading", "text": "The problems it is designed to solve" },
+      { "type": "key_value", "rows": [
+        { "label": "Lost intent", "value": "Requirements written once and forgotten. PL keeps a living record of what was understood, decided, assumed and still open." },
+        { "label": "Slow hand-offs", "value": "Analysis, design, build and test done by different people in sequence. PL carries one thread from idea to release with you approving at typed gates." },
+        { "label": "Unverifiable code", "value": "Generated code you cannot trust. PL traces every requirement to tests and browser evidence and records hashes for every file." },
+        { "label": "Uncontrolled AI", "value": "Agents that act on their own. PL never builds, deploys or touches external systems without an explicit approval from you." }
+      ] },
+      { "type": "callout", "tone": "info", "title": "What PL is not", "text": "PL is not a chatbot that writes code snippets, and not a no-code form designer. It is a control plane that runs a governed loop and keeps evidence for every step." }
+    ],
+    "followUps": ["who-is-it-for", "getting-started", "components", "how-it-all-works"],
+    "plPrompts": [
+      { "label": "Ask PL to explain itself", "prompt": "What is this platform, and what problem is it designed to solve? Explain in simple language using the capabilities installed in this workspace, and give three practical examples. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["what is PL", "purpose", "overview", "problem"]
+  },
+  {
+    "id": "primary-use",
+    "track": "about",
+    "level": 1,
+    "title": "Primarily used to deliver and evolve business applications through conversation",
+    "prompt": "What is this platform primarily used for?",
+    "summary": "Delivering new business applications from a conversation, evolving the applications it built, and answering questions about your project and the platform.",
+    "blocks": [
+      { "type": "paragraph", "text": "PL is primarily used to deliver business applications: worklists, forms, approval flows, calendars, case timelines and analytical lists that run on a UI, an API and a PostgreSQL database with proper roles. Its second use is evolving those applications safely once they exist. Its third use is answering questions and giving coding help in the same chat, without changing anything." },
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Deliver new applications", "items": ["Discovery from plain words", "Requirements, design, build plan", "Generated UI, API, database, tests", "Release to EAL with roles"] },
+        { "title": "Evolve existing PL-built applications", "items": ["Describe the change", "Impact analysis", "Regenerate in order", "New release version"] },
+        { "title": "Ask and get help", "items": ["General answers from project context", "Coding assistance", "Application overview"] }
+      ], "caption": "Three uses, one chat." },
+      { "type": "table", "columns": ["If you want to", "PL does", "You do"], "rows": [
+        ["Replace a spreadsheet with an app", "Discover, design, build, verify, release", "Describe, answer, approve, accept"],
+        ["Add a field or rule to an app PL built", "Analyse impact, regenerate, verify, release", "Describe the change, approve"],
+        ["Understand what PL can do", "Answer from installed capabilities", "Ask"],
+        ["Get a code example or a review", "Answer in chat, execute nothing", "Ask"]
+      ] },
+      { "type": "callout", "tone": "tip", "text": "The sweet spot today is a single-entity business application with two or three roles, delivered in under an hour. Larger scopes are delivered as several bounded applications." }
+    ],
+    "followUps": ["what-can-i-do", "build-an-app", "examples-by-size", "capabilities-installed"],
+    "plPrompts": [
+      { "label": "Ask what this workspace can build", "prompt": "What is this platform primarily used for? Show the main capabilities available in this workspace and give one example each. Do not perform any build or deployment.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["use", "purpose", "deliver", "evolve"]
+  },
+  {
+    "id": "what-can-i-do",
+    "track": "about",
+    "level": 1,
+    "title": "As a user you describe, decide and accept; as a developer you review, steer and extend",
+    "prompt": "What can I do with this platform as a user or developer?",
+    "summary": "Business users drive discovery and accept releases; developers review designs and build plans, use coding assistance and evolve applications. Both work in the same chat with the same project state.",
+    "blocks": [
+      { "type": "diagram", "kind": "swimlane", "lanes": ["Business user", "Developer", "PL"], "sequence": [
+        { "lane": 0, "label": "Describe the problem" },
+        { "lane": 2, "label": "Propose Blueprint" },
+        { "lane": 0, "label": "Approve Blueprint" },
+        { "lane": 2, "label": "Draft design + build plan" },
+        { "lane": 1, "label": "Review design" },
+        { "lane": 2, "label": "Build + verify" },
+        { "lane": 0, "label": "Accept release" },
+        { "lane": 1, "label": "Evolve later" }
+      ], "caption": "Who touches what. Both roles can do everything; this is the natural split." },
+      { "type": "heading", "text": "As a business user or product owner" },
+      { "type": "bullets", "items": [
+        "Start a project with a problem statement; PL asks only what it cannot infer.",
+        "Accept or correct measurable defaults (loan period 14 days, managers see their own depot).",
+        "Approve the Discovery Blueprint, then the Requirements and later work products.",
+        "Accept the release at Business Review after seeing the browser evidence.",
+        "Open the application in EAL and use it with your role."
+      ] },
+      { "type": "heading", "text": "As a developer or architect" },
+      { "type": "bullets", "items": [
+        "Review the Solution Design (components, contracts, data ownership) and the Build Plan (exact files, migrations, tests).",
+        "Request changes with precise wording; PL regenerates downstream work products in order.",
+        "Use coding assistance for examples, ports and reviews without executing anything.",
+        "Inspect the Knowledge Inspector: current state, decisions, assumptions, coverage gaps, source trace.",
+        "Evolve a released application: describe the change, review the impact, approve, get a new version."
+      ] },
+      { "type": "callout", "tone": "info", "text": "Everything is visible to both roles. There is no separate developer console; the chat, the work products and the evidence are the shared surface." }
+    ],
+    "followUps": ["roles", "getting-started", "floorplans", "enhance-deployed"],
+    "plPrompts": [
+      { "label": "Ask what you can do here", "prompt": "What can I do with this platform as a user or developer? Distinguish what is installed, what needs configuration or approval, and what is unavailable in this workspace. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["user", "developer", "roles", "what can I do"]
+  },
+  {
+    "id": "getting-started",
+    "track": "about",
+    "level": 1,
+    "title": "Start with one problem in plain words; PL leads from there",
+    "prompt": "I am new to this platform. How should I get started?",
+    "summary": "Create a project, describe one problem in a few sentences, accept the recommended defaults one at a time, approve the Blueprint, confirm Local defaults, and let PL take you through requirements to a running app.",
+    "takeaways": [
+      "Describe the problem, not the solution; three to six sentences are enough.",
+      "Accept defaults one card at a time and approve the Blueprint before anything else.",
+      "Follow the next-step chip; it always carries the right command for the active revision."
+    ],
+    "status": "available",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Create a project", "note": "one app per project" },
+        { "label": "Describe the problem", "note": "3 to 6 sentences" },
+        { "label": "Answer one question at a time", "note": "accept defaults" },
+        { "label": "Approve the Blueprint" },
+        { "label": "Confirm Local defaults" },
+        { "label": "Approve work products" },
+        { "label": "Start build." },
+        { "label": "Accept and open in EAL" }
+      ], "highlight": 1, "caption": "A first project takes about 30 to 45 minutes of your attention; PL does the rest." },
+      { "type": "steps", "items": [
+        { "title": "Create a project", "detail": "Use the Projects panel on the left. Name it after the application, for example Mileage Reimbursement Log. A project holds one application and its chats." },
+        { "title": "Describe the problem, not the solution", "detail": "Who struggles, how the work happens now, what should improve, which fields and rules matter. Add: Scope: Local Development only. Finish with: Finalize discovery from this description and generate the Discovery Blueprint for review. Do not design or build yet." },
+        { "title": "Accept defaults one card at a time", "detail": "PL proposes measurable defaults (rounding rule, who sees what). Click the recommended option or answer in your own words. Do not ask PL to apply all defaults at once; it answers within a per-turn model-call limit." },
+        { "title": "Approve the Discovery Blueprint", "detail": "Read it as the whole understanding in one card. Corrections are cheap here and expensive later." },
+        { "title": "Confirm where it runs", "detail": "Accept the nudge Use Local defaults and confirm. It places the UI, API and database schema on your workstation." },
+        { "title": "Follow the next-step chip", "detail": "The composer offers the next lifecycle command: Requirements, then Delivery Plan, Solution Design and Build Plan. Approve each; request changes in Requirements, not later." },
+        { "title": "Start build and accept", "detail": "Send Start build. Watch the steps, review the Business Review evidence, accept the release, and open the app in EAL with the test identity PL created." }
+      ] },
+      { "type": "callout", "tone": "warning", "title": "Two phrases to avoid", "text": "Never write I confirm the topology or I confirm the architecture; the evaluator treats that as an authority conflict and the discovery loops. Confirm business facts only, as the requesting user. And never ask PL to apply defaults without asking." }
+    ],
+    "followUps": ["how-start", "prompts-that-work", "build-an-app", "simple-effort"],
+    "plPrompts": [
+      { "label": "Start discovery from a rough idea", "prompt": "Help me turn a business problem into an application idea. Start with three simple examples, propose a direction, and ask one question at a time. Do not build anything.", "requires": ["outcome-discovery"], "stages": ["welcome", "outcome-discovery"] }
+    ],
+    "keywords": ["new user", "getting started", "first project", "how to begin"]
+  },
+  {
+    "id": "components",
+    "track": "about",
+    "level": 1,
+    "title": "Two loops and a ring of services around them",
+    "prompt": "What are the main components of this platform, and what is the purpose of each component?",
+    "summary": "PL (development loop) and EAL (runtime loop) are the two general-purpose loops; UME, EKG with Platform Brain, the Integration plane, Audit, Eval Studio and the Control Center are the services around them, plus the applications PL generates.",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "People", "items": ["Business users", "Developers and architects", "Operators"] },
+        { "title": "Two loops", "items": ["Platform Loops (PL): development loop", "Enterprise AI Launchpad (EAL): runtime loop"] },
+        { "title": "Generated applications", "items": ["UI (React)", "API (Fastify)", "PostgreSQL schema per app", "Tests, manifests, provider release"] },
+        { "title": "Platform services", "items": ["UME identity", "EKG knowledge graph + Brain", "Integration plane", "Audit", "Eval Studio", "Control Center"] },
+        { "title": "Foundation", "items": ["PostgreSQL databases (one per service)", "Contracts SDK (neutral provider contracts)"] }
+      ], "caption": "Every service owns its own database; nothing reads another service's tables." },
+      { "type": "table", "columns": ["Component", "Purpose", "You meet it when"], "rows": [
+        ["Platform Loops (PL)", "Governed development loop: discovery, work products, generation, verification, release", "Every chat in this workspace"],
+        ["Enterprise AI Launchpad (EAL)", "Runtime where users sign in, chat with registered apps, fill forms, approve tasks", "Opening a released application"],
+        ["UME (User Management Engine)", "Identity: principals, roles, sessions, effective access; publishes app roles", "Signing in; role assignments"],
+        ["EKG + Platform Brain", "Enterprise Knowledge Graph and organisational knowledge: landscape, lineage, questions about apps", "Landscape placement; Ask Brain"],
+        ["Integration plane", "Governed connectors (PostgreSQL, files) for integration-backed apps", "Apps that read or write a system of record"],
+        ["Audit", "Append-only evidence envelopes, projections, cases", "Compliance questions"],
+        ["Eval Studio", "Continuous testing and evaluation of PL, EAL and generated apps", "Quality reports and gates"],
+        ["Control Center", "Start, stop, monitor landscape services", "Operating the platform"],
+        ["Contracts SDK", "Neutral contracts every service speaks", "Never directly"]
+      ] }
+    ],
+    "followUps": ["what-is-eal-note", "components-together", "architecture-diagram", "where-run"],
+    "plPrompts": [
+      { "label": "Ask PL about its components", "prompt": "What are the main components of this platform, and what is the purpose of each component? Use plain language and distinguish what is installed here from what is planned. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["components", "architecture", "services", "EAL", "UME", "EKG"]
+  },
+  {
+    "id": "components-together",
+    "track": "about",
+    "level": 2,
+    "title": "During delivery the components hand work to each other in a fixed order",
+    "prompt": "How do the different platform components work together during application development?",
+    "summary": "PL owns the loop; EKG answers landscape questions; the builder generates the app; delivery provisions the database, registers the release with EAL and publishes roles to UME; EAL launches the app for users; Audit and Eval Studio observe.",
+    "blocks": [
+      { "type": "diagram", "kind": "swimlane", "lanes": ["PL", "EKG / Brain", "Delivery + DB", "EAL + UME"], "sequence": [
+        { "lane": 0, "label": "Discovery + Blueprint" },
+        { "lane": 1, "label": "Landscape placement" },
+        { "lane": 0, "label": "Work products approved" },
+        { "lane": 2, "label": "Generate + provision schema" },
+        { "lane": 2, "label": "Build, start, verify" },
+        { "lane": 3, "label": "Register release, publish roles" },
+        { "lane": 0, "label": "Business Review" },
+        { "lane": 3, "label": "Users open the app" }
+      ], "caption": "Hand-offs during one delivery. Audit and Eval Studio observe every lane." },
+      { "type": "numbered", "items": [
+        "PL understands your message, routes it to a capability, and keeps the session and delivery case as an event log.",
+        "When you confirm where the app runs, PL asks the landscape provider (EKG, or Local defaults when EKG is offline) for placement.",
+        "The builder turns the approved Build Plan into source files: UI, API, domain, migrations, tests.",
+        "Delivery provisions a PostgreSQL schema with the app's own login, runs migrations, builds and starts the API and UI on reserved ports, and verifies them.",
+        "Delivery registers a signed release set with the EAL registry and publishes the app's roles to UME; a test identity is created for you.",
+        "Business Review shows browser evidence; when you accept, the release is activated in EAL and users can open it.",
+        "Every step writes receipts: artifact manifests with hashes, delivery journal, audit envelopes; Eval Studio can replay and score the run."
+      ] },
+      { "type": "callout", "tone": "info", "text": "Nothing crosses a boundary by reading another service's database. Components talk over signed HTTP contracts, which is why a release can be rolled back and why evidence is attributable." }
+    ],
+    "followUps": ["architecture-diagram", "artifacts-per-stage", "where-deployed", "components"],
+    "plPrompts": [],
+    "keywords": ["integration", "hand-off", "flow between components"]
+  },
+  {
+    "id": "architecture-diagram",
+    "track": "about",
+    "level": 2,
+    "title": "Architecture of application delivery",
+    "prompt": "Show me the major platform components involved in application delivery as an architecture diagram.",
+    "summary": "A layered view: your browser and the PL chat on top, the PL loop and its engines in the middle, the generated application and its database, and the runtime and identity services beside it.",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Client", "items": ["PL chat UI (projects, conversation, Knowledge Inspector, composer)", "EAL chat and full view for end users"] },
+        { "title": "PL API and loop", "items": ["Understanding engine", "Capability registry + routing", "Workflow + bounded reasoning", "Context + memory", "Policy, governance, DoD, feedback", "Tool gateway"] },
+        { "title": "Delivery and generation", "items": ["Build-plan producer", "Generation engine (schema-driven, floorplan compiler)", "Application delivery (provision, build, start, verify, register)", "Traceability + qualification"] },
+        { "title": "Generated application", "items": ["React UI", "Fastify API with role policy + idempotency", "PostgreSQL schema with its own login", "Tests, manifests, provider release"] },
+        { "title": "Runtime and identity", "items": ["EAL registry + runtime", "UME identity", "EKG landscape + Platform Brain", "Integration plane, Audit, Eval Studio, Control Center"] }
+      ], "caption": "Read top to bottom for a request, bottom to top for evidence." },
+      { "type": "key_value", "rows": [
+        { "label": "State", "value": "Event-sourced sessions and delivery cases in the PL database; work products versioned; every event hashed." },
+        { "label": "Model calls", "value": "Only in the PL loop (understanding, discovery, planning, work products, one structured call for the application blueprint). Generation and runtime are deterministic." },
+        { "label": "Trust boundaries", "value": "Signed provider contracts between services; per-app database login; EAL authority reference resolved live by the generated API." }
+      ] }
+    ],
+    "followUps": ["components-together", "how-it-all-works", "where-run", "components"],
+    "plPrompts": [
+      { "label": "Ask PL for its architecture", "prompt": "Show me the major platform components involved in application delivery as an architecture description with layers and the connections between them. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["architecture", "diagram", "layers"]
+  },
+  {
+    "id": "how-it-all-works",
+    "track": "about",
+    "level": 1,
+    "title": "From your idea to a running application and its improvement",
+    "prompt": "Finally, explain how the entire platform works together, from a user's initial idea to a running production application and its continuous improvement.",
+    "summary": "One thread: understand, shape, design and plan, build and verify, release and run, observe and improve. PL owns the thread, EAL runs the result, the services around them keep identity, knowledge, evidence and operations honest.",
+    "takeaways": [
+      "One canonical record connects messages, decisions, work products, files, releases and usage.",
+      "PL is the development loop, EAL the runtime loop; UME, EKG, Audit and Eval keep them honest.",
+      "Today everything runs in Local Development; QA, UAT and Production are planned, not available."
+    ],
+    "status": "partial",
+    "statusNote": "loop available; later environments planned",
+    "blocks": [
+      { "type": "diagram", "kind": "timeline", "items": [
+        { "label": "Understand", "detail": "You describe the need; PL discovers actors, process, data and rules and proposes the Discovery Blueprint.", "state": "done" },
+        { "label": "Shape", "detail": "You approve the Blueprint and confirm where it runs; PL writes Requirements and the Delivery Plan.", "state": "done" },
+        { "label": "Design and plan", "detail": "Solution Design and Build Plan, each reviewed as consequence and diff.", "state": "done" },
+        { "label": "Build and verify", "detail": "Generated UI, API, database and tests; typecheck, tests, browser qualification; hashes and receipts.", "state": "active" },
+        { "label": "Release and run", "detail": "Business Review, activation in EAL, roles in UME; users sign in and work.", "state": "todo" },
+        { "label": "Observe and improve", "detail": "Runtime observations, evaluations and your change requests feed the next version through impact analysis.", "state": "todo" }
+      ], "caption": "The same thread continues for every later version of the application." },
+      { "type": "paragraph", "text": "The platform works because one canonical record connects everything. Your messages become events; events become decisions and work products; work products become generated files with hashes; files become a release with a manifest; the release becomes a registered application in EAL with roles from UME; use in EAL produces observations; observations and your new requests start the next revision, which traces back to the same Blueprint. Knowledge about the application lives in the project ledger and, when enabled, in the Platform Brain and the Enterprise Knowledge Graph, so the platform can answer questions about the application months later." },
+      { "type": "callout", "tone": "warning", "title": "Honest scope today", "text": "Applications run in Local Development on the platform workstation. Central Development, QA, UAT and Production environments are designed and sequenced in the roadmap but are not yet available. Everything else in this answer is what the platform does now." }
+    ],
+    "followUps": ["end-to-end", "lifecycle-flow", "production-improvement", "environments"],
+    "plPrompts": [
+      { "label": "Ask PL to explain the whole loop", "prompt": "Explain how the entire platform works together, from a user's initial idea to a running application and its continuous improvement. Be concrete about what exists in this workspace today. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["end to end", "how it works", "overview"]
+  }
+]

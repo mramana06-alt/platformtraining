@@ -1,0 +1,187 @@
+[
+  {
+    "id": "automation-vs-approval",
+    "track": "governance",
+    "level": 2,
+    "title": "Automated by default; approval wherever authority or consequence is involved",
+    "prompt": "How does the platform determine which development activities can be automated and which ones require human approval?",
+    "summary": "PL automates analysis, drafting, generation, verification and packaging. It requires a typed human decision for anything that fixes intent (Blueprint, requirements), authorizes execution (Start build), accepts a result (Business Review) or reaches outside the workspace (external effects).",
+    "blocks": [
+      { "type": "diagram", "kind": "swimlane", "lanes": ["Automated by PL", "Your approval"], "sequence": [
+        { "lane": 0, "label": "Understand and draft" },
+        { "lane": 1, "label": "Blueprint" },
+        { "lane": 0, "label": "Draft work products" },
+        { "lane": 1, "label": "Approve each" },
+        { "lane": 0, "label": "Generate, verify, package" },
+        { "lane": 1, "label": "Start build, accept release" },
+        { "lane": 0, "label": "Register, publish roles" },
+        { "lane": 1, "label": "External effects" }
+      ] },
+      { "type": "table", "columns": ["Rule", "Automated", "Needs you"], "rows": [
+        ["Fixing intent", "Proposals and measurable defaults", "Accepting a default, approving the Blueprint and Requirements"],
+        ["Authorizing execution", "Everything read-only and workspace-local", "Start build; activation after Business Review"],
+        ["Consequence outside the workspace", "Nothing", "Fresh, exact authorization for each external effect"],
+        ["Quality", "Typecheck, tests, browser qualification, hashes", "Accepting or rejecting the release"],
+        ["Budget", "Token and model-call ceilings per turn and session", "Rolling over to a successor chat"]
+      ] },
+      { "type": "key_value", "rows": [
+        { "label": "How it is enforced", "value": "A policy engine restricts each step to allowed action types; tools are authorized against fingerprinted step descriptors; approvals must be caused by an authenticated user event; external side effects need a task envelope, an effect grant and governance policy." },
+        { "label": "Why it feels light", "value": "Approvals are typed cards, not forms. A first application needs about eight clicks of authority in total." }
+      ] }
+    ],
+    "followUps": ["roles", "decisions-approvals", "correctness", "errors"],
+    "plPrompts": [
+      { "label": "Ask PL what it will not do alone", "prompt": "Which development activities do you automate and which ones require my approval? Distinguish proposals from authorized execution. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["automation", "approval", "authority", "governance"]
+  },
+  {
+    "id": "roles",
+    "track": "governance",
+    "level": 2,
+    "title": "Who plays which role during delivery",
+    "prompt": "What roles do AI agents, developers, architects, testers, product owners, and business users play during application delivery?",
+    "summary": "Business users and product owners own intent and acceptance; developers and architects own design review and evolution; testers own evidence review; PL's agents draft, generate and verify; operators run the platform. Roles are collaborative, not sequential.",
+    "blocks": [
+      { "type": "diagram", "kind": "swimlane", "lanes": ["Business / PO", "Architect / Dev", "Tester", "PL agents", "Operator"], "sequence": [
+        { "lane": 0, "label": "Describe + decide" },
+        { "lane": 3, "label": "Discover + draft" },
+        { "lane": 0, "label": "Approve Blueprint" },
+        { "lane": 1, "label": "Review design" },
+        { "lane": 3, "label": "Generate + verify" },
+        { "lane": 2, "label": "Review evidence" },
+        { "lane": 0, "label": "Accept release" },
+        { "lane": 4, "label": "Operate services" }
+      ] },
+      { "type": "table", "columns": ["Role", "During delivery", "Typical actions in PL"], "rows": [
+        ["Business user", "Owns the problem and the outcome", "Describe, answer questions, accept defaults, approve Blueprint and Requirements, accept the release, use the app in EAL"],
+        ["Product owner", "Owns scope and priority", "Decide what is in the first version and what is deferred; approve changes and their impact"],
+        ["Architect", "Owns structure and placement", "Confirm the landscape; review the Solution Design; decide integration approach"],
+        ["Developer", "Owns build-plan review and evolution", "Review the Build Plan; request precise changes; use coding assistance; evolve the app"],
+        ["Tester", "Owns evidence", "Read Business Review checks; reject with reasons; add acceptance signals to Requirements"],
+        ["PL agents", "Understanding, discovery, drafting, generation, verification, evaluation", "Never approve, never build without Start build, never act outside the workspace"],
+        ["Operator", "Runs the platform", "Control Center: start, stop, monitor; EAL activation and revocation"]
+      ] },
+      { "type": "callout", "tone": "info", "text": "One person can play every role for a small application; the platform does not force a role questionnaire. It adapts to the task and to your stated preference for guided or direct interaction." }
+    ],
+    "followUps": ["automation-vs-approval", "what-can-i-do", "quality-checks", "decisions-approvals"],
+    "plPrompts": [
+      { "label": "Ask PL about roles", "prompt": "What roles do AI agents, developers, architects, testers, product owners, and business users play during application delivery on this platform? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["roles", "agents", "developer", "product owner"]
+  },
+  {
+    "id": "correctness",
+    "track": "governance",
+    "level": 2,
+    "title": "Traceability, deterministic generation and evidence keep applications correct",
+    "prompt": "How does the platform ensure that generated applications meet requirements and are technically correct?",
+    "summary": "Requirements trace to acceptance criteria and tests; generation is deterministic from the approved Blueprint; every build runs typecheck, tests and a browser qualification with independently supplied expected values; hashes and receipts make the result reviewable.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Requirement" },
+        { "label": "Acceptance criterion" },
+        { "label": "Test or browser check" },
+        { "label": "Evidence receipt" },
+        { "label": "Business Review" }
+      ], "caption": "The traceability engine assembles this matrix; the Business Review shows it." },
+      { "type": "key_value", "rows": [
+        { "label": "Meets requirements", "value": "A traceability matrix links requirements to criteria and tests; browser qualification drives the running app with a business oracle whose expected values come from outside the model." },
+        { "label": "Technically correct", "value": "Deterministic generators produce typed domain, API and UI code; typecheck, unit and contract tests, build and start must pass; ports, schema and identity are verified after deployment, not assumed." },
+        { "label": "Secure by construction", "value": "Generated APIs enforce per-action authorization and idempotency receipts; the app runs with its own database login; EAL authority is resolved live for every request." },
+        { "label": "Reviewable", "value": "Artifact manifests with SHA-256 per file, immutable release directories, provenance gate on commits, delivery journal with every receipt." }
+      ] },
+      { "type": "callout", "tone": "warning", "text": "Correctness is proven for what was specified. If a rule is missing from Requirements, no test will catch it; that is why the guide keeps sending you back to Requirements for changes." }
+    ],
+    "followUps": ["quality-checks", "readiness", "errors", "automation-vs-approval"],
+    "plPrompts": [
+      { "label": "Ask PL how it verifies apps", "prompt": "How does the platform ensure that generated applications meet requirements and are technically correct? Name the checks that run at build and review time. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome", "build-plan"] }
+    ],
+    "keywords": ["correctness", "traceability", "verification", "tests"]
+  },
+  {
+    "id": "quality-checks",
+    "track": "governance",
+    "level": 3,
+    "title": "Testing, validation, review, security and quality checks in detail",
+    "prompt": "How are testing, validation, code review, security review, and quality checks handled?",
+    "summary": "Automated: typecheck, generated contract tests, build, start, browser qualification, hash verification, generated-security refinements. Human: work-product reviews and Business Review. Platform-level: Eval Studio campaigns with sealed evidence and an independent register of gaps.",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Every build (automated)", "items": ["Typecheck", "Contract and unit tests", "Build and start on reserved ports", "Browser qualification with business oracle", "Artifact hashes, provenance"] },
+        { "title": "Every release (human)", "items": ["Build Plan review", "Business Review with evidence table", "Accept or reject with reason"] },
+        { "title": "Security (automated at generation)", "items": ["Per-action authorization", "Idempotency receipts", "Own database login, no platform secrets", "Live EAL authority resolution"] },
+        { "title": "Platform level (continuous)", "items": ["Eval Studio definitions and campaigns", "Sealed evidence, verdicts by kind", "Gaps and recommendations register"] }
+      ] },
+      { "type": "table", "columns": ["Check", "When", "Who or what"], "rows": [
+        ["Validation rules from Requirements", "Generation and tests", "Generated API enforces; tests assert"],
+        ["Code review", "Build Plan and Solution Design review", "Developer or architect, in chat"],
+        ["Security review", "Generation-time refinements and security evaluations", "Platform; generated-security eval scripts in the apps repository"],
+        ["Accessibility and UI", "Browser qualification", "Floorplan gates"],
+        ["Regression", "Every evolution", "Existing tests must pass before a new version"],
+        ["Platform quality", "Continuous", "Eval Studio, with work items resolved and re-verified"]
+      ] },
+      { "type": "callout", "tone": "info", "text": "There is no separate manual security sign-off gate today. Security controls are generated into the application and evaluated by scripts; a formal review gate is part of the customer-readiness work." }
+    ],
+    "followUps": ["correctness", "errors", "readiness", "business-review-procedure"],
+    "plPrompts": [],
+    "keywords": ["testing", "security", "review", "quality"]
+  },
+  {
+    "id": "readiness",
+    "track": "governance",
+    "level": 3,
+    "title": "Readiness is a set of typed gates, each backed by evidence",
+    "prompt": "How does the platform know when an application is ready to move from development to testing and then to production?",
+    "summary": "Within Local Development: Blueprint approved, landscape confirmed, four heads approved on the active revision, build verified, Business Review accepted. Promotion to QA and Production is planned to work by immutable release manifests passing environment gates.",
+    "blocks": [
+      { "type": "diagram", "kind": "timeline", "items": [
+        { "label": "Ready to specify", "detail": "Enough discovery dimensions covered; no semantic defects; Blueprint approved", "state": "done" },
+        { "label": "Ready to build", "detail": "Requirements, Delivery Plan, Solution Design, Build Plan approved on the active revision; budget available", "state": "done" },
+        { "label": "Ready to review", "detail": "Typecheck, tests, build, start and browser qualification passed; release identity recorded", "state": "active" },
+        { "label": "Ready to use", "detail": "Business Review accepted; release activated in EAL; roles in UME", "state": "todo" },
+        { "label": "Ready to promote (planned)", "detail": "Release manifest with evidence passes the QA, UAT and Production gates", "state": "todo" }
+      ] },
+      { "type": "key_value", "rows": [
+        { "label": "Never inferred from chat", "value": "Readiness is computed from delivery-case state and receipts. A message saying it is ready changes nothing." },
+        { "label": "Refusals are explicit", "value": "Start build before the heads are eligible is refused with the missing item; a build without budget is refused with the shortfall." },
+        { "label": "Gate artifacts", "value": "Each gate writes a JSON and Markdown record with hashes so later reviews can verify what passed." }
+      ] }
+    ],
+    "followUps": ["start-build-rules", "environments", "quality-checks", "major-stages"],
+    "plPrompts": [
+      { "label": "Ask PL whether this project is ready to build", "prompt": "Is the current application ready for Start build? List which work products are approved on the active revision and what is still missing. Do not build anything.", "requires": ["general-answer"], "stages": ["build-plan", "architecture-design", "requirements-formalization"] }
+    ],
+    "keywords": ["readiness", "gates", "promotion"]
+  },
+  {
+    "id": "errors",
+    "track": "governance",
+    "level": 3,
+    "title": "Errors are surfaced with their step and a proposed next action",
+    "prompt": "How are errors, failed builds, failed tests, or deployment problems handled?",
+    "summary": "Build steps report the failing step and output; a failed session accepts Start build again after the cause is fixed; deployment problems are auto-resolved where safe (ports) or refused with a code; activation can roll back; budget and model-call limits have explicit recoveries.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Failure detected", "note": "step + output" },
+        { "label": "Classified", "note": "defect, budget, environment" },
+        { "label": "Shown in chat", "note": "code + suggestion" },
+        { "label": "You decide", "note": "fix, retry, roll back" },
+        { "label": "Resume", "note": "Start build. again" }
+      ] },
+      { "type": "table", "columns": ["Situation", "What PL does", "What you do"], "rows": [
+        ["A generated test fails", "Stops the build at Verify; shows the failing check", "Fix the rule in Requirements (or accept PL's proposed correction); rebuild"],
+        ["Port already in use", "Reserves another port and updates the release", "Nothing"],
+        ["Build fails", "Reports the step and the compiler output; session status becomes failed", "Send Start build. again after the fix; a failed session accepts it"],
+        ["Deployment drift or conflict", "Refuses with a code such as PL_APPLICATION_MIGRATION_IMMUTABLE_CONFLICT", "Use the recovery the message names; never edit files by hand"],
+        ["Activation problem in EAL", "Conditional activation; rollback to the previous release", "Accept the rollback or retry"],
+        ["Model-call cap per turn", "MODEL_CALL_LIMIT_EXCEEDED", "Answer defaults one card at a time; avoid apply everything"],
+        ["Session budget exhausted", "WORKFLOW_STEP_TOKEN_RESERVATION_UNAVAILABLE", "Roll over to the successor chat and continue"]
+      ] },
+      { "type": "callout", "tone": "tip", "text": "Every failure leaves receipts in the delivery journal, so a retry never repeats a committed effect: idempotency keys, durable effect records and fencing protect against duplicates." }
+    ],
+    "followUps": ["troubleshooting", "budgets-rollover", "start-build-rules", "correctness"],
+    "plPrompts": [],
+    "keywords": ["errors", "failed build", "failed tests", "recovery"]
+  }
+]

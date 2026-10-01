@@ -1,0 +1,259 @@
+[
+  {
+    "id": "who-is-it-for",
+    "track": "about",
+    "level": 1,
+    "title": "For developers, architects, product managers, business analysts and business users",
+    "prompt": "Who is this platform for?",
+    "summary": "Anyone who owns a business need can develop, deploy and validate an AI-native application with PL. Business users and analysts drive discovery and acceptance, product managers scope and approve, architects and developers review design and build plans, and everyone validates the result in EAL.",
+    "takeaways": [
+      "One chat serves every role; nobody needs to write code or a specification first.",
+      "Business roles own intent and acceptance; technical roles own design review and evolution.",
+      "AI-native means the application is generated, verified and run by the platform with roles, audit and a conversational runtime built in."
+    ],
+    "status": "available",
+    "blocks": [
+      { "type": "diagram", "kind": "map", "center": "AI-native application", "nodes": [
+        { "label": "Business user", "note": "describe, accept, use" },
+        { "label": "Business analyst", "note": "discovery, requirements" },
+        { "label": "Product manager", "note": "scope, priority, approvals" },
+        { "label": "Architect", "note": "landscape, solution design" },
+        { "label": "Developer", "note": "build plan, evolution, code help" },
+        { "label": "Tester", "note": "evidence, Business Review" },
+        { "label": "Operator", "note": "Control Center, EAL activation" }
+      ], "caption": "Every role works in the same PL chat and validates in the same EAL runtime." },
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Develop", "detail": "Describe the need in the PL chat; PL discovers, proposes the Blueprint, writes requirements, design and build plan, and generates the application with tests. Business and technical roles approve at typed gates.", "artifact": "Blueprint, work products, generated source" },
+        { "label": "Deploy", "detail": "PL provisions the database schema and login, builds and starts the UI and API on reserved ports, registers the signed release with EAL and publishes roles to UME. Today this is Local Development; later environments are promoted by release manifest.", "artifact": "Release identity, EAL registration, roles" },
+        { "label": "Validate", "detail": "Business Review shows browser evidence against requirements; you accept or reject. Then every role signs in to EAL with their own role and uses the application: chat, forms, approvals, full view.", "artifact": "Business Review record, EAL activation" }
+      ], "caption": "Develop, deploy, validate. Click a step for what each role does." },
+      { "type": "table", "columns": ["Role", "What you do in PL", "What you do in EAL"], "rows": [
+        ["Business user", "Describe the problem, accept defaults, approve the Blueprint, accept the release", "Use the application with your role; raise the next change"],
+        ["Business analyst", "Shape discovery: actors, process, rules, acceptance signals in Requirements", "Validate that screens and rules match the process"],
+        ["Product manager", "Decide the first version and what is deferred; approve changes and their impact", "Check outcomes and prioritise the next version"],
+        ["Architect", "Confirm the landscape; review the Solution Design and integrations", "Verify runtime placement and authority"],
+        ["Developer", "Review the Build Plan; request precise changes; evolve the app; use coding assistance", "Reproduce issues; verify fixes in the full view"],
+        ["Tester", "Read the Business Review evidence; add acceptance signals", "Run role-based checks against the running app"],
+        ["Operator", "Nothing in the chat", "Control Center: start, stop, monitor; EAL activation and revocation"]
+      ] },
+      { "type": "callout", "tone": "info", "title": "What AI-native means here", "text": "The application is produced from a typed Blueprint by the platform, carries its roles, audit and idempotency by construction, is used through a conversational runtime as well as a full UI, and is evolved through the same governed loop that created it." }
+    ],
+    "followUps": ["primary-use", "roles", "what-can-i-do", "application-lifecycle"],
+    "plPrompts": [
+      { "label": "Ask PL who it is for", "prompt": "Who is this platform for, and what can each role (business user, analyst, product manager, architect, developer, tester) do with it? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["roles", "who is it for", "personas", "AI-native"]
+  },
+  {
+    "id": "dev-process-diagram",
+    "track": "process",
+    "level": 1,
+    "title": "The application development process, as a process diagram",
+    "prompt": "Show me the app development process as a process diagram.",
+    "summary": "Eight steps from a business problem to a running application. Four of them are your decisions; the rest are automated and evidenced by PL. Click any step for what happens, who decides and what it produces.",
+    "takeaways": [
+      "Your decisions: approve the Blueprint, approve the work products, authorize Start build, accept the Business Review.",
+      "Everything between your decisions is automated and leaves evidence: manifests, tests, browser checks.",
+      "The same eight steps repeat for every later version of the application."
+    ],
+    "status": "available",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Describe", "note": "you", "detail": "Type the problem in plain words: who struggles, how the work happens today, what should improve, the fields and rules that matter. End with the request to generate the Discovery Blueprint. Three to eight sentences are enough.", "artifact": "Problem statement" },
+        { "label": "Discover", "note": "PL", "detail": "PL extracts the outcome, actors, journeys, data, rules and risks, then asks one question per turn with a measurable default you can accept or correct. It stops when enough dimensions are covered.", "artifact": "Discovery items" },
+        { "label": "Blueprint", "note": "you approve", "detail": "The whole understanding in one card: entity, fields, states, roles, screens and a topology recommendation. Approve it or request a change. This is the cheapest moment to fix a misunderstanding.", "artifact": "Discovery Blueprint v1" },
+        { "label": "Requirements", "note": "you approve", "detail": "Testable statements with validation rules and acceptance signals, each traced to the Blueprint. Approving starts the chain of downstream work products; later changes here cascade.", "artifact": "Requirements v1" },
+        { "label": "Design and plan", "note": "review", "detail": "Delivery Plan (which stages apply), Solution Design (components, contracts, data ownership) and Build Plan (exact files, migrations, tests). Each shown as what it decides plus a diff.", "artifact": "Delivery Plan, Solution Design, Build Plan" },
+        { "label": "Build and verify", "note": "Start build.", "detail": "Scaffold, generate, provision the schema and login, migrate, build, start on reserved ports, typecheck, tests and browser qualification. PL only interrupts if it needs you.", "artifact": "Generated source, release identity, manifests" },
+        { "label": "Review and release", "note": "you accept", "detail": "The Business Review lists requirement-derived checks with evidence observed in a real browser. Accept to activate the release in EAL and publish roles to UME.", "artifact": "Business Review record, EAL activation" },
+        { "label": "Run and improve", "note": "EAL", "detail": "Users sign in to EAL and work in chat or the full view. Change requests come back into the same project with impact analysis and a new version.", "artifact": "Usage, observations, next version" }
+      ], "caption": "The development process." },
+      { "type": "key_value", "rows": [
+        { "label": "Who decides", "value": "Blueprint, Requirements and downstream approvals, Start build, and the Business Review are yours. Nothing passes those points without a typed decision." },
+        { "label": "What is automated", "value": "Understanding, discovery questions, drafting of every work product, generation, provisioning, building, testing, browser qualification, packaging, registration and role publication." },
+        { "label": "What is recorded", "value": "Every message, decision and result as events; every file with a SHA-256; every build with receipts; every release with an identity." }
+      ] },
+      { "type": "callout", "tone": "tip", "text": "Open the cross-functional swimlane next to see the same process split by who does what." }
+    ],
+    "followUps": ["delivery-swimlane", "typical-process", "idea-to-app", "application-lifecycle"],
+    "plPrompts": [
+      { "label": "Ask PL for the process", "prompt": "Show me the app development process on this platform as an ordered list of steps, marking which steps need my decision and what each step produces. Do not start execution.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["process diagram", "development process", "steps"]
+  },
+  {
+    "id": "delivery-swimlane",
+    "track": "process",
+    "level": 2,
+    "title": "Cross-functional delivery: who does what, in order",
+    "prompt": "Show the app delivery process as a cross-functional swimlane diagram.",
+    "summary": "Four lanes and thirteen steps. Business decides, architects and developers review, PL discovers, drafts, generates and verifies, and the runtime registers and serves the application. Click any box for the details of that step.",
+    "takeaways": [
+      "Hand-offs alternate between a human decision and platform work; no lane skips another.",
+      "PL never enters the business lane: it proposes, you decide.",
+      "The runtime lane starts only after your acceptance in the Business Review."
+    ],
+    "status": "available",
+    "blocks": [
+      { "type": "diagram", "kind": "swimlane", "lanes": ["Business user / PO", "Architect / Developer", "Platform Loops (PL)", "Runtime (EAL, UME)"], "sequence": [
+        { "lane": 0, "label": "Describe the need", "detail": "Create a project and describe the problem in plain words: people, current situation, desired improvement, fields, rules and examples. End with the request to generate the Discovery Blueprint.", "artifact": "Problem statement" },
+        { "lane": 2, "label": "Discover", "detail": "PL extracts actors, journeys, data, rules and risks and asks one question per turn with a measurable default. Option cards wait for the business answer; the composer is paused meanwhile.", "artifact": "Discovery items with authority" },
+        { "lane": 0, "label": "Approve Blueprint", "detail": "Review the entity, fields, states, roles, screens and topology recommendation in one card. Approve, or request a change and approve the next version.", "artifact": "Discovery Blueprint v1" },
+        { "lane": 1, "label": "Confirm landscape", "detail": "Decide where the application runs. Local defaults place the UI, API and PostgreSQL schema on the platform host in one click; EKG can propose placements when it is online.", "artifact": "Landscape binding" },
+        { "lane": 2, "label": "Requirements", "detail": "Testable statements, validation rules and acceptance signals, each traced to a Blueprint item.", "artifact": "Requirements v1" },
+        { "lane": 0, "label": "Approve Requirements", "detail": "Approving starts the downstream chain. A later change to Requirements supersedes the Delivery Plan, Solution Design and Build Plan, which regenerate in order.", "artifact": "Approval event" },
+        { "lane": 2, "label": "Plan, design, build plan", "detail": "Delivery Plan: which stages apply and the verification each needs. Solution Design: components, contracts, data ownership. Build Plan: exact files, migrations and tests.", "artifact": "Three work products" },
+        { "lane": 1, "label": "Review design and plan", "detail": "The architect reviews components and data ownership; the developer reviews files and tests. Precise change requests go into Requirements so the cascade carries them.", "artifact": "Approvals or change requests" },
+        { "lane": 0, "label": "Start build.", "detail": "Authorizes generation and local execution. Eligible only when all four work products are approved on the active revision and the session budget allows it.", "artifact": "Build authorization" },
+        { "lane": 2, "label": "Generate, provision, verify", "detail": "Scaffold, generate source, create the schema and a NOBYPASSRLS login, migrate, build, start on reserved ports, run typecheck, tests and browser qualification, record the release identity.", "artifact": "Generated source, manifests, receipts" },
+        { "lane": 3, "label": "Register release, publish roles", "detail": "A signed release set is staged in the EAL registry; the application's roles are published to UME; a test identity is created for validation.", "artifact": "Provider release, role publication" },
+        { "lane": 0, "label": "Accept in Business Review", "detail": "Read requirement-derived checks with browser evidence. Accept to activate; reject with a reason to return to Requirements.", "artifact": "Business Review record" },
+        { "lane": 3, "label": "Users work in EAL", "detail": "Users sign in with their roles, chat with registered tasks, fill confirmed forms, approve human tasks and open the full view. Every write is receipted and audited.", "artifact": "Runtime task cases, audit" }
+      ], "caption": "Cross-functional delivery." },
+      { "type": "table", "columns": ["Hand-off", "From", "To", "Trigger"], "rows": [
+        ["Blueprint ready for review", "PL", "Business", "Enough discovery dimensions covered"],
+        ["Chain starts", "Business", "PL", "Requirements approved"],
+        ["Design ready for review", "PL", "Architect / Developer", "Solution Design and Build Plan drafted"],
+        ["Build authorized", "Business", "PL", "Start build. sent and eligible"],
+        ["Release ready for review", "PL", "Business", "Verification passed"],
+        ["Application activated", "Business", "Runtime", "Business Review accepted"]
+      ] },
+      { "type": "callout", "tone": "info", "text": "For an evolution of a released application the same lanes apply from Requirements onward, with an impact analysis step in the PL lane before regeneration." }
+    ],
+    "followUps": ["dev-process-diagram", "decisions-approvals", "artifacts-per-stage", "roles"],
+    "plPrompts": [
+      { "label": "Ask PL for the cross-functional view", "prompt": "Show the app delivery process on this platform as a cross-functional view: for each step, who acts (business user, architect or developer, the platform, the runtime) and what is handed over. Do not start execution.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["swimlane", "cross-functional", "delivery process", "who does what"]
+  },
+  {
+    "id": "application-lifecycle",
+    "track": "process",
+    "level": 1,
+    "title": "The application lifecycle: create or migrate, release, operate, enhance, release again",
+    "prompt": "What is the application lifecycle?",
+    "summary": "An AI-native application is created new or migrated from a legacy application, released through DEV, QA and PRD, operated, enhanced and released again. Today PL delivers the create-and-enhance loop in Local Development (DEV) and runs the app in EAL; QA and PRD promotion and legacy migration are designed and sequenced on the roadmap.",
+    "takeaways": [
+      "Two entry paths: a new AI-native application, or a legacy application migrated into one.",
+      "Two ongoing loops: enhance and release again; migrate an AI-native application between environments by promoting its immutable release.",
+      "Available today: create, enhance, release to DEV, run in EAL. Planned: QA and PRD promotion, legacy migration."
+    ],
+    "status": "partial",
+    "statusNote": "DEV today; QA and PRD promotion planned",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "New idea or legacy app", "note": "entry", "detail": "A new AI-native application starts from a problem statement. A legacy application enters through modernization: repository and runtime discovery, a characterization baseline that is green before any change, and strangler increments. Modernization is planned; new applications are available today.", "artifact": "Problem statement or modernization baseline" },
+        { "label": "Develop with PL", "note": "available", "detail": "Discovery, Blueprint, Requirements, Delivery Plan, Solution Design, Build Plan, build and verification through the governed loop.", "artifact": "Work products, generated source, evidence" },
+        { "label": "Release to DEV", "note": "available", "detail": "Local Development: schema and login provisioned, UI and API started on reserved ports, signed release registered in EAL, roles published to UME, Business Review accepted.", "artifact": "Release 1.0.0 in DEV" },
+        { "label": "Promote to QA", "note": "planned", "detail": "The immutable release manifest is promoted to a QA environment with its evidence; qualification runs there without rebuilding. Planned with the environment ladder.", "artifact": "QA gate record" },
+        { "label": "Promote to PRD", "note": "planned", "detail": "Production promotion under a customer-controlled installation with identity federation, secret references, backup and recovery drills. Planned with the deployment foundation.", "artifact": "Production release" },
+        { "label": "Operate", "note": "EAL", "detail": "Users work in EAL; the Control Center monitors platform services; audit and activity are recorded; observations feed the next change.", "artifact": "Usage, audit, observations" }
+      ], "caption": "Create or migrate, then release. Click a step for details and status." },
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Enhance", "note": "available", "detail": "Describe the change in the application's project. PL classifies it as an evolution, shows the impact (fields, screens, rules, tests) and asks for approval.", "artifact": "Requirements v2, impact" },
+        { "label": "Regenerate", "note": "available", "detail": "Downstream work products regenerate in order from canonical inputs; unchanged parts are byte-identical; migrations are additive and prior bytes preserved.", "artifact": "Design and plan v2, new migration" },
+        { "label": "Verify", "note": "available", "detail": "Existing tests must pass; new tests cover the change; browser qualification repeats the business checks.", "artifact": "Receipts" },
+        { "label": "Release to DEV", "note": "available", "detail": "A new release directory and identity; activation replaces the previous release in EAL; the previous one is kept for rollback.", "artifact": "Release 1.0.1" },
+        { "label": "Promote QA, PRD", "note": "planned", "detail": "Migrating an AI-native application between environments means promoting the same immutable release through the environment gates, never rebuilding it.", "artifact": "Promotion records" }
+      ], "caption": "Enhance and release again; migrate between environments by promotion." },
+      { "type": "table", "columns": ["Lifecycle stage", "Today", "Planned"], "rows": [
+        ["Create a new AI-native app", "Available: discovery to release in Local Development", "Unchanged"],
+        ["Migrate a legacy app to AI-native", "Not available; build the new capability beside it and connect data through the Integration plane", "Modernization gate: discovery, characterization baseline, strangler increments, rollback"],
+        ["Release to DEV", "Available: Local Development on the platform host", "Central Development with independent deployables"],
+        ["Promote to QA and PRD", "Not available", "Environment promotion by immutable release manifest with gates"],
+        ["Enhance an AI-native app", "Available: impact analysis, regeneration, new version", "Runtime observations turned into proposals"],
+        ["Migrate an AI-native app between environments", "Not applicable yet (one environment)", "Promotion of the same release; no rebuild"],
+        ["Retire", "Revoke the release in EAL; data and evidence retained", "Retention policy and erasure"]
+      ] }
+    ],
+    "followUps": ["lifecycle-flow", "environments", "enhance-deployed", "existing-app"],
+    "plPrompts": [
+      { "label": "Ask PL about the lifecycle", "prompt": "What is the application lifecycle on this platform, from creating or migrating an application through release to DEV, QA and PRD, operation and enhancement? Say what is available today. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["lifecycle", "DEV QA PRD", "migrate", "enhance", "release"]
+  },
+  {
+    "id": "runtime-architecture",
+    "track": "environments",
+    "level": 2,
+    "title": "Runtime architecture of an AI-native application",
+    "prompt": "What is the AI-native app runtime architecture?",
+    "summary": "Users reach the application through EAL. The application runs as its own UI and API processes with its own PostgreSQL schema and login. UME supplies identity and roles, the Integration plane supplies systems of record, Audit and EKG observe. No component shares credentials with another.",
+    "takeaways": [
+      "EAL is the front door; the application never authenticates users itself.",
+      "Each application holds only its own database login; platform secrets never reach it.",
+      "Every request carries a signed authority that the API resolves live, so revocation takes effect immediately."
+    ],
+    "status": "available",
+    "statusNote": "Local Development",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Users", "items": ["Business users by role", "Test identity pl.app-name.user"] },
+        { "title": "EAL runtime", "items": ["Sign-in and app catalog", "Chat with registered tasks", "Confirmed forms", "Human tasks and approvals", "Full view launcher"] },
+        { "title": "AI-native application", "items": ["React UI (floorplans)", "Fastify API: role policy, idempotency receipts", "Own PostgreSQL schema + login", "Audit and outbox tables"] },
+        { "title": "Platform services", "items": ["UME: principals, roles, sessions", "Integration plane: systems of record", "Audit: envelopes, cases", "EKG + Brain: landscape, knowledge"] },
+        { "title": "Data", "items": ["platformapps database (one schema per app)", "Connected PostgreSQL systems of record"] }
+      ], "caption": "Runtime layers. Arrows of trust go down; evidence goes up." },
+      { "type": "diagram", "kind": "swimlane", "lanes": ["User", "EAL", "Application API", "Database / services"], "sequence": [
+        { "lane": 0, "label": "Sign in", "detail": "The user signs in to EAL. EAL resolves the user's roles and application scopes from UME; the application never sees a password.", "artifact": "EAL session" },
+        { "lane": 1, "label": "Launch with authority", "detail": "EAL opens the application's UI with a signed application authority reference bound to application, environment, tenant, subject and session.", "artifact": "Authority reference" },
+        { "lane": 2, "label": "Resolve authority", "detail": "On every request the generated API resolves the reference live against EAL and checks that the subject matches; expired or revoked authority is refused.", "artifact": "Authorization decision" },
+        { "lane": 3, "label": "Read or write own schema", "detail": "The API uses its own restricted login. Integration-backed operations go through the Integration plane with pinned targets and receipts.", "artifact": "Rows, receipts" },
+        { "lane": 2, "label": "Audit + outbox", "detail": "Each write records an audit row and an outbox event in the same transaction; idempotency receipts prevent duplicates on retry.", "artifact": "Audit row, outbox event" },
+        { "lane": 1, "label": "Confirm to user", "detail": "EAL shows the result in chat or the full view and records the runtime task case.", "artifact": "Task case" }
+      ], "caption": "One request through the runtime. Click a box for details." },
+      { "type": "key_value", "rows": [
+        { "label": "Processes", "value": "Two per application (UI, API) on reserved ports, started by the PL deployer and adopted by the managed runtime after restarts." },
+        { "label": "Isolation", "value": "Own schema, own NOBYPASSRLS login, allow-listed environment; row-level security policies in integration-backed apps." },
+        { "label": "Observability today", "value": "EAL activity and notifications, application audit tables, Control Center liveness for platform services. Application telemetry export is planned." }
+      ] }
+    ],
+    "followUps": ["local-dev-architecture", "where-run", "what-is-eal-note", "architecture-diagram"],
+    "plPrompts": [
+      { "label": "Ask PL for the runtime architecture", "prompt": "Describe the runtime architecture of an application built on this platform: how users reach it, how identity and authority work, where data lives and what is audited. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["runtime architecture", "AI-native", "EAL", "authority"]
+  },
+  {
+    "id": "local-dev-architecture",
+    "track": "environments",
+    "level": 2,
+    "title": "Local development architecture on one workstation",
+    "prompt": "What is the AI-native app local development architecture?",
+    "summary": "Everything runs on the platform workstation on loopback: the PL chat UI and API, the training guide service, EAL, UME, EKG and Brain, the Control Center, and PostgreSQL with one database per service. Each generated application gets its own reserved ports and its own schema in the platformapps database.",
+    "takeaways": [
+      "One workstation, loopback only; every service owns its database and never reads another's.",
+      "Local defaults place a new application in one click: UI port, API port, schema.",
+      "The same layout is what Central Development will run as independent deployables."
+    ],
+    "status": "available",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Browser", "items": ["PL chat UI :5174 / :5185", "EAL web :5175", "UME admin :5195", "EKG Workbench :5194", "Control Center :3990"] },
+        { "title": "Development loop", "items": ["PL API :3002", "Training guide :8840", "Workspace D:\\workspace\\...", "platformapps repository"] },
+        { "title": "Runtime loop", "items": ["EAL runtime :3101", "EAL registry :3102", "UME API :3201", "Generated apps :58xxx (UI + API per app)"] },
+        { "title": "Knowledge and operations", "items": ["EKG API :5192", "Brain API :8805", "Integration plane :3401", "Audit :3301", "Eval Studio :3311"] },
+        { "title": "PostgreSQL :5432", "items": ["platformloops", "platformapps (schema per app)", "platformeal", "platformume", "platformekg", "platformtraining"] }
+      ], "caption": "Local development topology. Ports are the defaults on this workstation." },
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Use Local defaults", "detail": "The landscape nudge composes, resolves and confirms the placement for a new application in one click.", "artifact": "Landscape binding" },
+        { "label": "Reserve ports", "detail": "The deployer verifies and reserves a UI port and an API port; conflicts are resolved automatically and recorded in the release.", "artifact": "Port reservations" },
+        { "label": "Provision schema", "detail": "A schema app_name and a NOBYPASSRLS login with a random password are created in the platformapps database; migrations run from the release.", "artifact": "Schema, login" },
+        { "label": "Start UI + API", "detail": "Two processes with an allow-listed environment: the app's database URL, ports and EAL origins, nothing else.", "artifact": "Running processes" },
+        { "label": "Register", "detail": "Signed release set to the EAL registry on :3102; roles to UME on :3201.", "artifact": "EAL registration" }
+      ], "caption": "What Local defaults do. Click a step for details." },
+      { "type": "table", "columns": ["Concern", "Local development today"], "rows": [
+        ["Secrets", "File-based per service; never inherited by generated apps"],
+        ["Process supervision", "PL managed runtime adopts and restarts application processes; Control Center for platform services"],
+        ["Networking", "127.0.0.1 only; CORS allow-list for UI origins"],
+        ["Data", "One PostgreSQL instance; one database per service; one schema per application"],
+        ["Rebuilds", "PL API runs from dist; source changes need a rebuild and restart; the chat UI hot-reloads"]
+      ] }
+    ],
+    "followUps": ["runtime-architecture", "where-development", "where-deployed", "environments"],
+    "plPrompts": [
+      { "label": "Ask PL for the local architecture", "prompt": "Describe the local development architecture of this platform: which services run on this workstation, on which ports, which databases they own, and where a generated application runs. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["local development", "architecture", "ports", "workstation"]
+  }
+]

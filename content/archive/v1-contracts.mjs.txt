@@ -1,0 +1,18 @@
+import {z} from 'zod';import {createHmac,timingSafeEqual,createHash} from 'node:crypto';
+const text=z.string().min(1).max(5000),id=z.string().regex(/^[a-z][a-z0-9-]{1,70}$/);
+const item=z.object({label:text,value:text}).strict();
+const example=z.object({title:text,before:text,after:text,features:z.array(text).max(8),fields:z.array(text).max(8)}).strict();
+export const PromptSchema=z.object({id,label:text,prompt:text,requires:z.array(id).max(12).default([]),stages:z.array(z.string().max(80)).max(12).default([])}).strict();
+export const LessonSchema=z.object({id,title:text,body:z.array(text).min(1).max(8),flow:z.array(text).max(8).default([]),prompt:text.optional(),requires:z.array(id).max(12).default([]),takeaway:text.optional(),cards:z.array(z.object({title:text,description:text,example:text,requires:z.array(id).default([]),condition:text.optional()}).strict()).max(8).default([]),sections:z.array(z.object({title:text,body:text,items:z.array(item).max(8).default([])}).strict()).max(8).default([]),example:z.object({title:text,before:text,after:text,features:z.array(text).max(8),fields:z.array(text).max(8)}).strict().optional(),next:id.optional()}).strict();
+export const PackageSchema=z.object({schemaVersion:z.literal(1),version:z.string().regex(/^\d+\.\d+\.\d+$/),playerVersion:z.literal(1),welcome:z.object({title:text,body:text}).strict(),lessons:z.array(LessonSchema).min(6).max(30),prompts:z.array(PromptSchema).min(3).max(60),example:z.object({id,title:text,description:text,steps:z.array(z.object({id,title:text,body:text,prompt:text.optional(),flow:z.array(text).max(8).default([]),facts:z.array(item).max(8).default([]),example:example.optional(),choices:z.array(z.object({id,label:text}).strict()).max(5).default([])}).strict()).min(4).max(20)}).strict()}).strict().superRefine((p,c)=>{for(const list of [p.lessons,p.prompts,p.example.steps])if(new Set(list.map(x=>x.id)).size!==list.length)c.addIssue({code:'custom',message:'Duplicate content IDs'});});
+export const ActionSchema=z.object({eventId:z.uuid(),expectedVersion:z.number().int().min(0),action:z.enum(['start','next','choice','pause','resume','mode']),choiceId:id.optional(),mode:z.enum(['guided','direct']).optional()}).strict();
+export const ContextSchema=z.object({tenantId:z.string().min(1).max(200),userId:z.uuid(),capabilities:z.array(z.string().min(1).max(200)).max(200),stage:z.string().max(200).default('welcome'),exp:z.number(),aud:z.literal('platformtraining')}).strict();
+export const digest=value=>createHash('sha256').update(value).digest('hex');
+export function verifyRequest(req,raw,secret,now=Date.now()){
+ const encoded=req.headers['x-training-context'],signature=req.headers['x-training-signature'];if(typeof encoded!=='string'||typeof signature!=='string'||encoded.length>20000)throw Object.assign(Error('Unauthorized'),{status:401});
+ const expected=createHmac('sha256',secret).update(req.method+'\n'+req.url+'\n'+digest(raw)+'\n'+encoded).digest('hex');
+ if(signature.length!==expected.length||!timingSafeEqual(Buffer.from(signature),Buffer.from(expected)))throw Object.assign(Error('Unauthorized'),{status:401});
+ const context=ContextSchema.parse(JSON.parse(Buffer.from(encoded,'base64url').toString()));if(context.exp*1000<now||context.exp*1000>now+90000)throw Object.assign(Error('Expired request'),{status:401});return context;
+}
+export function selectPrompts(pkg,context){return pkg.prompts.filter(p=>p.requires.every(id=>context.capabilities.includes(id))).sort((a,b)=>Number(b.stages.includes(context.stage))-Number(a.stages.includes(context.stage))).slice(0,3);}
+

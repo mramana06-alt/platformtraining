@@ -1,0 +1,482 @@
+[
+  {
+    "id": 0,
+    "title": "What is this platform, and what problem is it designed to solve?",
+    "group": "Understand PL",
+    "words": 259,
+    "related": [
+      1,
+      3,
+      30
+    ],
+    "diagram": "overview"
+  },
+  {
+    "id": 1,
+    "title": "What is this platform primarily used for?",
+    "group": "Understand PL",
+    "words": 224,
+    "related": [
+      2,
+      4,
+      28
+    ],
+    "diagram": null
+  },
+  {
+    "id": 2,
+    "title": "What can I do with this platform as a user or developer?",
+    "group": "Understand PL",
+    "words": 226,
+    "related": [
+      3,
+      8,
+      19
+    ],
+    "diagram": null
+  },
+  {
+    "id": 3,
+    "title": "I am new to this platform. How should I get started?",
+    "group": "Understand PL",
+    "words": 227,
+    "related": [
+      0,
+      4,
+      19
+    ],
+    "diagram": null
+  },
+  {
+    "id": 4,
+    "title": "How can I use this platform to build a software application?",
+    "group": "Build an application",
+    "words": 214,
+    "related": [
+      5,
+      18,
+      20
+    ],
+    "diagram": null
+  },
+  {
+    "id": 5,
+    "title": "Walk me through the typical application development process using this platform.",
+    "group": "Build an application",
+    "words": 228,
+    "related": [
+      7,
+      32,
+      33
+    ],
+    "diagram": "lifecycle"
+  },
+  {
+    "id": 6,
+    "title": "How does the platform take an idea or business requirement and turn it into a working application?",
+    "group": "Build an application",
+    "words": 196,
+    "related": [
+      4,
+      17,
+      34
+    ],
+    "diagram": null
+  },
+  {
+    "id": 7,
+    "title": "What are the major stages involved in developing an application from discovery through production?",
+    "group": "Build an application",
+    "words": 198,
+    "related": [
+      5,
+      22,
+      37
+    ],
+    "diagram": null
+  },
+  {
+    "id": 8,
+    "title": "What are the main components of this platform, and what is the purpose of each component?",
+    "group": "Platform components",
+    "words": 242,
+    "related": [
+      9,
+      38,
+      39
+    ],
+    "diagram": null
+  },
+  {
+    "id": 9,
+    "title": "How do the different platform components work together during application development?",
+    "group": "Platform components",
+    "words": 201,
+    "related": [
+      8,
+      30,
+      38
+    ],
+    "diagram": "overview"
+  },
+  {
+    "id": 10,
+    "title": "Where does application development actually happen?",
+    "group": "Environments and runtime",
+    "words": 189,
+    "related": [
+      11,
+      12,
+      14
+    ],
+    "diagram": "environments"
+  },
+  {
+    "id": 11,
+    "title": "Where are applications built by this platform deployed?",
+    "group": "Environments and runtime",
+    "words": 183,
+    "related": [
+      12,
+      13,
+      22
+    ],
+    "diagram": null
+  },
+  {
+    "id": 12,
+    "title": "Where do the deployed applications run?",
+    "group": "Environments and runtime",
+    "words": 203,
+    "related": [
+      10,
+      11,
+      35
+    ],
+    "diagram": null
+  },
+  {
+    "id": 13,
+    "title": "What development, testing, staging, and production environments does the platform support?",
+    "group": "Environments and runtime",
+    "words": 208,
+    "related": [
+      11,
+      14,
+      22
+    ],
+    "diagram": null
+  },
+  {
+    "id": 14,
+    "title": "How does the platform handle application configuration, infrastructure, deployment, and runtime management?",
+    "group": "Environments and runtime",
+    "words": 180,
+    "related": [
+      10,
+      13,
+      23
+    ],
+    "diagram": null
+  },
+  {
+    "id": 15,
+    "title": "After an application has already been deployed, how can I use this platform to enhance or modify it?",
+    "group": "Enhance existing applications",
+    "words": 190,
+    "related": [
+      16,
+      17,
+      34
+    ],
+    "diagram": null
+  },
+  {
+    "id": 16,
+    "title": "Can the platform understand an existing application and help me add new features to it?",
+    "group": "Enhance existing applications",
+    "words": 196,
+    "related": [
+      15,
+      17,
+      36
+    ],
+    "diagram": null
+  },
+  {
+    "id": 17,
+    "title": "How does the platform handle changes to an existing application's requirements, design, code, testing, and deployment?",
+    "group": "Enhance existing applications",
+    "words": 205,
+    "related": [
+      15,
+      20,
+      33
+    ],
+    "diagram": null
+  },
+  {
+    "id": 18,
+    "title": "How does the platform determine which development activities can be automated and which ones require human approval?",
+    "group": "People, control and quality",
+    "words": 200,
+    "related": [
+      19,
+      21,
+      33
+    ],
+    "diagram": null
+  },
+  {
+    "id": 19,
+    "title": "What roles do AI agents, developers, architects, testers, product owners, and business users play during application delivery?",
+    "group": "People, control and quality",
+    "words": 216,
+    "related": [
+      18,
+      20,
+      33
+    ],
+    "diagram": null
+  },
+  {
+    "id": 20,
+    "title": "How does the platform ensure that generated applications meet requirements and are technically correct?",
+    "group": "People, control and quality",
+    "words": 199,
+    "related": [
+      21,
+      22,
+      32
+    ],
+    "diagram": null
+  },
+  {
+    "id": 21,
+    "title": "How are testing, validation, code review, security review, and quality checks handled?",
+    "group": "People, control and quality",
+    "words": 220,
+    "related": [
+      20,
+      22,
+      23
+    ],
+    "diagram": null
+  },
+  {
+    "id": 22,
+    "title": "How does the platform know when an application is ready to move from development to testing and then to production?",
+    "group": "People, control and quality",
+    "words": 189,
+    "related": [
+      7,
+      13,
+      21
+    ],
+    "diagram": null
+  },
+  {
+    "id": 23,
+    "title": "How are errors, failed builds, failed tests, or deployment problems handled?",
+    "group": "People, control and quality",
+    "words": 200,
+    "related": [
+      17,
+      20,
+      35
+    ],
+    "diagram": null
+  },
+  {
+    "id": 24,
+    "title": "If I ask the platform to build a very simple application, approximately how much effort and time should I expect?",
+    "group": "Application complexity",
+    "words": 202,
+    "related": [
+      27,
+      28,
+      21
+    ],
+    "diagram": null
+  },
+  {
+    "id": 25,
+    "title": "How would the development approach change for a moderately complex enterprise application?",
+    "group": "Application complexity",
+    "words": 188,
+    "related": [
+      26,
+      27,
+      29
+    ],
+    "diagram": null
+  },
+  {
+    "id": 26,
+    "title": "How would the platform handle a highly complex application involving multiple systems, integrations, APIs, databases, security requirements, and business processes?",
+    "group": "Application complexity",
+    "words": 198,
+    "related": [
+      9,
+      17,
+      27
+    ],
+    "diagram": null
+  },
+  {
+    "id": 27,
+    "title": "What factors determine whether an application is considered simple, medium, complex, or enterprise-scale?",
+    "group": "Application complexity",
+    "words": 213,
+    "related": [
+      24,
+      25,
+      26
+    ],
+    "diagram": null
+  },
+  {
+    "id": 28,
+    "title": "Can you give me an example of a simple application, a moderately complex application, and a highly complex application that could be built using this platform?",
+    "group": "Application complexity",
+    "words": 200,
+    "related": [
+      24,
+      27,
+      29
+    ],
+    "diagram": null
+  },
+  {
+    "id": 29,
+    "title": "For each of those examples, explain how the development process would differ.",
+    "group": "Application complexity",
+    "words": 223,
+    "related": [
+      28,
+      21,
+      30
+    ],
+    "diagram": null
+  },
+  {
+    "id": 30,
+    "title": "Walk me through the complete end-to-end application delivery process using this platform.",
+    "group": "Complete lifecycle",
+    "words": 217,
+    "related": [
+      31,
+      32,
+      37
+    ],
+    "diagram": "lifecycle"
+  },
+  {
+    "id": 31,
+    "title": "Start with a business idea and explain how it moves through discovery, requirements, solution design, planning, development, testing, release, deployment, operations, and continuous improvement.",
+    "group": "Complete lifecycle",
+    "words": 224,
+    "related": [
+      30,
+      32,
+      35
+    ],
+    "diagram": null
+  },
+  {
+    "id": 32,
+    "title": "During the end-to-end process, what artifacts does the platform create at each stage?",
+    "group": "Complete lifecycle",
+    "words": 219,
+    "related": [
+      5,
+      20,
+      34
+    ],
+    "diagram": null
+  },
+  {
+    "id": 33,
+    "title": "What decisions and approvals would typically occur throughout the delivery lifecycle?",
+    "group": "Complete lifecycle",
+    "words": 196,
+    "related": [
+      18,
+      19,
+      22
+    ],
+    "diagram": null
+  },
+  {
+    "id": 34,
+    "title": "How does the platform maintain context and knowledge about the application throughout the entire lifecycle?",
+    "group": "Complete lifecycle",
+    "words": 204,
+    "related": [
+      17,
+      36,
+      39
+    ],
+    "diagram": null
+  },
+  {
+    "id": 35,
+    "title": "Once an application is running in production, how does the platform continue to monitor, maintain, enhance, and improve it?",
+    "group": "Complete lifecycle",
+    "words": 194,
+    "related": [
+      23,
+      36,
+      39
+    ],
+    "diagram": null
+  },
+  {
+    "id": 36,
+    "title": "If I return six months later and ask about an application that was previously built, what information should the platform know about that application?",
+    "group": "Complete lifecycle",
+    "words": 199,
+    "related": [
+      34,
+      35,
+      15
+    ],
+    "diagram": null
+  },
+  {
+    "id": 37,
+    "title": "Show me the complete lifecycle of an application built using this platform as a process flow.",
+    "group": "Complete lifecycle",
+    "words": 188,
+    "related": [
+      7,
+      22,
+      32
+    ],
+    "diagram": "lifecycle"
+  },
+  {
+    "id": 38,
+    "title": "Show me the major platform components involved in application delivery as an architecture diagram.",
+    "group": "Platform components",
+    "words": 191,
+    "related": [
+      8,
+      9,
+      39
+    ],
+    "diagram": "architecture"
+  },
+  {
+    "id": 39,
+    "title": "Finally, explain how the entire platform works together—from a user's initial idea to a running production application and its continuous improvement.",
+    "group": "Complete lifecycle",
+    "words": 269,
+    "related": [
+      30,
+      34,
+      35
+    ],
+    "diagram": "overview"
+  }
+]

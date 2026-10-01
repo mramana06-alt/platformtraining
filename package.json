@@ -1,0 +1,27 @@
+{
+  "name": "platformtraining",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Platform Training: guided conversation training content and learner progress for Platform Loops",
+  "scripts": {
+    "start": "node src/server.mjs",
+    "setup": "node scripts/setup.mjs",
+    "build:content": "node scripts/assemble-content.mjs",
+    "build:prototype": "node scripts/assemble-content.mjs && node scripts/build-prototype.mjs",
+    "publish": "node scripts/assemble-content.mjs && node scripts/publish.mjs",
+    "test": "node scripts/assemble-content.mjs && node --test tests/schema.test.mjs tests/experience.test.mjs",
+    "test:db": "node --test tests/repository.test.mjs",
+    "verify:wire": "node scripts/verify-wire.mjs",
+    "configure:pl": "node scripts/configure-pl.mjs",
+    "qa:create-account": "node scripts/create-qa-account.mjs",
+    "qa:check-topics": "node scripts/check-topics-live.mjs",
+    "qa:campaign": "node scripts/prompt-campaign.mjs",
+    "qa:campaign:rescore": "node scripts/prompt-campaign-rescore.mjs",
+    "qa:campaign:report": "node scripts/prompt-campaign-report.mjs"
+  },
+  "dependencies": {
+    "pg": "^8.23.0",
+    "zod": "^4.3.6"
+  }
+}

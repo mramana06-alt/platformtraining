@@ -1,0 +1,171 @@
+[
+  {
+    "id": "enhance-deployed",
+    "track": "change",
+    "level": 2,
+    "title": "Enhance a deployed app by describing the change in its project",
+    "prompt": "After an application has already been deployed, how can I use this platform to enhance or modify it?",
+    "summary": "Open the application's project, describe the change, review the impact PL shows, approve the Requirements change, let the chain regenerate in order, verify, and accept the new version. Unrelated behaviour is preserved and proven by the existing tests.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Describe change", "note": "in the app's project" },
+        { "label": "Impact analysis", "note": "fields, screens, rules, tests" },
+        { "label": "Approve", "note": "Requirements change" },
+        { "label": "Regenerate in order" },
+        { "label": "Verify", "note": "old + new tests" },
+        { "label": "Release 1.0.1" }
+      ], "caption": "Evolution reuses the same lifecycle; nothing is rebuilt from scratch." },
+      { "type": "steps", "items": [
+        { "title": "Go to the application's project", "detail": "Each application lives in one project. If the primary chat is out of budget, PL offers a successor chat that carries all approvals forward." },
+        { "title": "Describe the enhancement", "detail": "For example: Add an optional Cost centre field to the mileage log, required for claims above 200. PL classifies this as an evolution, not a new app." },
+        { "title": "Review the impact", "detail": "PL shows what changes: domain field, an additive migration, form and worklist columns, one new validation rule and test. Destructive changes are rejected." },
+        { "title": "Approve and let the chain regenerate", "detail": "Requirements v2 supersedes Delivery Plan, Solution Design and Build Plan; they regenerate in order from canonical inputs, with your accepted topology carried forward." },
+        { "title": "Start build and accept", "detail": "Prior migration bytes are preserved; the new migration is additive; existing tests must still pass; Business Review shows the new checks; version 1.0.1 is activated." }
+      ] },
+      { "type": "callout", "tone": "tip", "text": "Ask for the Application overview first if you have forgotten the details: it lists the Blueprint, versions, roles, runtime and evidence of the application." }
+    ],
+    "followUps": ["existing-app", "change-handling", "revisions", "six-months-later"],
+    "plPrompts": [
+      { "label": "Preview an enhancement in PL", "prompt": "Add an optional field to the current application and show the impact of the change for review. Do not build or create files yet.", "requires": ["outcome-discovery"], "stages": ["welcome", "outcome-discovery", "requirements-formalization"] }
+    ],
+    "keywords": ["enhance", "modify", "evolve", "change"]
+  },
+  {
+    "id": "existing-app",
+    "track": "change",
+    "level": 2,
+    "title": "PL understands applications it built; understanding foreign applications is planned",
+    "prompt": "Can the platform understand an existing application and help me add new features to it?",
+    "summary": "For applications PL built: yes, fully, from the Blueprint, work products, releases and evidence it holds. For applications built elsewhere: not yet; repository discovery, characterization baselines and strangler increments are the planned modernization capability.",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Applications PL built (available)", "items": ["Application overview from project knowledge", "Blueprint, requirements, design, releases", "Impact analysis and bounded evolution", "Proven preservation of unrelated behaviour"] },
+        { "title": "Applications built elsewhere (planned)", "items": ["Repository and runtime discovery", "Characterization baseline green before change", "Change-impact and compatibility analysis", "Strangler increments with rollback"] }
+      ] },
+      { "type": "table", "columns": ["Question", "PL-built application", "External application"], "rows": [
+        ["Can PL describe it?", "Yes: overview, versions, roles, runtime, evidence", "Only what you tell it; no repository scan"],
+        ["Can PL add a feature?", "Yes: evolution lifecycle with impact analysis", "Not yet; you would model it as a new PL app beside it"],
+        ["Can PL read its data?", "Its own schema, through the generated API", "Through the Integration plane if it is a PostgreSQL system of record"],
+        ["Can PL replace it gradually?", "Not needed", "Planned: modernization increments on a registered repository"]
+      ] },
+      { "type": "callout", "tone": "info", "text": "The honest path for an existing external application today: build the new capability as a PL application, connect its data through a governed connector where possible, and keep the old system authoritative until the modernization capability lands." }
+    ],
+    "followUps": ["enhance-deployed", "complex-approach", "context-knowledge", "change-handling"],
+    "plPrompts": [
+      { "label": "Ask PL for an application overview", "prompt": "Give me an overview of the current application: what it does, its roles, its releases and versions, where it runs, and what evidence exists for it. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["existing application", "modernization", "understand"]
+  },
+  {
+    "id": "change-handling",
+    "track": "change",
+    "level": 3,
+    "title": "How a change flows through requirements, design, code, tests and deployment",
+    "prompt": "How does the platform handle changes to an existing application's requirements, design, code, testing, and deployment?",
+    "summary": "A change starts as a Requirements revision; the cascade regenerates design and build plan; generation produces additive migrations and updated code with prior bytes preserved; old and new tests run; the release becomes a new version with rollback to the previous one.",
+    "blocks": [
+      { "type": "diagram", "kind": "swimlane", "lanes": ["Requirements", "Design + Plan", "Code", "Tests", "Deployment"], "sequence": [
+        { "lane": 0, "label": "v2 with the change" },
+        { "lane": 1, "label": "Regenerated in order" },
+        { "lane": 2, "label": "Additive migration + updated files" },
+        { "lane": 3, "label": "Existing tests + new tests" },
+        { "lane": 4, "label": "Release 1.0.1, rollback kept" }
+      ] },
+      { "type": "key_value", "rows": [
+        { "label": "Requirements", "value": "The change is expressed as a new Requirements version. Approving it supersedes the downstream work products (the cascade)." },
+        { "label": "Design", "value": "Solution Design and Build Plan regenerate from canonical inputs; unchanged parts are byte-identical, so the diff shows only the consequence of your change." },
+        { "label": "Code", "value": "Blueprint and migration hashes are checked before writing; destructive changes and reused migration sequence numbers are rejected; prior migration bytes are preserved." },
+        { "label": "Tests", "value": "Existing contract tests must still pass; new tests cover the change; browser qualification re-runs the business checks with independent expected values." },
+        { "label": "Deployment", "value": "A new release directory and identity; activation replaces the previous release in EAL; the previous one stays on disk for rollback." }
+      ] },
+      { "type": "callout", "tone": "warning", "text": "Change wording matters. Lifecycle wording (Create the Requirements for the current app ...) continues the active revision; capability-style wording (Build me a ...) opens a new business revision. The next-step chip in the composer always carries the right command." }
+    ],
+    "followUps": ["revisions", "approvals-and-changes", "errors", "enhance-deployed"],
+    "plPrompts": [],
+    "keywords": ["change", "revision", "cascade", "migration"]
+  },
+  {
+    "id": "context-knowledge",
+    "track": "change",
+    "level": 3,
+    "title": "Context and knowledge are kept as events, a ledger and projections",
+    "prompt": "How does the platform maintain context and knowledge about the application throughout the entire lifecycle?",
+    "summary": "Every message, decision and result is an event in the project's delivery case; the Project Knowledge Ledger keeps typed items with lifecycle and authority; projections feed the Knowledge Inspector and the model context; the Platform Brain and EKG can hold cross-project knowledge.",
+    "blocks": [
+      { "type": "diagram", "kind": "layers", "layers": [
+        { "title": "Canonical events", "items": ["Session events (messages, routing, results)", "Delivery case transitions (approvals, builds, releases)"] },
+        { "title": "Project Knowledge Ledger", "items": ["Items: facts, decisions, assumptions, risks", "Lifecycle: propose, accept, supersede, dispute, defer", "Relations, coverage snapshots, contradiction groups"] },
+        { "title": "Projections", "items": ["Knowledge Inspector views", "Context planner for model calls", "Summaries: current state, decisions, gaps, source trace"] },
+        { "title": "Organisational knowledge", "items": ["Platform Brain publications", "EKG landscape and delivery evidence"] }
+      ], "caption": "Nothing is remembered by the model; everything is recorded and re-projected." },
+      { "type": "key_value", "rows": [
+        { "label": "Within a chat", "value": "Recent history plus structured memory; when the session budget nears its ceiling, a successor chat carries the approvals and knowledge forward." },
+        { "label": "Across a project", "value": "The ledger persists across chats and revisions; a new revision carries accepted topology and decisions forward through explicit transitions." },
+        { "label": "Across projects", "value": "The Platform Brain receives published planning context and delivery evidence; Ask Brain in the composer queries it when the feature is enabled." },
+        { "label": "What you can inspect", "value": "The Knowledge Inspector shows current state, decision register, assumptions and risks, coverage gaps and source trace for the project." }
+      ] }
+    ],
+    "followUps": ["six-months-later", "knowledge-inspector", "budgets-rollover", "enhance-deployed"],
+    "plPrompts": [
+      { "label": "Ask PL what it knows about this project", "prompt": "What do you currently know about this project: decisions, assumptions, open questions and the source of each? Do not build anything.", "requires": ["general-answer"], "stages": ["welcome", "outcome-discovery"] }
+    ],
+    "keywords": ["context", "knowledge", "memory", "ledger"]
+  },
+  {
+    "id": "production-improvement",
+    "track": "change",
+    "level": 2,
+    "title": "Monitoring and improvement after release: what exists and what is planned",
+    "prompt": "Once an application is running in production, how does the platform continue to monitor, maintain, enhance, and improve it?",
+    "summary": "Today: EAL activity and audit, Control Center monitoring of platform services, Eval Studio evaluations, and change requests with impact analysis. Planned: a production profile with telemetry, SLOs, runtime observations flowing into proposals, and Brain-assisted evolution.",
+    "blocks": [
+      { "type": "diagram", "kind": "flow", "steps": [
+        { "label": "Use in EAL", "note": "activity, audit" },
+        { "label": "Observe", "note": "Control Center, Eval Studio" },
+        { "label": "Propose", "note": "your request or a finding" },
+        { "label": "Evolve", "note": "impact, regenerate, verify" },
+        { "label": "Release", "note": "next version" }
+      ] },
+      { "type": "table", "columns": ["Concern", "Available today", "Planned"], "rows": [
+        ["Monitoring", "Control Center: liveness, logs, CPU and memory of platform services; EAL activity and notifications", "Application telemetry, SLOs, OpenTelemetry export"],
+        ["Maintenance", "Managed runtime restarts lost app processes; rollback to the previous release", "Production supervisor, backup and restore drills"],
+        ["Enhancement", "Change requests with impact analysis and versioned releases", "Runtime observations turned into proposals automatically"],
+        ["Improvement", "Eval Studio evaluates the platform and applications with sealed evidence and work items", "Business KPI capture and Brain-assisted evolution"]
+      ] },
+      { "type": "callout", "tone": "warning", "title": "Plain statement", "text": "There is no Production environment yet, so production monitoring in the operational sense does not exist. What exists is a complete change loop for applications in Local Development and observation of the platform itself." }
+    ],
+    "followUps": ["enhance-deployed", "environments", "quality-checks", "how-it-all-works"],
+    "plPrompts": [],
+    "keywords": ["monitor", "maintain", "improve", "operations"]
+  },
+  {
+    "id": "six-months-later",
+    "track": "change",
+    "level": 3,
+    "title": "Six months later PL can still tell you what the application is and why",
+    "prompt": "If I return six months later and ask about an application that was previously built, what information should the platform know about that application?",
+    "summary": "Its Blueprint and requirements, every work-product version, every release with hashes and evidence, its roles and runtime placement, the decisions and assumptions recorded, and the open items that were deferred. Ask for the Application overview.",
+    "blocks": [
+      { "type": "diagram", "kind": "map", "center": "Application overview", "nodes": [
+        { "label": "Purpose and Blueprint", "note": "what it does, for whom" },
+        { "label": "Requirements and design", "note": "all versions" },
+        { "label": "Releases", "note": "identity, hashes, dates" },
+        { "label": "Roles and users", "note": "UME publication" },
+        { "label": "Runtime placement", "note": "ports, schema, EAL status" },
+        { "label": "Evidence", "note": "tests, browser checks, reviews" },
+        { "label": "Decisions and assumptions", "note": "with source trace" },
+        { "label": "Open and deferred items", "note": "what was left for later" }
+      ] },
+      { "type": "key_value", "rows": [
+        { "label": "Where it comes from", "value": "The project's delivery case and knowledge ledger, the release directories and journals, the EAL registry and UME publication." },
+        { "label": "How to ask", "value": "Open the project and ask: Give me an overview of the current application. The overview route assembles these records; Ask Brain adds cross-project context when enabled." },
+        { "label": "What it will not know", "value": "How people used the application day to day, unless runtime observations were recorded; business outcomes are not measured yet." }
+      ] }
+    ],
+    "followUps": ["existing-app", "context-knowledge", "enhance-deployed", "knowledge-inspector"],
+    "plPrompts": [
+      { "label": "Ask for the application overview", "prompt": "I am returning to this application after a long time. Give me an overview: purpose, requirements, releases and versions, roles, where it runs, evidence, decisions, assumptions and deferred items. Do not build anything.", "requires": ["general-answer"], "stages": ["welcome"] }
+    ],
+    "keywords": ["overview", "history", "returning", "knowledge"]
+  }
+]
